@@ -1,0 +1,79 @@
+// Tryouts Registration App Prisma Schema
+// Supports: Clerk user linkage, guardians, players, registrations, Stripe payments, and future roles
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  clerkUserId  String   @unique
+  email        String   @unique
+  role         Role     @default(GUARDIAN)
+  guardian     Guardian?
+  player       Player?
+  createdAt    DateTime @default(now())
+}
+
+enum Role {
+  GUARDIAN
+  PLAYER
+  ADMIN
+  COACH
+}
+
+model Guardian {
+  id         String   @id @default(uuid())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String   @unique
+  phone      String?
+  players    Player[]
+  registrations Registration[]
+}
+
+model Player {
+  id         String   @id @default(uuid())
+  user       User?    @relation(fields: [userId], references: [id])
+  userId     String?  @unique
+  firstName  String
+  lastName   String
+  birthdate  DateTime
+  gender     String
+  guardian   Guardian @relation(fields: [guardianId], references: [id])
+  guardianId String
+  registrations PlayerRegistration[]
+}
+
+model Registration {
+  id           String   @id @default(uuid())
+  guardian     Guardian @relation(fields: [guardianId], references: [id])
+  guardianId   String
+  tryoutName   String
+  createdAt    DateTime @default(now())
+  payment      Payment?
+  players      PlayerRegistration[]
+}
+model PlayerRegistration {
+  id              String   @id @default(uuid())
+  registration    Registration @relation(fields: [registrationId], references: [id])
+  registrationId  String
+  player          Player @relation(fields: [playerId], references: [id])
+  playerId        String
+}
+
+model Payment {
+  id             String   @id @default(uuid())
+  stripeId       String   @unique
+  amount         Int
+  currency       String
+  status         String
+  receiptUrl     String?
+  createdAt      DateTime @default(now())
+  registration   Registration @relation(fields: [registrationId], references: [id])
+  registrationId String   @unique
+}
