@@ -10,17 +10,20 @@
   height: 100vh;
   background-image: url("/bg-shot.jpg");
   background-size: cover;
-  background-position: center;
+  background-position: top;
   background-repeat: no-repeat;
+  background-color: black;
   /* Parallax effect: background moves slower than scroll */
 }
 
 .sectionForm {
-  min-height: 100vh;
   background-image: url("/bg-form.jpg");
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
+  background-color: black;
+  min-height: 100vh;
+  /* Ensures black background is visible where image doesn't cover */
 }
 input[type="text"],
 input[type="email"],
@@ -30,8 +33,6 @@ input[type="time"],
 select,
 input[type="number"] {
   border-bottom: 2px solid #fff;
-  background: transparent;
-  padding: 8px 0px;
 }
 label.forText {
 }
