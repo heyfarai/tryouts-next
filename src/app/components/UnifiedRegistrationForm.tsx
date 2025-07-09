@@ -26,26 +26,26 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       ? localStorage.getItem(FORM_STORAGE_KEY)
       : null;
   type RegistrationFormData = {
-  players: Player[];
-  guardianName: string;
-  guardianPhone: string;
-  guardianEmail: string;
-  waiverLiability: boolean;
-  waiverPhoto: boolean;
-  accordionStep: number;
-};
-let parsed: Partial<RegistrationFormData> = {};
+    players: Player[];
+    guardianName: string;
+    guardianPhone: string;
+    guardianEmail: string;
+    waiverLiability: boolean;
+    waiverPhoto: boolean;
+    accordionStep: number;
+  };
+  let parsed: Partial<RegistrationFormData> = {};
   try {
     parsed = saved ? JSON.parse(saved) : {};
   } catch {}
 
   const [players, setPlayers] = useState<Player[]>(
     parsed.players || [
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
+      { firstName: "", lastName: "", birthdate: "", gender: "other" },
     ]
   );
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
-    { firstName: "", lastName: "", birthdate: "", gender: "" },
+    { firstName: "", lastName: "", birthdate: "", gender: "other" },
   ]);
   const [guardianName, setGuardianName] = useState<string>(
     parsed.guardianName || ""
@@ -74,9 +74,11 @@ let parsed: Partial<RegistrationFormData> = {};
   // Ensure at least one blank player on mount (only if no data was restored)
   useEffect(() => {
     if (players.length === 0 && hydrated) {
-      setPlayers([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
+      setPlayers([
+        { firstName: "", lastName: "", birthdate: "", gender: "other" },
+      ]);
       setPlayerErrors([
-        { firstName: "", lastName: "", birthdate: "", gender: "" },
+        { firstName: "", lastName: "", birthdate: "", gender: "other" },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -182,11 +184,11 @@ let parsed: Partial<RegistrationFormData> = {};
   const handleAddPlayer = () => {
     setPlayers([
       ...players,
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
+      { firstName: "", lastName: "", birthdate: "", gender: "other" },
     ]);
     setPlayerErrors([
       ...playerErrors,
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
+      { firstName: "", lastName: "", birthdate: "", gender: "other" },
     ]);
   };
   const handleRemovePlayer = (idx: number) => {
@@ -328,7 +330,7 @@ let parsed: Partial<RegistrationFormData> = {};
                       showYearDropdown
                       dropdownMode="select"
                       placeholderText="Select birthdate"
-                      className="w-full px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none bg-neutral-900"
+                      className="w-1/2 px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none bg-neutral-800 focus:bg-neutral-900"
                       required
                     />
 
@@ -338,7 +340,7 @@ let parsed: Partial<RegistrationFormData> = {};
                       </span>
                     )}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 hidden">
                     <label
                       htmlFor={`gender-${idx}`}
                       className="uppercase text-xs font-bold text-gray-300"
@@ -370,7 +372,7 @@ let parsed: Partial<RegistrationFormData> = {};
                   {players.length > 1 && (
                     <button
                       type="button"
-                      className="text-[var(--precision-red)] hover:text-[var(--precision-red)] hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
+                      className="hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
                       onClick={() => handleRemovePlayer(idx)}
                       aria-label="Remove player"
                     >
@@ -401,7 +403,7 @@ let parsed: Partial<RegistrationFormData> = {};
                   {idx === players.length - 1 && (
                     <button
                       type="button"
-                      className="text-[var(--precision-red)] hover:text-[var(--precision-red)] hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
+                      className="text-neutral-400 hover:text-neutral-200 hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
                       onClick={handleAddPlayer}
                       tabIndex={0}
                       aria-label="Add player"
