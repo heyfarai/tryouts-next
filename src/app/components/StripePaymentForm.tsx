@@ -86,7 +86,7 @@ const StripePaymentForm: React.FC<StripePaymentFormProps> = ({
           fontWeight: 700,
           fontSize: "1.1rem",
           width: "100%",
-          opacity: loading ? 0.7 : 1,
+          opacity: loading ? 0.5 : 1,
         }}
         disabled={loading}
         onClick={handleSubmit}

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-
+import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
 import { DEFAULT_PLAYER } from "./constants";
 import { Player, PlayerErrors } from "./PlayerForm";
@@ -14,6 +14,8 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   onSuccess,
   registrationLoading,
 }) => {
+  // Local loading state for Pay button
+  const [payLoading, setPayLoading] = useState(false);
   // Clear confirmation state when landing on the form
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -157,7 +159,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           accordionStep === 1 ? "" : "opacity-60 pointer-events-none"
         }`}
       >
-        <div className="w-full flex items-center justify-between py-4 px-2 bg-neutral-900 text-white border-0">
+        <div className="w-full flex items-center justify-between py-4 px-6 bg-neutral-900 text-white border-0">
           <button
             type="button"
             className="text-left flex-1 bg-transparent border-none text-white focus:outline-none flex items-center"
@@ -172,7 +174,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           {accordionStep !== 1 && (
             <button
               type="button"
-              className="ml-4 text-blue-400 underline text-sm bg-transparent border-none cursor-pointer"
+              className="hidden ml-4 text-blue-400 underline text-sm bg-transparent border-none cursor-pointer"
               onClick={() => setAccordionStep(1)}
               tabIndex={0}
             >
@@ -181,7 +183,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           )}
         </div>
         {accordionStep === 1 && (
-          <div className="pb-12">
+          <div className="pb-12 px-6">
             <h2 className="dela text-xl font-bold mb-12 pt-8">The Player </h2>
             {players.map((player, idx) => (
               <div
@@ -378,7 +380,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               value={guardianName}
               onChange={(e) => setGuardianName(e.target.value)}
               placeholder="Parent Name"
-              className="w-full px-2 py-2 mt-2 mb-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
+              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
             />
             {guardianNameError && (
               <span className="text-red-500 text-xs block mb-4">
@@ -399,7 +401,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               value={guardianPhone}
               onChange={(e) => setGuardianPhone(e.target.value)}
               placeholder="555-555-5555"
-              className="w-full px-2 py-2 mt-2 mb-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
+              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
             />
             {guardianPhoneError && (
               <span className="text-red-500 text-xs block mb-4">
@@ -420,7 +422,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               value={guardianEmail}
               onChange={(e) => setGuardianEmail(e.target.value)}
               placeholder="parent@email.com"
-              className="w-full px-2 py-2 mt-2 mb-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
+              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
             />
             {guardianEmailError && (
               <span className="text-red-500 text-xs block mb-4">
@@ -436,30 +438,22 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   className="form-checkbox h-5 w-5 text-blue-600"
                 />
                 <span className="ml-2 text-gray-200">
-                  I agree to the <b>Liability Waiver</b> (required)
+                  I agree to the{" "}
+                  <b>
+                    <Link
+                      href="/waiver-code-of-conduct"
+                      target="_blank"
+                      style={{ textDecoration: "underline" }}
+                    >
+                      Liability Waiver and Code of Conduct
+                    </Link>
+                  </b>{" "}
+                  (required)
                 </span>
               </label>
               {waiverLiabilityError && (
                 <span className="text-red-500 text-xs block mt-4">
                   {waiverLiabilityError}
-                </span>
-              )}
-            </div>
-            <div className="mb-4">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  checked={waiverPhoto}
-                  onChange={(e) => setWaiverPhoto(e.target.checked)}
-                  className="form-checkbox h-5 w-5 text-blue-600"
-                />
-                <span className="ml-2 text-gray-200">
-                  I consent to <b>Photo/Video Release</b> (required)
-                </span>
-              </label>
-              {waiverPhotoError && (
-                <span className="text-red-500 text-xs block mt-4">
-                  {waiverPhotoError}
                 </span>
               )}
             </div>
@@ -487,11 +481,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       >
         <button
           type="button"
-          className="w-full text-left py-4 px-2 bg-neutral-900 text-white focus:outline-none flex items-center justify-between"
+          className="w-full text-left py-4 px-6 bg-neutral-900 text-white focus:outline-none flex items-center justify-between"
           onClick={() => setAccordionStep(2)}
           aria-expanded={accordionStep === 2}
         >
-          <span className="dela text-xl font-bold">2. The Money</span>
+          <span className="text-2xl dela font-bold">2. The Money</span>
           <span className="ml-2">{accordionStep === 2 ? "▼" : "▶"}</span>
         </button>
         {accordionStep === 2 && (
@@ -504,41 +498,57 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               </div>
               <div className="flex justify-between mb-2">
                 <span>Price per player:</span>
-                <span>${Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) / 100}</span>
+                <span>
+                  $
+                  {Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) /
+                    100}
+                </span>
               </div>
               <div className="flex justify-between font-bold text-lg mt-4 border-t border-neutral-700 pt-2">
                 <span>Total:</span>
-                <span>${(players.length * Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) / 100).toFixed(2)}</span>
+                <span>
+                  $
+                  {(
+                    (players.length *
+                      Number(
+                        process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
+                      )) /
+                    100
+                  ).toFixed(2)}
+                </span>
               </div>
             </div>
             {/* Pay button */}
             <button
               type="button"
               className="py-3 px-8 border-gray-400 bg-red-600 text-white rounded-sm font-bold border-b-red-900 border-b-4 cursor-pointer hover:bg-red-700 w-full text-xl"
-              disabled={registrationLoading}
+              style={{ opacity: registrationLoading || payLoading ? 0.5 : 1 }}
+              disabled={registrationLoading || payLoading}
               onClick={async () => {
                 try {
-                  // Show loading state
-                  if (typeof window !== 'undefined') {
-                    (window as any).registrationLoading = true;
-                  }
-                  const amount = players.length * Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER);
+                  setPayLoading(true);
+                  const amount =
+                    players.length *
+                    Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER);
                   // 1. Create registration in DB
-                  const regRes = await fetch('/api/create-registration', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                  const regRes = await fetch("/api/create-registration", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       players,
                       guardianEmail,
                     }),
                   });
                   const regData = await regRes.json();
-                  if (!regRes.ok) throw new Error(regData.error || 'Failed to create registration');
+                  if (!regRes.ok)
+                    throw new Error(
+                      regData.error || "Failed to create registration"
+                    );
                   const registrationId = regData.registrationId;
                   // 2. Create Stripe Checkout Session with real registrationId
-                  const res = await fetch('/api/create-checkout-session', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                  const res = await fetch("/api/create-checkout-session", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
                       amount,
                       registrationId,
@@ -549,21 +559,32 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     }),
                   });
                   const data = await res.json();
-                  if (!res.ok) throw new Error(data.error || 'Failed to create checkout session');
-                  const { getStripe } = await import('./stripeCheckout');
+                  if (!res.ok)
+                    throw new Error(
+                      data.error || "Failed to create checkout session"
+                    );
+                  const { getStripe } = await import("./stripeCheckout");
                   const stripe = await getStripe();
-                  if (!stripe) throw new Error('Stripe.js failed to load');
+                  if (!stripe) throw new Error("Stripe.js failed to load");
                   await stripe.redirectToCheckout({ sessionId: data.id });
                 } catch (err: any) {
-                  alert(err.message || 'An error occurred while starting payment.');
+                  alert(
+                    err.message || "An error occurred while starting payment."
+                  );
                 } finally {
-                  if (typeof window !== 'undefined') {
-                    (window as any).registrationLoading = false;
-                  }
+                  setPayLoading(false);
                 }
               }}
             >
-              {registrationLoading ? 'Processing...' : `Pay $${(players.length * Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) / 100).toFixed(2)}`}
+              {registrationLoading || payLoading
+                ? "Processing..."
+                : `Pay $${(
+                    (players.length *
+                      Number(
+                        process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
+                      )) /
+                    100
+                  ).toFixed(2)}`}
             </button>
           </>
         )}

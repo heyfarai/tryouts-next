@@ -22,6 +22,8 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
   paymentStatus,
   paymentReceiptUrl,
 }) => {
+  // Debug: Log when paymentReceiptUrl arrives via props
+  React.useEffect(() => {}, [paymentReceiptUrl, players]);
   const [emailSent, setEmailSent] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState("");
@@ -34,7 +36,10 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
     const alreadySent =
       typeof window !== "undefined" &&
       localStorage.getItem("confirmationEmailSent") === "true";
-    const isPaymentComplete = paymentStatus === "paid" || paymentStatus === "succeeded" || paymentStatus === "complete";
+    const isPaymentComplete =
+      paymentStatus === "paid" ||
+      paymentStatus === "succeeded" ||
+      paymentStatus === "complete";
     if (
       isPaymentComplete &&
       !lastPaymentStatus.current?.match(/paid|succeeded|complete/) &&
@@ -83,15 +88,21 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
           );
           // 2. Send confirmation/receipt email (registration already exists)
           console.log("[DEBUG] Sending confirmation email to:", guardianEmail);
+          // Debug: Log payload before sending confirmation email
+          const emailPayload = {
+            email: guardianEmail,
+            phone: guardianPhone,
+            players,
+            paymentReceiptUrl,
+          };
+          console.log(
+            "[DEBUG] Sending /api/send-confirmation payload:",
+            emailPayload
+          );
           return fetch("/api/send-confirmation", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              email: guardianEmail,
-              phone: guardianPhone,
-              players,
-              paymentReceiptUrl,
-            }),
+            body: JSON.stringify(emailPayload),
           }).then(async (emailRes) => {
             console.log(
               "[DEBUG] /api/send-confirmation status:",

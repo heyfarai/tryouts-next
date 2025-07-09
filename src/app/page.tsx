@@ -48,8 +48,8 @@ export default function Home() {
           </h1>
           <p className="text-xl mb-8">
             A U14 AAA+ (Major Bantam) competitive boys basketball team. <br />
-            Built for serious players. <br />
-            Elite coaching, no politics, and real development.
+            Built for serious players. Elite coaching, no politics, and real
+            development.
           </p>
           <h3 className="font-extrabold text-xl mt-4 mb-2">
             3 Practices a week
@@ -58,7 +58,7 @@ export default function Home() {
             Expect to practice 3 times a week. <br />1 weeknight, Saturday, and
             Sunday. (2 hours each)
             <br />
-            Gamedays are TBC.
+            Gamedays and Leagues are TBC.
           </p>
 
           <h3 className="font-extrabold text-xl mt-4 mb-2">
@@ -70,9 +70,20 @@ export default function Home() {
               Boys and Girls Club (BGC) Tomlinson: 1463 Prince of Wales Dr
             </li>
           </ul>
+          <p className="text-lg mb-0 mt-8">
+            <a
+              href="#tryouts"
+              className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-200"
+            >
+              Register for Tryouts
+            </a>
+          </p>
         </div>
       </div>
-      <div className="sectionForm flex flex-col lg:pl-64 pt-48 px-7 bg-opacity-50">
+      <div
+        id="tryouts"
+        className="sectionForm flex flex-col lg:pl-64 pt-48 px-7 bg-opacity-50"
+      >
         <div className="content max-w-3xl bg-bl  ">
           <div className="formLede">
             <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">

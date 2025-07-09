@@ -57,6 +57,31 @@ export default function RegistrationCompletePage() {
               confirmation={confirmation}
             />
           )}
+          <h2 className="dela font-extrabold text-xl mt-0 mb-0">Remember</h2>
+          <ul>
+            <li>
+              Tryout Day 1 (All welcome):
+              <br />
+              Sunday, August 24, 2025
+              <br />
+              3:00pm - 5:00pm <br />
+              BGC Taggart Parkes (
+              <a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>){" "}
+              <br />
+              <br />
+              <br />
+            </li>
+            <li>
+              Tryout Day 2 (Invitation only):
+              <br />
+              Thursday, August 28, 2025
+              <br />
+              5:30pm - 7:30pm <br />
+              BGC Taggart Parkes (
+              <a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>){" "}
+              <br />
+            </li>
+          </ul>
         </div>
       </div>
     </div>

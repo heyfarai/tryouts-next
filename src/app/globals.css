@@ -32,7 +32,9 @@ input[type="date"],
 input[type="time"],
 select,
 input[type="number"] {
-  border-bottom: 2px solid #fff;
+  border-bottom: 2px solid rgb(122, 122, 122);
+  background-color: black;
+  padding-left: 0;
 }
 label.forText {
 }
