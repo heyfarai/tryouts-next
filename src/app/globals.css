@@ -1,6 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap");
 @import "tailwindcss";
+:root {
+  --precision-red: #e80707;
+}
 
 body {
   @apply font-sans;
@@ -36,8 +39,20 @@ input[type="time"],
 select,
 input[type="number"] {
   border-bottom: 2px solid rgb(122, 122, 122);
-  background-color: black;
-  padding-left: 0;
+  @apply rounded-sm;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+input[type="number"]:focus {
+  @apply outline-none bg-neutral-900;
+  border-bottom: 2px solid var(--precision-red);
 }
 label.forText {
+}
+.stepWrapper {
+  @apply bg-neutral-800;
 }
