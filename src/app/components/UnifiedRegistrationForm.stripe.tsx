@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import StripePaymentForm from "./StripePaymentForm";
@@ -21,9 +21,18 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 }) => {
   // Players
   const [players, setPlayers] = useState<Player[]>([]);
-  const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
-    { firstName: "", lastName: "", birthdate: "", gender: "" },
-  ]);
+const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
+  { firstName: "", lastName: "", birthdate: "", gender: "" },
+]);
+
+// Ensure at least one blank player on mount
+useEffect(() => {
+  if (players.length === 0) {
+    setPlayers([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
+    setPlayerErrors([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
+  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, []);
 
   // Guardian fields
   const [guardianName, setGuardianName] = useState("");
