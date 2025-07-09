@@ -102,17 +102,15 @@ export default function Home() {
               <li className="mt-4">Fees $30 per player.</li>
             </ul>
             <p className="text-lg mb-0">
-              Who's eligible? Competitive players born in 2012{" "}
-              <i>(or later if you play up)</i>.
+              For competitive players born in 2012 or later.
             </p>
             <p className="text-lg mb-8">
               Tryouts will be conducted by 4-6 Precision Heat coaches, alongside
               current competitive basketball professionals.
             </p>
             <p className="text-lg mb-8">
-              We&apos;re not trying to catch you slipping. We want to see you at
-              your best. So come and show us your athleticism, court IQ,
-              competitive drive, and coachable mindset.
+              We want to see you at your best. Show up with your athleticism,
+              court IQ, competitive drive, and coachable mindset.
             </p>
           </div>
           <div className="formContent">
