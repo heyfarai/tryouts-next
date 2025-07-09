@@ -1,9 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
+import useClearRegistrationForm from "./useClearRegistrationForm";
 import ConfirmationInfo from "./ConfirmationInfo";
 import ConfirmationStepWrapper from "./ConfirmationStepWrapper";
 
 export default function RegistrationCompletePage() {
+  useClearRegistrationForm();
   const [confirmation, setConfirmation] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

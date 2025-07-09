@@ -16,11 +16,28 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 }) => {
   // Local loading state for Pay button
   const [payLoading, setPayLoading] = useState(false);
-  // Clear confirmation state when landing on the form
+
+  // Persisted registration form state keys
+  const FORM_STORAGE_KEY = "registrationFormData";
+
+  // Initialize state from localStorage if present
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.removeItem("confirmationEmailSent");
       localStorage.removeItem("registrationConfirmation");
+      const saved = localStorage.getItem(FORM_STORAGE_KEY);
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          if (data.players) setPlayers(data.players);
+          if (data.guardianName) setGuardianName(data.guardianName);
+          if (data.guardianPhone) setGuardianPhone(data.guardianPhone);
+          if (data.guardianEmail) setGuardianEmail(data.guardianEmail);
+          if (typeof data.waiverLiability === "boolean") setWaiverLiability(data.waiverLiability);
+          if (typeof data.waiverPhoto === "boolean") setWaiverPhoto(data.waiverPhoto);
+          if (typeof data.accordionStep === "number") setAccordionStep(data.accordionStep);
+        } catch {}
+      }
     }
   }, []);
 
@@ -45,10 +62,25 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const [waiverLiabilityError, setWaiverLiabilityError] = useState("");
   const [waiverPhotoError, setWaiverPhotoError] = useState("");
 
-  // Payment state
-
   // Accordion step state: 1 = player, 2 = guardian, 3 = payment
   const [accordionStep, setAccordionStep] = useState(1);
+
+  // Save form data to localStorage whenever relevant state changes
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const data = {
+        players,
+        guardianName,
+        guardianPhone,
+        guardianEmail,
+        waiverLiability,
+        waiverPhoto,
+        accordionStep,
+      };
+      localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
+    }
+  }, [players, guardianName, guardianPhone, guardianEmail, waiverLiability, waiverPhoto, accordionStep]);
+
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const router = useRouter();
@@ -573,6 +605,10 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   );
                 } finally {
                   setPayLoading(false);
+                  // Only clear persisted form data after payment attempt (success or cancel handled by redirect)
+                  if (typeof window !== "undefined") {
+                    localStorage.removeItem(FORM_STORAGE_KEY);
+                  }
                 }
               }}
             >
