@@ -6,8 +6,6 @@
 }
 
 .sectionHero {
-  min-height: 100vh;
-  height: 100vh;
   background-image: url("/bg-shot.jpg");
   background-size: cover;
   background-position: top;
