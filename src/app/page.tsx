@@ -20,8 +20,8 @@ export default function Home() {
             );
           return res.json();
         })
-        .then((data) => setRegistrations(data.registrations || []))
-        // .finally(() => setRegistrationsLoading(false));
+        .then((data) => setRegistrations(data.registrations || []));
+      // .finally(() => setRegistrationsLoading(false));
     }
   }, [isLoaded, user]);
 
@@ -32,7 +32,7 @@ export default function Home() {
     <div>
       <div className="sectionHero flex flex-col justify-center lg:pl-64">
         <div className="content max-w-3xl mx-7">
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+          <h1 className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Precision.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">

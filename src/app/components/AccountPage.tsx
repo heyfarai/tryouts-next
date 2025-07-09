@@ -16,18 +16,6 @@ interface Registration {
   };
 }
 
-interface Registration {
-  id: string;
-  tryoutName: string;
-  createdAt: string;
-  payment?: {
-    status: string;
-    amount: number;
-    currency: string;
-    receiptUrl?: string;
-  };
-}
-
 interface DataType {
   role: string;
   players: { id: string; firstName: string; lastName: string; gender: string; birthdate: string }[];
@@ -35,11 +23,10 @@ interface DataType {
   player?: { firstName: string; lastName: string; gender: string; birthdate: string };
 }
 
-export default function AccountPage() {
+const AccountPage: React.FC = () => {
   const { user, isLoaded } = useUser();
-
   const [data, setData] = useState<DataType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -206,4 +193,6 @@ export default function AccountPage() {
       </SignOutButton>
     </div>
   );
-}
+};
+
+export default AccountPage;

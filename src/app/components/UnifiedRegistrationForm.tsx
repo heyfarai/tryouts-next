@@ -530,7 +530,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
             {/* Invoice summary */}
             <div className="bg-neutral-800 text-white p-6 rounded mb-6">
               <div className="flex justify-between mb-2">
-                <span>Players:</span>
+                <span>Players to register:</span>
                 <span>{players.length}</span>
               </div>
               <div className="flex justify-between mb-2">
@@ -541,7 +541,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     100}
                 </span>
               </div>
-              <div className="flex justify-between font-bold text-lg mt-4 border-t border-neutral-700 pt-2">
+              <div className="flex justify-between font-bold mt-4 border-t border-neutral-700 pt-2">
                 <span>Total:</span>
                 <span>
                   $
