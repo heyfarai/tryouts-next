@@ -30,8 +30,8 @@ export default function Home() {
 
   return (
     <div>
-      <div className="sectionHero flex flex-col justify-center lg:pl-64">
-        <div className="content max-w-3xl mx-7">
+      <div className="sectionHero flex flex-col justify-start lg:pl-64">
+        <div className="content max-w-3xl mx-7 pt-36">
           <h1 className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Precision.
           </h1>
@@ -102,7 +102,7 @@ export default function Home() {
               <li className="mt-4">Fees $30 per player.</li>
             </ul>
             <p className="text-lg mb-0">
-              Who`&apos;`s eligible? Competitive players born in 2012{" "}
+              Who's eligible? Competitive players born in 2012{" "}
               <i>(or later if you play up)</i>.
             </p>
             <p className="text-lg mb-8">

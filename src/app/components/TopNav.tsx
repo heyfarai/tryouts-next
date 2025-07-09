@@ -8,7 +8,7 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 const TopNav: React.FC = () => {
   return (
     <header className="absolute top-0 z-50 w-full py-7">
-      <nav className="relative max-w-7xl w-full flex flex-wrap items-center justify-between px-4 md:px-6 lg:px-8 mx-auto">
+      <nav className="relative max-w-7xl w-full flex flex-wrap items-center justify-between px-6 md:px-6 lg:px-8 mx-auto">
         <div className="flex items-center">
           {/* Logo */}
           <Link
