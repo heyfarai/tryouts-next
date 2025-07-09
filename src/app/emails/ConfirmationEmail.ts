@@ -90,12 +90,14 @@ export async function getConfirmationEmailHtml({
                 BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/>
                 </li>
             </ul>
-            ${paymentReceiptUrl
-              ? `<div style="margin: 32px 0; text-align: center;">
-                  <a href="${paymentReceiptUrl}" target="_blank" rel="noopener" style="display:inline-block;padding:12px 24px;background:#1976d2;color:#fff;text-decoration:none;border-radius:6px;font-weight:600;font-size:1.1rem;">View Payment Receipt</a>
-                  <p style="margin-top:8px;font-size:0.95rem;color:#555;">You can download or print your payment receipt here.</p>
+            ${
+              paymentReceiptUrl
+                ? `<div style="margin: 0;">
+            <p><strong>Receipt</strong></p>
+                  <a href="${paymentReceiptUrl}" target="_blank" rel="noopener" style="">View Payment Receipt</a>
                 </div>`
-              : ''}
+                : ""
+            }
             <p>See you at the tryouts!</p>
         </div>
     </div>
