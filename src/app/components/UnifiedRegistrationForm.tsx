@@ -4,6 +4,7 @@ import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
 
 import { Player, PlayerErrors } from "./PlayerForm";
+import { DEFAULT_PLAYER } from "./constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -40,21 +41,25 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   } catch {}
 
   const [players, setPlayers] = useState<Player[]>(
-    parsed.players || [
-      { firstName: "", lastName: "", birthdate: "", gender: "other" },
-    ]
+    parsed.players ||
+      (process.env.NODE_ENV === "development"
+        ? [DEFAULT_PLAYER]
+        : [{ firstName: "", lastName: "", birthdate: "", gender: "" }])
   );
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "other" },
   ]);
   const [guardianName, setGuardianName] = useState<string>(
-    parsed.guardianName || ""
+    parsed.guardianName ||
+      (process.env.NODE_ENV === "development" ? "Mumzo" : "")
   );
   const [guardianPhone, setGuardianPhone] = useState<string>(
-    parsed.guardianPhone || ""
+    parsed.guardianPhone ||
+      (process.env.NODE_ENV === "development" ? "800 000 0000" : "")
   );
   const [guardianEmail, setGuardianEmail] = useState<string>(
-    parsed.guardianEmail || ""
+    parsed.guardianEmail ||
+      (process.env.NODE_ENV === "development" ? "farai@icloud.com" : "")
   );
   const [waiverLiability, setWaiverLiability] = useState<boolean>(
     typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
@@ -90,8 +95,6 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   // Waivers
   const [waiverLiabilityError, setWaiverLiabilityError] = useState("");
-
-  // Accordion step state: 1 = player, 2 = guardian, 3 = payment
 
   // Save form data to localStorage whenever relevant state changes
   useEffect(() => {
@@ -222,7 +225,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       {/* Accordion Step 1: Player & Guardian */}
       <div
         className={`bg-neutral-800 rounded-tr-lg rounded-tl-lg ${
-          accordionStep === 1 ? "" : "opacity-60 pointer-events-none"
+          accordionStep === 1 ? "" : "opacity-60"
         }`}
       >
         <div className="stepHeader w-full flex items-center justify-between py-6 px-6  text-white rounded-tr-sm rounded-tl-sm ">
@@ -240,8 +243,13 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           {accordionStep !== 1 && (
             <button
               type="button"
-              className="hidden ml-4 text-blue-400 underline text-sm bg-transparent border-none cursor-pointer"
-              onClick={() => setAccordionStep(1)}
+              className="ml-4 underline text-sm bg-transparent border-none cursor-pointer"
+              onClick={() => {
+                setAccordionStep(1);
+                if (formRef.current) {
+                  formRef.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               tabIndex={0}
             >
               Edit
@@ -550,6 +558,44 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               </button>
             </div>
           </div>
+        )}
+        {accordionStep === 2 && (
+          <>
+            {/* Step 1 Summary */}
+            <div className="bg-neutral-800 text-white px-6 pt-0 pb-6 rounded mb-0">
+              <div className="mb-4">
+                <div className="font-semibold mb-1">Registering:</div>
+                <p className="ml-0 flex">
+                  {players.map((player, idx) => (
+                    <span
+                      key={idx}
+                      className="mb-1 list-none ml-0 pl-0"
+                    >
+                      {player.firstName} {player.lastName} — {player.birthdate}{" "}
+                    </span>
+                  ))}
+                </p>
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian:</span>{" "}
+                {guardianName || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian Phone:</span>{" "}
+                {guardianPhone || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian Email:</span>{" "}
+                {guardianEmail || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+            </div>
+          </>
         )}
       </div>
 
