@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
-import { DEFAULT_PLAYER } from "./constants";
+
 import { Player, PlayerErrors } from "./PlayerForm";
 
 interface UnifiedRegistrationFormProps {
@@ -43,7 +43,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   }, []);
 
   // Players
-  const [players, setPlayers] = useState<Player[]>([DEFAULT_PLAYER]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "" },
   ]);

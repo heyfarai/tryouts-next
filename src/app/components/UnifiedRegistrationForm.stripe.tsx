@@ -3,7 +3,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import StripePaymentForm from "./StripePaymentForm";
 import { validatePlayerInfo } from "./validation";
-import { DEFAULT_PLAYER, PAYMENT_AMOUNT_PER_PLAYER } from "./constants";
+import { PAYMENT_AMOUNT_PER_PLAYER } from "./constants";
 import { Player, PlayerErrors } from "./PlayerForm";
 
 const stripePromise = loadStripe(
@@ -20,7 +20,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   registrationLoading,
 }) => {
   // Players
-  const [players, setPlayers] = useState<Player[]>([DEFAULT_PLAYER]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "" },
   ]);
