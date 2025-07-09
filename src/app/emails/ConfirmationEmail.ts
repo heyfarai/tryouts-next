@@ -1,15 +1,9 @@
-import QRCode from "qrcode";
-
 export async function getConfirmationEmailHtml({
-  email,
   players,
   paymentReceiptUrl,
-  phone,
 }: {
-  email: string;
   players: any[];
   paymentReceiptUrl?: string;
-  phone?: string;
 }): Promise<string> {
   // DEBUG: Log input to diagnose email rendering issues
   console.log("[ConfirmationEmail] players:", JSON.stringify(players));
