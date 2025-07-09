@@ -44,18 +44,20 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   // Players
   const [players, setPlayers] = useState<Player[]>([]);
-const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
-  { firstName: "", lastName: "", birthdate: "", gender: "" },
-]);
+  const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
+    { firstName: "", lastName: "", birthdate: "", gender: "" },
+  ]);
 
-// Ensure at least one blank player on mount
-useEffect(() => {
-  if (players.length === 0) {
-    setPlayers([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
-    setPlayerErrors([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
-  }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, []);
+  // Ensure at least one blank player on mount
+  useEffect(() => {
+    if (players.length === 0) {
+      setPlayers([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
+      setPlayerErrors([
+        { firstName: "", lastName: "", birthdate: "", gender: "" },
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Guardian fields
   const [guardianName, setGuardianName] = useState("");
@@ -212,9 +214,7 @@ useEffect(() => {
             onClick={() => setAccordionStep(1)}
             aria-expanded={accordionStep === 1}
           >
-            <span className="text-2xl dela font-bold">
-              1. The Player & Guardian
-            </span>
+            <span className="text-2xl font-bold">1. The Player & Guardian</span>
             <span className="ml-2">{accordionStep === 1 ? "▼" : "▶"}</span>
           </button>
           {accordionStep !== 1 && (
@@ -230,7 +230,7 @@ useEffect(() => {
         </div>
         {accordionStep === 1 && (
           <div className="pb-12 px-6">
-            <h2 className="dela text-xl font-bold mb-12 pt-8">The Player </h2>
+            <h2 className=" text-xl font-bold mb-12 pt-8">The Player </h2>
             {players.map((player, idx) => (
               <div
                 key={idx}
@@ -411,7 +411,7 @@ useEffect(() => {
                 </div>
               </div>
             ))}
-            <h2 className="dela text-xl font-bold mb-4 pt-6">The Guardian</h2>
+            <h2 className=" text-xl font-bold mb-4 pt-6">The Guardian</h2>
             <label
               htmlFor="guardianName"
               className="uppercase text-xs mt-2 font-bold text-gray-300"
@@ -531,7 +531,7 @@ useEffect(() => {
           onClick={() => setAccordionStep(2)}
           aria-expanded={accordionStep === 2}
         >
-          <span className="text-2xl dela font-bold">2. The Money</span>
+          <span className="text-2xl font-bold">2. The Money</span>
           <span className="ml-2">{accordionStep === 2 ? "▼" : "▶"}</span>
         </button>
         {accordionStep === 2 && (

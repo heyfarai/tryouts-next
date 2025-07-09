@@ -37,7 +37,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
         onClick={onExpand}
         aria-expanded={expanded}
       >
-        <span className="dela text-xl font-bold">2. The Money</span>
+        <span className="text-xl font-bold">2. The Money</span>
         <span className="ml-2">{expanded ? "▼" : "▶"}</span>
       </button>
       {expanded && (

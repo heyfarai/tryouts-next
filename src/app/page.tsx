@@ -32,7 +32,10 @@ export default function Home() {
     <div>
       <div className="sectionHero flex flex-col justify-start lg:pl-64 min-h-[calc(100vh)]">
         <div className="content max-w-3xl mx-7 pt-36 pb-32 mb-12">
-          <h1 className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+          <h1
+            style={{ fontWeight: "600" }}
+            className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0"
+          >
             Precision.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">

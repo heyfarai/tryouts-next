@@ -68,7 +68,7 @@ const PlayerForm: React.FC<PlayerFormProps> = ({
       }}
       className="pb-24"
     >
-      <h2 className="dela text-2xl font-bold mb-4">Player Information</h2>
+      <h2 className="text-2xl font-bold mb-4">Player Information</h2>
       {players.map((player, idx) => (
         <div key={idx}>
           <div style={{ display: "flex", gap: 12 }}>

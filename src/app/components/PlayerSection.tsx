@@ -31,7 +31,7 @@ const PlayerSection: React.FC<PlayerSectionProps> = ({
         onClick={onExpand}
         aria-expanded={expanded}
       >
-        <span className="dela text-xl font-bold">1. Player(s)</span>
+        <span className="text-xl font-bold">1. Player(s)</span>
         <span className="ml-2">{expanded ? "▼" : "▶"}</span>
       </button>
       {expanded && (

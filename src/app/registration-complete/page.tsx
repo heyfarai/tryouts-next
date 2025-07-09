@@ -34,7 +34,7 @@ export default function RegistrationCompletePage() {
 
   return (
     <div>
-      <div className="sectionHero flex flex-col justify-center lg:pl-64 pb-24">
+      <div className="sectionHero flex flex-col justify-center lg:pl-64 p">
         <div className="content max-w-3xl mx-7">
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Registered.
@@ -58,7 +58,7 @@ export default function RegistrationCompletePage() {
               confirmation={confirmation}
             />
           )}
-          <h2 className="dela font-extrabold text-xl mt-0 mb-0">Remember</h2>
+          <h2 className=" font-extrabold text-xl mt-0 mb-0">Remember</h2>
           <ul>
             <li>
               Tryout Day 1 (All welcome):
