@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
         registrationId,
       },
     });
-    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret } satisfies { clientSecret: string | null });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }
