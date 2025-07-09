@@ -81,7 +81,6 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
         { firstName: "", lastName: "", birthdate: "", gender: "other" },
       ]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [players.length, hydrated]);
 
   // Guardian errors

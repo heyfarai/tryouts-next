@@ -28,6 +28,12 @@ export async function POST(req: NextRequest) {
     const session: any = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
+      payment_intent_data: {
+        metadata: {
+          registrationId,
+          guardianEmail,
+        },
+      },
       line_items: [
         {
           price_data: {
