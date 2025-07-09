@@ -44,7 +44,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     parsed.players ||
       (process.env.NODE_ENV === "development"
         ? [DEFAULT_PLAYER]
-        : [{ firstName: "", lastName: "", birthdate: "", gender: "" }])
+        : [{ firstName: "", lastName: "", birthdate: "", gender: "other" }])
   );
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "other" },
@@ -551,7 +551,14 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-gray-200"
                 disabled={registrationLoading}
                 onClick={() => {
-                  if (validateAll()) setAccordionStep(2);
+                  const valid = validateAll();
+                  if (valid) {
+                    setAccordionStep(2);
+                  } else {
+                    alert(
+                      "Please fix the errors in the form before continuing.\nCheck for missing or invalid fields highlighted in red."
+                    );
+                  }
                 }}
               >
                 {registrationLoading ? "Submitting..." : "Continue to Payment"}
