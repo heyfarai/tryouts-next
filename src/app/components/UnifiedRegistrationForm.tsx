@@ -6,12 +6,10 @@ import { DEFAULT_PLAYER } from "./constants";
 import { Player, PlayerErrors } from "./PlayerForm";
 
 interface UnifiedRegistrationFormProps {
-  onSuccess: () => void;
-  registrationLoading: boolean;
+  registrationLoading?: boolean;
 }
 
 const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
-  onSuccess,
   registrationLoading,
 }) => {
   // Local loading state for Pay button
@@ -33,9 +31,12 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           if (data.guardianName) setGuardianName(data.guardianName);
           if (data.guardianPhone) setGuardianPhone(data.guardianPhone);
           if (data.guardianEmail) setGuardianEmail(data.guardianEmail);
-          if (typeof data.waiverLiability === "boolean") setWaiverLiability(data.waiverLiability);
-          if (typeof data.waiverPhoto === "boolean") setWaiverPhoto(data.waiverPhoto);
-          if (typeof data.accordionStep === "number") setAccordionStep(data.accordionStep);
+          if (typeof data.waiverLiability === "boolean")
+            setWaiverLiability(data.waiverLiability);
+          if (typeof data.waiverPhoto === "boolean")
+            setWaiverPhoto(data.waiverPhoto);
+          if (typeof data.accordionStep === "number")
+            setAccordionStep(data.accordionStep);
         } catch {}
       }
     }
@@ -60,7 +61,6 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const [waiverLiability, setWaiverLiability] = useState(true);
   const [waiverPhoto, setWaiverPhoto] = useState(true);
   const [waiverLiabilityError, setWaiverLiabilityError] = useState("");
-  const [waiverPhotoError, setWaiverPhotoError] = useState("");
 
   // Accordion step state: 1 = player, 2 = guardian, 3 = payment
   const [accordionStep, setAccordionStep] = useState(1);
@@ -79,8 +79,15 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       };
       localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
     }
-  }, [players, guardianName, guardianPhone, guardianEmail, waiverLiability, waiverPhoto, accordionStep]);
-
+  }, [
+    players,
+    guardianName,
+    guardianPhone,
+    guardianEmail,
+    waiverLiability,
+    waiverPhoto,
+    accordionStep,
+  ]);
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const router = useRouter();
@@ -134,13 +141,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     }
     // Waivers
     setWaiverLiabilityError("");
-    setWaiverPhotoError("");
     if (!waiverLiability) {
       setWaiverLiabilityError("You must agree to the liability waiver.");
       valid = false;
     }
     if (!waiverPhoto) {
-      setWaiverPhotoError("You must consent to photo/video release.");
       valid = false;
     }
     return valid;

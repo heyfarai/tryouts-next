@@ -4,26 +4,58 @@ import { useUser } from "@clerk/nextjs";
 import React, { useEffect, useState } from "react";
 import { SignOutButton } from "@clerk/nextjs";
 
+interface Registration {
+  id: string;
+  tryoutName: string;
+  createdAt: string;
+  payment?: {
+    status: string;
+    amount: number;
+    currency: string;
+    receiptUrl?: string;
+  };
+}
+
+interface Registration {
+  id: string;
+  tryoutName: string;
+  createdAt: string;
+  payment?: {
+    status: string;
+    amount: number;
+    currency: string;
+    receiptUrl?: string;
+  };
+}
+
+interface DataType {
+  role: string;
+  players: { id: string; firstName: string; lastName: string; gender: string; birthdate: string }[];
+  registrations: (Registration & { players: { player: { firstName: string; lastName: string } }[] })[];
+  player?: { firstName: string; lastName: string; gender: string; birthdate: string };
+}
+
 export default function AccountPage() {
   const { user, isLoaded } = useUser();
-  const [data, setData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+
+  const [data, setData] = useState<DataType | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     if (!isLoaded || !user) return;
     const role =
       user.publicMetadata?.role || user.unsafeMetadata?.role || "GUARDIAN";
     fetch(`/api/account-data?clerkUserId=${user.id}&role=${role}`)
-      .then(async (res) => {
+      .then(async (res: Response) => {
         if (!res.ok)
           throw new Error(
             (await res.json()).error || "Failed to load account data"
           );
-        return res.json();
+        return res.json() as Promise<DataType>;
       })
       .then(setData)
-      .catch((err) => setError(err.message || "Unknown error"))
+      .catch((err: Error) => setError(err.message || "Unknown error"))
       .finally(() => setLoading(false));
   }, [isLoaded, user]);
 
@@ -44,12 +76,12 @@ export default function AccountPage() {
       <div>
         <strong>Email:</strong> {user.primaryEmailAddress?.emailAddress}
       </div>
-      {role === "GUARDIAN" && (
+      {data && role === "GUARDIAN" && (
         <>
           <h2>Your Players</h2>
           <ul>
-            {data.players?.length ? (
-              data.players.map((p: any) => (
+            {data && data.players && data.players.length ? (
+              data.players.map((p: { id: string; firstName: string; lastName: string; gender: string; birthdate: string }) => (
                 <li key={p.id}>
                   {p.firstName} {p.lastName} ({p.gender},{" "}
                   {new Date(p.birthdate).toLocaleDateString()})
@@ -62,7 +94,7 @@ export default function AccountPage() {
           <h2>Your Tryout Registrations</h2>
           <ul>
             {data.registrations?.length ? (
-              data.registrations.map((r: any) => (
+              data.registrations.map((r: Registration & { players: { player: { firstName: string; lastName: string } }[] }) => (
                 <li
                   key={r.id}
                   style={{ marginBottom: 16 }}
@@ -73,7 +105,7 @@ export default function AccountPage() {
                   Players:{" "}
                   {r.players
                     .map(
-                      (pr: any) =>
+                      (pr: { player: { firstName: string; lastName: string } }) =>
                         `${pr.player.firstName} ${pr.player.lastName}`
                     )
                     .join(", ")}
@@ -111,23 +143,22 @@ export default function AccountPage() {
       {role === "PLAYER" && (
         <>
           <h2>
-            Player: {data.player.firstName} {data.player.lastName}
+            Player: {data?.player?.firstName} {data?.player?.lastName}
           </h2>
           <div>
-            {data.player ? (
+            {data?.player && (
               <div>
-                {data.player.firstName} {data.player.lastName} (
-                {data.player.gender},{" "}
-                {new Date(data.player.birthdate).toLocaleDateString()})
+                {data?.player && `${data.player.firstName} ${data.player.lastName} (${data.player.gender}, ${new Date(data.player.birthdate).toLocaleDateString()})`}
               </div>
-            ) : (
+            )}
+            {!data?.player && (
               <div>No player profile found.</div>
             )}
           </div>
           <h2>Tryout Registrations</h2>
           <ul>
-            {data.registrations?.length ? (
-              data.registrations.map((r: any) => (
+            {data && data.registrations && data.registrations.length ? (
+              data.registrations.map((r: Registration & { players: { player: { firstName: string; lastName: string } }[] }) => (
                 <li
                   key={r.id}
                   style={{ marginBottom: 16 }}

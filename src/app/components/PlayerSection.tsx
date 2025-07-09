@@ -16,7 +16,6 @@ const PlayerSection: React.FC<PlayerSectionProps> = ({
   players,
   errors,
   onChange,
-  onErrors,
   onAddPlayer,
   onRemovePlayer,
   expanded,

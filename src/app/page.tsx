@@ -9,12 +9,9 @@ export default function Home() {
   const { user, isLoaded } = useUser();
   const [showForm, setShowForm] = useState(false);
   const [registrations, setRegistrations] = useState<any[]>([]);
-  const [registrationsLoading, setRegistrationsLoading] = useState(false);
-  const [registrationsError, setRegistrationsError] = useState("");
 
   useEffect(() => {
     if (isLoaded && user) {
-      setRegistrationsLoading(true);
       fetch(`/api/account-data?clerkUserId=${user.id}&role=GUARDIAN`)
         .then(async (res) => {
           if (!res.ok)
@@ -24,13 +21,11 @@ export default function Home() {
           return res.json();
         })
         .then((data) => setRegistrations(data.registrations || []))
-        .catch((err) => setRegistrationsError(err.message || "Unknown error"))
-        .finally(() => setRegistrationsLoading(false));
+        // .finally(() => setRegistrationsLoading(false));
     }
   }, [isLoaded, user]);
 
   // Unified registration form state
-  const [registrationLoading, setRegistrationLoading] = useState(false);
   const [registrationComplete, setRegistrationComplete] = useState(false);
 
   return (
@@ -107,7 +102,7 @@ export default function Home() {
               <li className="mt-4">Fees $30 per player.</li>
             </ul>
             <p className="text-lg mb-0">
-              Who's eligible? Competitive players born in 2012{" "}
+              Who`&apos;`s eligible? Competitive players born in 2012{" "}
               <i>(or later if you play up)</i>.
             </p>
             <p className="text-lg mb-8">
@@ -155,10 +150,7 @@ export default function Home() {
                         </button>
                       </div>
                     ) : (
-                      <UnifiedRegistrationForm
-                        onSuccess={() => setRegistrationComplete(true)}
-                        registrationLoading={registrationLoading}
-                      />
+                      <UnifiedRegistrationForm />
                     )}
                   </div>
                 )}

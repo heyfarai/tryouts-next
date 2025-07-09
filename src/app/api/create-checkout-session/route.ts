@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const session = await stripe.checkout.sessions.create({
+    const session: any = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "payment",
       line_items: [
@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
       cancel_url: cancelUrl || `${baseUrl}/register?canceled=1`,
     });
 
-    return NextResponse.json({ id: session.id, url: session.url });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ id: session.id, url: session.url } satisfies { id: string; url: string });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }

@@ -15,8 +15,8 @@ export async function POST(req: NextRequest) {
       sig as string,
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
-  } catch (err: any) {
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: `Webhook Error: ${err instanceof Error ? err.message : String(err)}` }, { status: 400 });
   }
   // Handle event types as needed
   switch (event.type) {
@@ -27,5 +27,5 @@ export async function POST(req: NextRequest) {
     default:
       break;
   }
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true } satisfies { received: boolean });
 }

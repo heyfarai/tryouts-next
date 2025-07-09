@@ -13,10 +13,8 @@ export async function POST(req: NextRequest) {
       );
     }
     const html = await getConfirmationEmailHtml({
-      email,
       players,
       paymentReceiptUrl,
-      phone,
     });
 
     // Nodemailer config from env
@@ -57,10 +55,10 @@ export async function POST(req: NextRequest) {
         messageId: info.messageId,
         html,
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Failed to send confirmation email:", err);
       return NextResponse.json(
-        { error: "Failed to send confirmation email", detail: err.message },
+        { error: "Failed to send confirmation email", detail: err instanceof Error ? err.message : String(err) },
         { status: 500 }
       );
     }

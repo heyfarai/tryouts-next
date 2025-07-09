@@ -13,7 +13,9 @@ interface PaymentSectionProps {
   onBack: () => void;
 }
 
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
 
 const PaymentSection: React.FC<PaymentSectionProps> = ({
   amount,
@@ -22,10 +24,13 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
   setPaymentComplete,
   expanded,
   onExpand,
-  onBack,
 }) => {
   return (
-    <div className={`mt-0 pb-24 ${expanded ? '' : 'opacity-60 pointer-events-none'}`}>
+    <div
+      className={`mt-0 pb-24 ${
+        expanded ? "" : "opacity-60 pointer-events-none"
+      }`}
+    >
       <button
         type="button"
         className="w-full text-left py-4 px-2 bg-neutral-900 text-white focus:outline-none flex items-center justify-between"
@@ -33,7 +38,7 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
         aria-expanded={expanded}
       >
         <span className="dela text-xl font-bold">2. The Money</span>
-        <span className="ml-2">{expanded ? '▼' : '▶'}</span>
+        <span className="ml-2">{expanded ? "▼" : "▶"}</span>
       </button>
       {expanded && (
         <>
@@ -49,7 +54,6 @@ const PaymentSection: React.FC<PaymentSectionProps> = ({
               Payment required to complete registration.
             </div>
           )}
-          
         </>
       )}
     </div>

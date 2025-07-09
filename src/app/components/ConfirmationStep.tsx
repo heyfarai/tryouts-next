@@ -150,7 +150,15 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
     else {
       lastPaymentStatus.current = paymentStatus;
     }
-  }, [paymentStatus, emailSent, sending, guardianEmail, players]);
+  }, [
+    paymentStatus,
+    emailSent,
+    sending,
+    guardianEmail,
+    players,
+    guardianPhone,
+    paymentReceiptUrl,
+  ]);
 
   return (
     <div>
