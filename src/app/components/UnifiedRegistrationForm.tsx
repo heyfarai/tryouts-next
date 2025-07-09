@@ -4,6 +4,7 @@ import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
 
 import { Player, PlayerErrors } from "./PlayerForm";
+import { DEFAULT_PLAYER } from "./constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -40,9 +41,10 @@ let parsed: Partial<RegistrationFormData> = {};
   } catch {}
 
   const [players, setPlayers] = useState<Player[]>(
-    parsed.players || [
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
-    ]
+    parsed.players ||
+    (process.env.NODE_ENV === "development"
+      ? [require("./constants").DEFAULT_PLAYER]
+      : [{ firstName: "", lastName: "", birthdate: "", gender: "" }])
   );
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "" },
@@ -54,7 +56,8 @@ let parsed: Partial<RegistrationFormData> = {};
     parsed.guardianPhone || ""
   );
   const [guardianEmail, setGuardianEmail] = useState<string>(
-    parsed.guardianEmail || ""
+    parsed.guardianEmail ||
+    (process.env.NODE_ENV === "development" ? "farai@icloud.com" : "")
   );
   const [waiverLiability, setWaiverLiability] = useState<boolean>(
     typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
