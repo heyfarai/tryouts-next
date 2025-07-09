@@ -22,6 +22,9 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
   paymentStatus,
   paymentReceiptUrl,
 }) => {
+  // DEBUG LOGS
+  console.log("DEBUG paymentStatus", paymentStatus);
+  console.log("DEBUG players", players, "guardianEmail", guardianEmail);
   // Debug: Log when paymentReceiptUrl arrives via props
   React.useEffect(() => {}, [paymentReceiptUrl, players]);
   const [emailSent, setEmailSent] = useState(false);
@@ -40,6 +43,12 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
       paymentStatus === "paid" ||
       paymentStatus === "succeeded" ||
       paymentStatus === "complete";
+    // Granular debug logs for each condition
+    console.log("[DEBUG] isPaymentComplete:", isPaymentComplete);
+    console.log("[DEBUG] lastPaymentStatus.current:", lastPaymentStatus.current);
+    console.log("[DEBUG] emailSent:", emailSent);
+    console.log("[DEBUG] sending:", sending);
+    console.log("[DEBUG] alreadySent:", alreadySent);
     if (
       isPaymentComplete &&
       !lastPaymentStatus.current?.match(/paid|succeeded|complete/) &&
@@ -70,51 +79,35 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             try {
               const data = JSON.parse(rawBody);
               errorMsg = data.error || errorMsg;
-              console.error("[DEBUG] Clerk user creation error data:", data);
+    
             } catch {
               errorMsg = rawBody || errorMsg;
             }
-            console.error("[DEBUG] Clerk user creation failed:", errorMsg);
+
             throw new Error(errorMsg);
           }
           let userData = null;
           try {
             userData = JSON.parse(rawBody);
           } catch {}
-          console.log(
-            "[DEBUG] Clerk user created successfully for:",
-            guardianEmail,
-            userData
-          );
           // 2. Send confirmation/receipt email (registration already exists)
-          console.log("[DEBUG] Sending confirmation email to:", guardianEmail);
-          // Debug: Log payload before sending confirmation email
           const emailPayload = {
             email: guardianEmail,
             phone: guardianPhone,
             players,
             paymentReceiptUrl,
           };
-          console.log(
-            "[DEBUG] Sending /api/send-confirmation payload:",
-            emailPayload
-          );
           return fetch("/api/send-confirmation", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(emailPayload),
           }).then(async (emailRes) => {
-            console.log(
-              "[DEBUG] /api/send-confirmation status:",
-              emailRes.status
-            );
             let body;
             try {
               body = await emailRes.clone().json();
             } catch {
               body = await emailRes.clone().text();
             }
-            console.log("[DEBUG] /api/send-confirmation response body:", body);
             if (!emailRes.ok) {
               let errorMsg = "Failed to send email";
               try {
@@ -132,11 +125,12 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
             // Mark in localStorage that confirmation email has been sent
             if (typeof window !== "undefined") {
               localStorage.setItem("confirmationEmailSent", "true");
+              localStorage.removeItem("registrationFormData");
             }
           });
         })
         .catch((err) => {
-          console.error("[DEBUG] ConfirmationStep error:", err);
+
           setError(
             err.message?.includes("404")
               ? "A required server endpoint was not found (404). Please contact support."

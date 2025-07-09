@@ -4,6 +4,8 @@ import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
 
 import { Player, PlayerErrors } from "./PlayerForm";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface UnifiedRegistrationFormProps {
   registrationLoading?: boolean;
@@ -18,67 +20,81 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   // Persisted registration form state keys
   const FORM_STORAGE_KEY = "registrationFormData";
 
-  // Initialize state from localStorage if present
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("confirmationEmailSent");
-      localStorage.removeItem("registrationConfirmation");
-      const saved = localStorage.getItem(FORM_STORAGE_KEY);
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          if (data.players) setPlayers(data.players);
-          if (data.guardianName) setGuardianName(data.guardianName);
-          if (data.guardianPhone) setGuardianPhone(data.guardianPhone);
-          if (data.guardianEmail) setGuardianEmail(data.guardianEmail);
-          if (typeof data.waiverLiability === "boolean")
-            setWaiverLiability(data.waiverLiability);
-          if (typeof data.waiverPhoto === "boolean")
-            setWaiverPhoto(data.waiverPhoto);
-          if (typeof data.accordionStep === "number")
-            setAccordionStep(data.accordionStep);
-        } catch {}
-      }
-    }
-  }, []);
+  // Hydrate all form fields from localStorage using useState initializers
+  const saved =
+    typeof window !== "undefined"
+      ? localStorage.getItem(FORM_STORAGE_KEY)
+      : null;
+  type RegistrationFormData = {
+  players: Player[];
+  guardianName: string;
+  guardianPhone: string;
+  guardianEmail: string;
+  waiverLiability: boolean;
+  waiverPhoto: boolean;
+  accordionStep: number;
+};
+let parsed: Partial<RegistrationFormData> = {};
+  try {
+    parsed = saved ? JSON.parse(saved) : {};
+  } catch {}
 
-  // Players
-  const [players, setPlayers] = useState<Player[]>([]);
+  const [players, setPlayers] = useState<Player[]>(
+    parsed.players || [
+      { firstName: "", lastName: "", birthdate: "", gender: "" },
+    ]
+  );
   const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
     { firstName: "", lastName: "", birthdate: "", gender: "" },
   ]);
+  const [guardianName, setGuardianName] = useState<string>(
+    parsed.guardianName || ""
+  );
+  const [guardianPhone, setGuardianPhone] = useState<string>(
+    parsed.guardianPhone || ""
+  );
+  const [guardianEmail, setGuardianEmail] = useState<string>(
+    parsed.guardianEmail || ""
+  );
+  const [waiverLiability, setWaiverLiability] = useState<boolean>(
+    typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
+  );
+  const [waiverPhoto, setWaiverPhoto] = useState<boolean>(
+    typeof parsed.waiverPhoto === "boolean" ? parsed.waiverPhoto : true
+  );
+  const [accordionStep, setAccordionStep] = useState<number>(
+    typeof parsed.accordionStep === "number" ? parsed.accordionStep : 1
+  );
+  const [hydrated, setHydrated] = useState<boolean>(false);
 
-  // Ensure at least one blank player on mount
   useEffect(() => {
-    if (players.length === 0) {
+    setHydrated(true);
+  }, []);
+
+  // Ensure at least one blank player on mount (only if no data was restored)
+  useEffect(() => {
+    if (players.length === 0 && hydrated) {
       setPlayers([{ firstName: "", lastName: "", birthdate: "", gender: "" }]);
       setPlayerErrors([
         { firstName: "", lastName: "", birthdate: "", gender: "" },
       ]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [players.length, hydrated]);
 
-  // Guardian fields
-  const [guardianName, setGuardianName] = useState("");
-  const [guardianPhone, setGuardianPhone] = useState("");
-  const [guardianEmail, setGuardianEmail] = useState("");
   // Guardian errors
   const [guardianNameError, setGuardianNameError] = useState("");
   const [guardianPhoneError, setGuardianPhoneError] = useState("");
   const [guardianEmailError, setGuardianEmailError] = useState("");
 
   // Waivers
-  const [waiverLiability, setWaiverLiability] = useState(true);
-  const [waiverPhoto, setWaiverPhoto] = useState(true);
   const [waiverLiabilityError, setWaiverLiabilityError] = useState("");
 
   // Accordion step state: 1 = player, 2 = guardian, 3 = payment
-  const [accordionStep, setAccordionStep] = useState(1);
 
   // Save form data to localStorage whenever relevant state changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && hydrated) {
       const data = {
         players,
         guardianName,
@@ -98,6 +114,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     waiverLiability,
     waiverPhoto,
     accordionStep,
+    hydrated,
   ]);
 
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -286,24 +303,35 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-3 flex-col md:flex-row mt-6">
-                  <div className="flex-1">
+                  <div className="flex-1 flex flex-col">
                     <label
                       htmlFor={`birthdate-${idx}`}
                       className="uppercase text-xs font-bold text-gray-300"
                     >
                       Player Birthdate
                     </label>
-                    <input
+                    <DatePicker
                       id={`birthdate-${idx}`}
-                      type="date"
-                      value={player.birthdate}
-                      onChange={(e) =>
-                        handleInputChange(idx, "birthdate", e.target.value)
+                      selected={
+                        player.birthdate ? new Date(player.birthdate) : null
                       }
+                      onChange={(date: Date | null) =>
+                        handleInputChange(
+                          idx,
+                          "birthdate",
+                          date ? date.toISOString().slice(0, 10) : ""
+                        )
+                      }
+                      dateFormat="yyyy-MM-dd"
+                      maxDate={new Date("2012-12-31")}
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      placeholderText="Select birthdate"
+                      className="w-full px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none bg-neutral-900"
                       required
-                      className="w-full px-2 py-2 mt-2 border-gray-900  text-white focus:outline-none"
-                      max="2012-12-31"
                     />
+
                     {playerErrors[idx]?.birthdate && (
                       <span className="text-red-500 text-xs block mt-1">
                         {playerErrors[idx].birthdate}
@@ -578,6 +606,10 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 disabled={registrationLoading || payLoading}
                 onClick={async () => {
                   try {
+                    // Remove confirmationEmailSent flag when starting a new registration
+                    if (typeof window !== "undefined") {
+                      localStorage.removeItem("confirmationEmailSent");
+                    }
                     setPayLoading(true);
                     const amount =
                       players.length *
@@ -625,10 +657,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     );
                   } finally {
                     setPayLoading(false);
-                    // Only clear persisted form data after payment attempt (success or cancel handled by redirect)
-                    if (typeof window !== "undefined") {
-                      localStorage.removeItem(FORM_STORAGE_KEY);
-                    }
+                    // (Do not clear registrationFormData here; it will be cleared in the confirmation step after email is sent)
                   }
                 }}
               >
