@@ -1,26 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: "2025-06-30.basil",
 });
 
 export async function POST(req: NextRequest) {
+  const protocol = req.headers.get("x-forwarded-proto") || "https";
+  const host = req.headers.get("host");
+  const baseUrl = `${protocol}://${host}`;
   try {
-    const { amount, registrationId, players, guardianEmail, successUrl, cancelUrl } = await req.json();
+    const {
+      amount,
+      registrationId,
+      players,
+      guardianEmail,
+      successUrl,
+      cancelUrl,
+    } = await req.json();
     if (!amount || !registrationId || !players || !guardianEmail) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     const session = await stripe.checkout.sessions.create({
-      payment_method_types: ['card'],
-      mode: 'payment',
+      payment_method_types: ["card"],
+      mode: "payment",
       line_items: [
         {
           price_data: {
-            currency: 'cad',
+            currency: "cad",
             product_data: {
-              name: `Tryout Registration (${players.length} player${players.length > 1 ? 's' : ''})`,
+              name: `Tryout Registration (${players.length} player${
+                players.length > 1 ? "s" : ""
+              })`,
               metadata: {
                 registrationId,
                 guardianEmail,
@@ -36,8 +51,10 @@ export async function POST(req: NextRequest) {
         guardianEmail,
       },
       customer_email: guardianEmail,
-      success_url: successUrl || `${process.env.NEXT_PUBLIC_BASE_URL}/registration-complete?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_BASE_URL}/register?canceled=1`,
+      success_url:
+        successUrl ||
+        `${baseUrl}/registration-complete?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${baseUrl}/register?canceled=1`,
     });
 
     return NextResponse.json({ id: session.id, url: session.url });
