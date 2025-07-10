@@ -98,6 +98,7 @@ export async function getConfirmationEmailHtml({
                 </div>`
                 : ""
             }
+            <p>We'll remind you closer to the day.</p>
             <p>See you at the tryouts!</p>
         </div>
     </div>
