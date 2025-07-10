@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <div>
-      <div className="sectionHero flex flex-col justify-start lg:pl-64 min-h-[calc(100vh)]">
+      <div className="sectionHero flex flex-col justify-start lg:pl-64 sm:min-h-[calc(100vh)]">
         <div className="content max-w-3xl mx-7 pt-36 pb-32 mb-12">
           <h1
             style={{ fontWeight: "600" }}
