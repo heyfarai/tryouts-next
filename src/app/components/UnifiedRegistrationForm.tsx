@@ -71,10 +71,78 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     typeof parsed.accordionStep === "number" ? parsed.accordionStep : 1
   );
   const [hydrated, setHydrated] = useState<boolean>(false);
+  // General error state for validation
+  const [showGeneralError, setShowGeneralError] = useState(false);
 
   useEffect(() => {
     setHydrated(true);
-  }, []);
+
+    // Autofill polling: for first 3 seconds after mount, poll key fields for changes
+    let active = true;
+    let pollCount = 0;
+    const maxPolls = 10; // poll for ~3 seconds (10 x 300ms)
+    const pollInterval = 300;
+    const poll = () => {
+      if (!active || pollCount > maxPolls) return;
+      pollCount++;
+      // Guardian Email
+      const emailInput = document.getElementById(
+        "guardianEmail"
+      ) as HTMLInputElement | null;
+      if (emailInput && emailInput.value !== guardianEmail) {
+        setGuardianEmail(emailInput.value);
+      }
+      // Guardian Phone
+      const phoneInput = document.getElementById(
+        "guardianPhone"
+      ) as HTMLInputElement | null;
+      if (phoneInput && phoneInput.value !== guardianPhone) {
+        setGuardianPhone(phoneInput.value);
+      }
+      // Guardian Name
+      const nameInput = document.getElementById(
+        "guardianName"
+      ) as HTMLInputElement | null;
+      if (nameInput && nameInput.value !== guardianName) {
+        setGuardianName(nameInput.value);
+      }
+      // Player fields
+      let playersChanged = false;
+      const updatedPlayers = players.map((player, idx) => {
+        let changed = false;
+        const firstNameInput = document.getElementById(
+          `player-firstName-${idx}`
+        ) as HTMLInputElement | null;
+        const lastNameInput = document.getElementById(
+          `player-lastName-${idx}`
+        ) as HTMLInputElement | null;
+        const birthdateInput = document.getElementById(
+          `player-birthdate-${idx}`
+        ) as HTMLInputElement | null;
+        const updated = { ...player };
+        if (firstNameInput && firstNameInput.value !== player.firstName) {
+          updated.firstName = firstNameInput.value;
+          changed = true;
+        }
+        if (lastNameInput && lastNameInput.value !== player.lastName) {
+          updated.lastName = lastNameInput.value;
+          changed = true;
+        }
+        if (birthdateInput && birthdateInput.value !== player.birthdate) {
+          updated.birthdate = birthdateInput.value;
+          changed = true;
+        }
+        if (changed) playersChanged = true;
+        return updated;
+      });
+      if (playersChanged) setPlayers(updatedPlayers);
+      setTimeout(poll, pollInterval);
+    };
+    setTimeout(poll, pollInterval);
+    return () => {
+      active = false;
+    };
+  }, [guardianEmail, guardianPhone, guardianName, players]);
 
   // Ensure at least one blank player on mount (only if no data was restored)
   useEffect(() => {
@@ -87,6 +155,19 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       ]);
     }
   }, [players.length, hydrated]);
+
+  // Hide general error when user edits any field
+  useEffect(() => {
+    if (showGeneralError) setShowGeneralError(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    players,
+    guardianName,
+    guardianPhone,
+    guardianEmail,
+    waiverLiability,
+    waiverPhoto,
+  ]);
 
   // Guardian errors
   const [guardianNameError, setGuardianNameError] = useState("");
@@ -272,8 +353,9 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       Player First Name
                     </label>
                     <input
-                      id={`firstName-${idx}`}
+                      id={`player-firstName-${idx}`}
                       type="text"
+                      autoComplete="given-name"
                       value={player.firstName}
                       onChange={(e) =>
                         handleInputChange(idx, "firstName", e.target.value)
@@ -295,8 +377,9 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       Player Last Name
                     </label>
                     <input
-                      id={`lastName-${idx}`}
+                      id={`player-lastName-${idx}`}
                       type="text"
+                      autoComplete="family-name"
                       value={player.lastName}
                       onChange={(e) =>
                         handleInputChange(idx, "lastName", e.target.value)
@@ -319,6 +402,17 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     >
                       Player Birthdate
                     </label>
+                    <input
+                      id={`player-birthdate-${idx}`}
+                      type="text"
+                      autoComplete="bday"
+                      value={player.birthdate}
+                      onChange={(e) => handleInputChange(idx, "birthdate", e.target.value)}
+                      required
+                      className="w-full px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none"
+                      placeholder="YYYY-MM-DD"
+                    />
+                    {/*
                     <DatePicker
                       id={`birthdate-${idx}`}
                       selected={
@@ -545,6 +639,17 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 </span>
               )}
             </div>
+            {/* General error message for validation errors */}
+            {showGeneralError && (
+              <div
+                className="bg-red-100 text-red-700 px-4 py-3 mt-12 rounded mb-4"
+                role="alert"
+              >
+                <span className="block">
+                  Check for missing or invalid fields highlighted in red.
+                </span>
+              </div>
+            )}
             <div className="mt-12 pb-6">
               <button
                 type="button"
@@ -553,11 +658,10 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 onClick={() => {
                   const valid = validateAll();
                   if (valid) {
+                    setShowGeneralError(false);
                     setAccordionStep(2);
                   } else {
-                    console.log(
-                      "Please fix the errors in the form before continuing.\nCheck for missing or invalid fields highlighted in red."
-                    );
+                    setShowGeneralError(true);
                   }
                 }}
               >
