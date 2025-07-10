@@ -39,9 +39,9 @@ export async function POST(req: NextRequest) {
           price_data: {
             currency: "cad",
             product_data: {
-              name: `Tryout Registration (${players.length} player${
-                players.length > 1 ? "s" : ""
-              })`,
+              name: `Precision Heat Tryout Registration (${
+                players.length
+              } player${players.length > 1 ? "s" : ""})`,
               metadata: {
                 registrationId,
                 guardianEmail,
@@ -63,8 +63,14 @@ export async function POST(req: NextRequest) {
       cancel_url: cancelUrl || `${baseUrl}/register?canceled=1`,
     });
 
-    return NextResponse.json({ id: session.id, url: session.url } satisfies { id: string; url: string });
+    return NextResponse.json({ id: session.id, url: session.url } satisfies {
+      id: string;
+      url: string;
+    });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
+    return NextResponse.json(
+      { error: err instanceof Error ? err.message : String(err) },
+      { status: 500 }
+    );
   }
 }

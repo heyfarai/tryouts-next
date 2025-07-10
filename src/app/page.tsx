@@ -48,9 +48,7 @@ export default function Home() {
             A U14 AAA+ (Major Bantam) competitive boys basketball team. Elite
             coaching, no politics, and real development.
           </p>
-          <h3 className="font-extrabold text-xl mt-4 mb-2">
-            3 Practices a week
-          </h3>
+          <h3 className="font-extrabold text-xl mt-4 mb-2">What to expect</h3>
           <p className="text-xl mb-8">
             Expect to practice 3 times a week. <br />1 weeknight, Saturday, and
             Sunday. (2 hours each)
