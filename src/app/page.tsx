@@ -45,9 +45,8 @@ export default function Home() {
             Progress.
           </h1>
           <p className="text-xl mb-8">
-            A U14 AAA+ (Major Bantam) competitive boys basketball team. <br />
-            Built for serious players. Elite coaching, no politics, and real
-            development.
+            A U14 AAA+ (Major Bantam) competitive boys basketball team. Elite
+            coaching, no politics, and real development.
           </p>
           <h3 className="font-extrabold text-xl mt-4 mb-2">
             3 Practices a week
@@ -63,10 +62,8 @@ export default function Home() {
             Practice Locations
           </h3>
           <ul>
-            <li>Boys and Girls Club (BGC) Taggart: 1770 Heatherington Rd</li>
-            <li>
-              Boys and Girls Club (BGC) Tomlinson: 1463 Prince of Wales Dr
-            </li>
+            <li>BGC Taggart Parkes: 1770 Heatherington Rd.</li>
+            <li>BGC Tomlinson: 1463 Prince of Wales Dr.</li>
           </ul>
           <p className="text-lg mb-0 mt-16">
             <a

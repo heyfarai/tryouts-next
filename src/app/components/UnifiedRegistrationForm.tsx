@@ -555,7 +555,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   if (valid) {
                     setAccordionStep(2);
                   } else {
-                    alert(
+                    console.log(
                       "Please fix the errors in the form before continuing.\nCheck for missing or invalid fields highlighted in red."
                     );
                   }
