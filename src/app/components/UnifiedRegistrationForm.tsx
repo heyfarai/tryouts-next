@@ -402,17 +402,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     >
                       Player Birthdate
                     </label>
-                    <input
-                      id={`player-birthdate-${idx}`}
-                      type="text"
-                      autoComplete="bday"
-                      value={player.birthdate}
-                      onChange={(e) => handleInputChange(idx, "birthdate", e.target.value)}
-                      required
-                      className="w-full px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none"
-                      placeholder="YYYY-MM-DD"
-                    />
-                    {/*
+
                     <DatePicker
                       id={`birthdate-${idx}`}
                       selected={
