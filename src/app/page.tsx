@@ -175,7 +175,7 @@ export default function Home() {
         className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
       >
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 pb-48">
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-[var(--precision-red)] mb-0">
             FAQs.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">

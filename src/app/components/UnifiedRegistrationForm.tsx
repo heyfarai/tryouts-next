@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getPaymentAmount } from "../lib/paymentAmount";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
@@ -725,21 +726,14 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
               </div>
               <div className="flex justify-between mb-2">
                 <span>Price per player</span>
-                <span>
-                  $
-                  {Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) /
-                    100}
-                </span>
+                <span>${Number(getPaymentAmount()) / 100}</span>
               </div>
               <div className="flex justify-between font-bold mt-4 border-t border-neutral-700 pt-4">
                 <span>Total to pay</span>
                 <span>
                   $
                   {(
-                    (players.length *
-                      Number(
-                        process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
-                      )) /
+                    (players.length * Number(getPaymentAmount())) /
                     100
                   ).toFixed(2)}
                 </span>
@@ -759,9 +753,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       localStorage.removeItem("confirmationEmailSent");
                     }
                     setPayLoading(true);
-                    const amount =
-                      players.length *
-                      Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER);
+                    const amount = players.length * Number(getPaymentAmount());
                     // 1. Create registration in DB
                     const regRes = await fetch("/api/create-registration", {
                       method: "POST",
@@ -812,10 +804,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 {registrationLoading || payLoading
                   ? "Processing..."
                   : `Pay $${(
-                      (players.length *
-                        Number(
-                          process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
-                        )) /
+                      (players.length * getPaymentAmount()) /
                       100
                     ).toFixed(2)}`}
               </button>
