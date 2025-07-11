@@ -12,9 +12,6 @@ export async function sendConfirmationFromWebhook({
   guardianEmail?: string;
 }) {
   try {
-
-
-
     // 1. Fetch registration, guardian, and player info
     const registration = await prisma.registration.findUnique({
       where: { id: registrationId },
@@ -25,12 +22,13 @@ export async function sendConfirmationFromWebhook({
     });
 
     if (!registration || !registration.guardian) {
-      throw new Error("Registration or guardian not found for confirmation email");
+      throw new Error(
+        "Registration or guardian not found for confirmation email"
+      );
     }
     const players = registration.players?.map((p: any) => p.player) || [];
     // Use guardianEmail from argument if provided, else fallback to DB
     const email = guardianEmail || registration.guardian.user.email;
-
 
     // 2. Compose email HTML
     const html = await getConfirmationEmailHtml({
@@ -39,7 +37,8 @@ export async function sendConfirmationFromWebhook({
     });
 
     // 3. SMTP config
-    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM } = process.env;
+    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM } =
+      process.env;
     if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !EMAIL_FROM) {
       throw new Error("Missing SMTP environment variables");
     }
@@ -52,15 +51,16 @@ export async function sendConfirmationFromWebhook({
 
     // 4. Send email
     const info = await transporter.sendMail({
-      from: EMAIL_FROM,
+      from: `"Precision Heat Basketball" <${EMAIL_FROM}>`,
       to: email,
       subject: "Precision Heat Tryouts Registration Confirmation",
       html,
+      replyTo: EMAIL_FROM, // Change this to a different address if needed
     });
 
     return info;
   } catch (err) {
-    console.error('[WebhookEmail] ERROR in sendConfirmationFromWebhook:', err);
+    console.error("[WebhookEmail] ERROR in sendConfirmationFromWebhook:", err);
     throw err;
   }
 }

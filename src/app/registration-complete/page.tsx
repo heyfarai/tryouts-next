@@ -34,8 +34,8 @@ export default function RegistrationCompletePage() {
 
   return (
     <div>
-      <div className="sectionHero flex flex-col justify-start lg:pl-64 min-h-[calc(100vh)]">
-        <div className="content max-w-3xl mx-7 pt-36">
+      <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Registered.
           </h1>
