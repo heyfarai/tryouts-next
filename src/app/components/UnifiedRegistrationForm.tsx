@@ -312,7 +312,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
         <div className="stepHeader w-full flex items-center justify-between py-6 px-6  text-white rounded-tr-sm rounded-tl-sm ">
           <button
             type="button"
-            className="w-full text-left  border-none text-white focus:outline-none flex items-center justify-between"
+            className="w-full text-left  border-none text-white focus:outline-none flex items-center justify-between "
             onClick={() => setAccordionStep(1)}
             aria-expanded={accordionStep === 1}
           >
@@ -643,7 +643,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
             <div className="mt-12 pb-6">
               <button
                 type="button"
-                className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-gray-200"
+                className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-gray-400 transition"
                 disabled={registrationLoading}
                 onClick={() => {
                   const valid = validateAll();
@@ -749,7 +749,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
             <div className="px-6 pb-12">
               <button
                 type="button"
-                className="py-3 px-8 bg-white text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-[var(--precision-red)] hover:text-white text-xl"
+                className="py-3 px-8 bg-white text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:text-white text-xl hover:bg-gray-400 transition"
                 style={{ opacity: registrationLoading || payLoading ? 0.5 : 1 }}
                 disabled={registrationLoading || payLoading}
                 onClick={async () => {

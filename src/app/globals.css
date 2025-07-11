@@ -8,7 +8,9 @@
 body {
   @apply font-sans;
 }
-
+p {
+  color: rgb(237, 235, 235);
+}
 .dela {
   font-family: "Dela Gothic One", Arial, Helvetica, sans-serif !important;
 }

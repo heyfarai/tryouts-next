@@ -30,8 +30,8 @@ export default function Home() {
 
   return (
     <div>
-      <div className="sectionHero flex flex-col justify-start lg:pl-64 sm:min-h-[calc(100vh)]">
-        <div className="content max-w-3xl mx-7 pt-36 pb-32 mb-12">
+      <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
           <h1
             style={{ fontWeight: "600" }}
             className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0"
@@ -45,39 +45,54 @@ export default function Home() {
             Progress.
           </h1>
           <p className="text-xl mb-8">
-            A U14 AAA+ (Major Bantam) competitive boys basketball team. Elite
-            coaching, no politics, and real development.
+            An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br /> We
+            coach and train competitive basketball players to elite levels of
+            individual and team skills.
           </p>
-          <h3 className="font-extrabold text-xl mt-4 mb-2">What to expect</h3>
-          <p className="text-xl mb-8">
-            Expect to practice 3 times a week. <br />1 weeknight, Saturday, and
-            Sunday. (2 hours each)
-            <br />
-            Gamedays and Leagues are TBC.
-          </p>
-
-          <h3 className="font-extrabold text-xl mt-4 mb-2">
-            Practice Locations
-          </h3>
-          <ul>
-            <li>BGC Taggart Parkes: 1770 Heatherington Rd.</li>
-            <li>BGC Tomlinson: 1463 Prince of Wales Dr.</li>
-          </ul>
-          <p className="text-lg mb-0 mt-16">
+          <p className="text-lg mb-20 mt-0">
             <a
               href="#tryouts"
-              className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-200"
+              className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-400 transition"
             >
               Register for Tryouts
             </a>
           </p>
+          <h3 className="font-bold text-2xl mt-4 mb-2">
+            Leagues, tournaments, and travel
+          </h3>
+          <p className="text-lg mb-12">
+            Games and leagues are TBC. <br /> We expect to travel to highly
+            competitive tournaments across Ontario and Quebec.
+          </p>
+          <h3 className="font-bold text-2xl mt-4 mb-2">What we believe</h3>
+          <p className="text-lg mb-12">
+            Hard work. No cap. No yap. <br />
+            Respect. For ourselves. For those around us. <br />
+            Boosting self-esteem and confidence.
+          </p>
+          <h3 className="font-bold text-2xl mt-4 mb-2">
+            We practice 3 times a week.
+          </h3>
+          <p className="text-lg mb-4">
+            1 weeknight, then Saturday and Sunday. (2 hours each)
+            <br />
+            Gamedays and Leagues are TBC.
+          </p>
+
+          <h3 className="font-bold text-sm uppercase mt-0 mb-2">
+            Practice Locations
+          </h3>
+          <ul className="mb-12">
+            <li>BGC Taggart Parkes: 1770 Heatherington Rd.</li>
+            <li>BGC Tomlinson: 1463 Prince of Wales Dr.</li>
+          </ul>
         </div>
       </div>
       <div
         id="tryouts"
-        className="sectionForm flex flex-col lg:pl-64 pt-32 px-7 bg-opacity-50"
+        className="sectionForm flex flex-col items-center lg:pt-32 pt-32 pb-32"
       >
-        <div className="content max-w-3xl bg-bl  ">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 ">
           <div className="formLede">
             <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
               Tryouts.
@@ -88,7 +103,7 @@ export default function Home() {
             <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
               With Precision.
             </h1>
-            <ul className="mb-8 text-lg">
+            <ul className="mb-12 text-lg">
               <li>
                 Tryouts Day 1 (All welcome): Sunday, 24 August, 3:00pm-5:00pm at
                 BGC Taggart Parkes.
@@ -139,7 +154,7 @@ export default function Home() {
                           confirmation and next steps.
                         </p>
                         <button
-                          className="py-2 px-6 border border-gray-300 rounded"
+                          className="py-2 px-6 border border-gray-300 rounded hover:bg-gray-200 transition"
                           onClick={() => setRegistrationComplete(false)}
                         >
                           Register another player
@@ -152,6 +167,73 @@ export default function Home() {
                 )}
               </>
             )}
+          </div>
+        </div>
+      </div>
+      <div
+        id="FAQ"
+        className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
+      >
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 pb-48">
+          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+            FAQs.
+          </h1>
+          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
+            Answers.
+          </h1>
+          <div className="faqContent mt-16">
+            <div className="faqItem mb-12">
+              <h2 className="text-xl font-bold mb-4">
+                What is the Tryout and Evaluation Process?
+              </h2>
+              <p className="text-lg mb-4">
+                <strong>Coaching Staff</strong> Tryouts will be conducted by 4-6
+                Precision Heat coaches, alongside current competitive basketball
+                professionals.
+              </p>
+              <div className="text-lg mb-4">
+                <strong>Evaluation Criteria</strong>
+                <ul className="list-disc ml-4">
+                  <li>Standardized tryout forms</li>
+                  <li>
+                    Assessment of athletic abilities and basketball skills
+                  </li>
+                  <li>Scrimmages to evaluate game-like decision-making</li>
+                  <li>
+                    Evaluation of coachability athletic abilities and basketball
+                    skills
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="faqItem">
+              <h2 className="text-xl font-bold mb-4">
+                Is Financial Assistance Available?
+              </h2>
+              <p className="text-lg mb-4">
+                Financial assistance is available on a case by case basis.
+                Contact us at{" "}
+                <a
+                  href="mailto:gm@precisionheat.team"
+                  className=" text-[var(--precision-red)] hover:underline hover:text-gray-400 transition"
+                >
+                  gm@precisionheat.team
+                </a>{" "}
+                to inquire about financial assistance options.
+              </p>
+            </div>
+            <div className="faqItem">
+              <h2 className="text-xl font-bold mb-4">More questions?</h2>
+              <p className="text-lg mb-4">
+                Reach out to{" "}
+                <a
+                  href="mailto:gm@precisionheat.team"
+                  className="text-[var(--precision-red)] hover:underline hover:text-gray-400 transition"
+                >
+                  gm@precisionheat.team
+                </a>
+              </p>
+            </div>
           </div>
         </div>
       </div>

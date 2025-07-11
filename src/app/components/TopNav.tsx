@@ -8,7 +8,7 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 const TopNav: React.FC = () => {
   return (
     <header className="absolute top-0 z-50 w-full py-7">
-      <nav className="relative max-w-7xl w-full flex flex-wrap items-center justify-between px-6 md:px-6 lg:px-8 mx-auto">
+      <nav className="relative w-full flex flex-wrap items-center justify-between px-6 md:px-6 lg:px-8 mx-auto">
         <div className="flex items-center">
           {/* Logo */}
           <Link
@@ -27,20 +27,32 @@ const TopNav: React.FC = () => {
         </div>
 
         {/* Button Group: Auth only */}
-        <div className="flex items-center gap-x-1 lg:gap-x-2 ms-auto py-1 lg:ps-6 lg:order-3 lg:col-span-3 hidden ">
+        <div className="flex items-center gap-x-4 lg:gap-x-6 ms-auto py-1 lg:ps-6 lg:order-3 lg:col-span-3">
+          <Link
+            href="#tryouts"
+            className="font-bold hover:text-gray-400 transition"
+          >
+            Tryouts
+          </Link>
+          <Link
+            href="#FAQ"
+            className="font-bold hover:text-gray-400 transition"
+          >
+            FAQ
+          </Link>
           <SignedOut>
-            <SignInButton>
+            {/* <SignInButton>
               <button
                 type="button"
                 className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent focus:outline-hidden transition disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
               >
                 Sign in
               </button>
-            </SignInButton>
+            </SignInButton> */}
           </SignedOut>
           <SignedIn>
             <Link href="/account">Account</Link>
-            {/* <SignOutButton>
+            {/* <SignOutButton> 
               <button
                 type="button"
                 className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium text-nowrap rounded-xl border border-transparent bg-gray-200 text-black hover:bg-gray-300 focus:outline-hidden focus:bg-gray-300 transition disabled:opacity-50 disabled:pointer-events-none"
