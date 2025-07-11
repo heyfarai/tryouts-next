@@ -13,7 +13,7 @@ const TopNav: React.FC = () => {
           {/* Logo */}
           <Link
             href="/"
-            className="flex-none text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
+            className="md:fixed md:top-5 flex-none text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
             aria-label="Precision Heat"
           >
             <Image
