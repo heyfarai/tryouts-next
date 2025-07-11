@@ -33,8 +33,8 @@ export default function Home() {
       <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
           <h1
-            style={{ fontWeight: "600" }}
-            className="dela font-weight-[600] font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0"
+            style={{ color: "var(--precision-red)" }}
+            className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
           >
             Precision.
           </h1>
@@ -94,36 +94,60 @@ export default function Home() {
       >
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 ">
           <div className="formLede">
-            <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+            <h1
+              style={{ color: "var(--precision-red)" }}
+              className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-1"
+            >
               Tryouts.
             </h1>
-            <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
-              Shoot your shot.
+            <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-1">
+              Take the shot.
             </h1>
             <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
               With Precision.
             </h1>
-            <ul className="mb-12 text-lg">
-              <li>
-                Tryouts Day 1 (All welcome): Sunday, 24 August, 3:00pm-5:00pm at
-                BGC Taggart Parkes.
-              </li>
-              <li>
-                Tryouts Day 2 (Invitation only): Thursday, 28 August,
-                5:30pm-7:30pm at BGC Taggart Parkes.
-              </li>
-              <li className="mt-4">Fees $30 per player.</li>
-            </ul>
-            <p className="text-lg mb-0">
-              For competitive players born in 2012 or later.
+            <p className="text-lg mb-4">
+              For competitive players born in 2012 or later. $30 per player.
             </p>
+            <div className="flex lg:flex-row flex-col mb-2 text-lg gap-x-16">
+              <div className="mb-6">
+                <span className="font-bold uppercase mt-0 mb-2">
+                  Tryouts Day 1
+                </span>
+                <br />
+                (All welcome) <br />
+                Sunday, 24 August <br />
+                3:00pm - 5:00pm <br />
+                BGC Taggart Parkes (
+                <a
+                  href="https://maps.app.goo.gl/fcace5GkineLFBK69"
+                  className="text-[var(--precision-red)]"
+                >
+                  map
+                </a>
+                )
+              </div>
+              <div className="mb-6">
+                <span className="font-bold uppercase mt-0 mb-2">
+                  Tryouts Day 2
+                </span>
+                <br />
+                (Invitation only) <br />
+                Thursday, 28 August <br />
+                5:30pm - 7:30pm <br />
+                BGC Taggart Parkes (
+                <a
+                  href="https://maps.app.goo.gl/fcace5GkineLFBK69"
+                  className="text-[var(--precision-red)]"
+                >
+                  map <i className="fa-solid fa-location-dot"></i>
+                </a>
+                )
+              </div>
+            </div>
             <p className="text-lg mb-8">
-              Tryouts will be conducted by 4-6 Precision Heat coaches, alongside
-              current competitive basketball professionals.
-            </p>
-            <p className="text-lg mb-8">
-              We want to see you at your best. Show up with your athleticism,
-              court IQ, competitive drive, and coachable mindset.
+              Bring your athleticism, court IQ, competitive drive, and coachable
+              mindset.
             </p>
           </div>
           <div className="formContent">
@@ -175,7 +199,10 @@ export default function Home() {
         className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
       >
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 pb-48">
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-[var(--precision-red)] mb-0">
+          <h1
+            style={{ color: "var(--precision-red)" }}
+            className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
+          >
             FAQs.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
@@ -187,7 +214,7 @@ export default function Home() {
                 What is the Tryout and Evaluation Process?
               </h2>
               <p className="text-lg mb-4">
-                <strong>Coaching Staff</strong> Tryouts will be conducted by 4-6
+                <strong>Coaching Staff</strong> Tryouts will be conducted by
                 Precision Heat coaches, alongside current competitive basketball
                 professionals.
               </p>

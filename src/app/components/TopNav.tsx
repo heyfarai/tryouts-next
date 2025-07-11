@@ -30,13 +30,13 @@ const TopNav: React.FC = () => {
         <div className="flex items-center gap-x-4 lg:gap-x-6 ms-auto py-1 lg:ps-6 lg:order-3 lg:col-span-3">
           <Link
             href="#tryouts"
-            className="font-bold hover:text-gray-400 transition"
+            className="text-black font-bold hover:text-[var(--precision-red)] transition"
           >
             Tryouts
           </Link>
           <Link
             href="#FAQ"
-            className="font-bold hover:text-gray-400 transition"
+            className="text-black font-bold hover:text-[var(--precision-red)] transition"
           >
             FAQ
           </Link>

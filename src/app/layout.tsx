@@ -19,9 +19,9 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className="bg-black text-white">
+      <body className="bg-black text-[#cccccc]">
         <ClerkProvider>
-          <main className="min-h-screen text-white">
+          <main className="min-h-screen text-[#cccccc]">
             <TopNav />
             {children}
           </main>
