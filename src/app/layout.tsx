@@ -8,6 +8,7 @@ export const metadata: Metadata = {
 };
 
 import TopNav from "./components/TopNav";
+import { getAbsoluteUrl } from "./lib/getAbsoluteUrl";
 
 export default function RootLayout({
   children,
@@ -42,6 +43,24 @@ export default function RootLayout({
           name="theme-color"
           content="#e80707"
         />
+        {/* Social Sharing Meta Tags */}
+        <meta
+          property="og:title"
+          content="Precision Heat Basketball - Tryout Registration Open"
+        />
+        <meta
+          property="og:description"
+          content="Precision Heat Tryouts Registration"
+        />
+        {/* Social Sharing Meta Tags using dynamic absolute URLs */}
+        {/* Import getAbsoluteUrl at the top of the file: import { getAbsoluteUrl } from "./lib/getAbsoluteUrl"; */}
+        <meta property="og:image" content={getAbsoluteUrl('/social-image.jpg')} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={getAbsoluteUrl('/')} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Precision Heat Basketball - Tryout Registration Open" />
+        <meta name="twitter:description" content="Precision Heat Tryouts Registration" />
+        <meta name="twitter:image" content={getAbsoluteUrl('/social-image.jpg')} />
       </head>
       <body className="bg-black text-[#cccccc]">
         <ClerkProvider>
