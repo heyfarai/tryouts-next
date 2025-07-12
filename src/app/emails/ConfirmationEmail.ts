@@ -1,15 +1,9 @@
-import QRCode from "qrcode";
-
 export async function getConfirmationEmailHtml({
-  email,
   players,
   paymentReceiptUrl,
-  phone,
 }: {
-  email: string;
   players: any[];
   paymentReceiptUrl?: string;
-  phone?: string;
 }): Promise<string> {
   // DEBUG: Log input to diagnose email rendering issues
   console.log("[ConfirmationEmail] players:", JSON.stringify(players));
@@ -96,7 +90,15 @@ export async function getConfirmationEmailHtml({
                 BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/>
                 </li>
             </ul>
-            
+            ${
+              paymentReceiptUrl
+                ? `<div style="margin: 0;">
+            <p><strong>Receipt</strong></p>
+                  <a href="${paymentReceiptUrl}" target="_blank" rel="noopener" style="">View Payment Receipt</a>
+                </div>`
+                : ""
+            }
+            <p>We'll remind you closer to the day.</p>
             <p>See you at the tryouts!</p>
         </div>
     </div>

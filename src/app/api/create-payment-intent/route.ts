@@ -7,21 +7,25 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
 
 export async function POST(req: NextRequest) {
   try {
-    const {
-      amount = Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER),
-      currency = "cad",
-      registrationId,
-    } = await req.json();
+    const body = await req.json();
+    const { amount, currency = "cad", registrationId } = body;
+
+    // Import helper
+    const { getPaymentAmountFromUrl } = await import("../../lib/paymentAmount");
+    let finalAmount = amount;
+    if (!finalAmount) {
+      finalAmount = getPaymentAmountFromUrl(req.url);
+    }
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: finalAmount,
       currency,
       metadata: {
         integration_check: "tryouts-registration",
         registrationId,
       },
     });
-    return NextResponse.json({ clientSecret: paymentIntent.client_secret });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ clientSecret: paymentIntent.client_secret } satisfies { clientSecret: string | null });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }
