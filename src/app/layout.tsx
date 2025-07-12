@@ -3,8 +3,13 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Script from "next/script";
 
+function getTitle() {
+  const base = "Precision Heat Basketball - Tryout Registration Open";
+  return process.env.NODE_ENV === "development" ? `[DEV] ${base}` : base;
+}
+
 export const metadata: Metadata = {
-  title: "Precision Heat Basketball - Tryout Registration Open",
+  title: getTitle(),
   description: "Precision Heat Tryouts Registration",
 };
 

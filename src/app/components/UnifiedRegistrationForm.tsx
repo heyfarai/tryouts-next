@@ -60,7 +60,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   );
   const [guardianEmail, setGuardianEmail] = useState<string>(
     parsed.guardianEmail ||
-      (process.env.NODE_ENV === "development" ? "farai@icloud.com" : "")
+      (process.env.NODE_ENV === "development" ? "gm@precisionheat.team" : "")
   );
   const [waiverLiability, setWaiverLiability] = useState<boolean>(
     typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
