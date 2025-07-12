@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Script from "next/script";
+import { isDevOrPreviewEnv } from "./lib/envUtils";
 
 function getTitle() {
   const base = "Precision Heat Basketball - Tryout Registration Open";
-  return process.env.NODE_ENV === "development" ? `[DEV] ${base}` : base;
+  return isDevOrPreviewEnv() ? `[DEV] ${base}` : base;
 }
 
 export const metadata: Metadata = {
