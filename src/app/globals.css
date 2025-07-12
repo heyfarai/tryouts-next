@@ -35,6 +35,13 @@ ul {
   min-height: 100vh;
   /* Ensures black background is visible where image doesn't cover */
 }
+.sectionFAQ {
+  background-image: url("/bg-rim.jpg");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-color: black;
+}
 input[type="text"],
 input[type="email"],
 input[type="tel"],
