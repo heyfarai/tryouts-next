@@ -43,7 +43,7 @@ const TopNav: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram"
-            className="flex items-center text-white shadow-sm hover:text-[var(--precision-red)] transition"
+            className="flex items-center text-white shadow-sm hover:text-[var(--precision-red)] transition rounded-sm"
           >
             {/* Filled Instagram SVG icon */}
             <svg
