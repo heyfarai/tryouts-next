@@ -32,31 +32,30 @@ export default function Home() {
     <div>
       <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
-          <h1
-            style={{ color: "var(--precision-red)" }}
-            className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
-          >
-            Precision.
-          </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
-            Purpose.
-          </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
-            Progress.
-          </h1>
-          <p className="text-xl mb-8">
-            An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br /> We
-            coach and train competitive basketball players to elite levels of
-            individual and team skills.
-          </p>
-          <p className="text-lg mb-20 mt-0">
-            <a
-              href="#tryouts"
-              className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-400 transition"
+          <div className="mb-40">
+            <h1
+              style={{ color: "var(--precision-red)" }}
+              className="dela font-extrabold text-4xl lg:text-5xl md:text-4xl mb-0"
             >
-              Register for Tryouts
-            </a>
-          </p>
+              Precision Heat.
+            </h1>
+            <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-4xl mt-0 mb-12">
+              Basketball.
+            </h1>
+            <p className="text-xl mb-8">
+              An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br /> We
+              coach and train competitive basketball players to elite levels of
+              individual and team skills.
+            </p>
+            <p className="text-lg mb-20 mt-0">
+              <a
+                href="#tryouts"
+                className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-400 transition"
+              >
+                Register for Tryouts
+              </a>
+            </p>
+          </div>
           <h3 className="font-bold text-2xl mt-4 mb-2">
             Leagues, tournaments, and travel
           </h3>
