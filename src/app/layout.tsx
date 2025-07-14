@@ -60,7 +60,7 @@ export default function RootLayout({
         />
         <meta
           property="og:image"
-          content={getAbsoluteUrl("/social-image.jpg")}
+          content="https://precisionheat.team/social-image.jpg"
         />
         <meta
           property="og:type"
@@ -68,7 +68,7 @@ export default function RootLayout({
         />
         <meta
           property="og:url"
-          content={getAbsoluteUrl("/")}
+          content="https://precisionheat.team"
         />
         <meta
           name="twitter:card"
@@ -84,7 +84,7 @@ export default function RootLayout({
         />
         <meta
           name="twitter:image"
-          content={getAbsoluteUrl("/social-image.jpg")}
+          content="https://precisionheat.team/social-image.jpg"
         />
         <Script
           id="crisp-script"
