@@ -31,7 +31,7 @@ export default function Home() {
   return (
     <div>
       <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
-        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
           <div className="mb-40">
             <h1
               style={{ color: "var(--precision-red)" }}
@@ -91,7 +91,7 @@ export default function Home() {
         id="tryouts"
         className="sectionForm flex flex-col items-center lg:pt-32 pt-32 pb-32"
       >
-        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 ">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 ">
           <div className="formLede">
             <h1
               style={{ color: "var(--precision-red)" }}
@@ -197,7 +197,7 @@ export default function Home() {
         id="FAQ"
         className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
       >
-        <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 pb-48">
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48">
           <h1
             style={{ color: "var(--precision-red)" }}
             className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
