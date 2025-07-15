@@ -1,7 +1,7 @@
 import postmark from "postmark";
 
 const POSTMARK_API_TOKEN = process.env.POSTMARK_API_TOKEN;
-const FROM_EMAIL = "gm@precisionheat.team";
+const FROM_EMAIL = "hi@precisionheat.team";
 const FROM_NAME = "Precision Heat Basketball";
 
 if (!POSTMARK_API_TOKEN) {
