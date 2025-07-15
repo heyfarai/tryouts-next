@@ -10,8 +10,8 @@ function getTitle() {
 }
 
 export const metadata: Metadata = {
-  title: getTitle(),
-  description: "Precision Heat Tryouts Registration",
+  title: "Precision Heat - U14 Boys Basketball Tryout Registration Open",
+  description: "Precision Heat U14 Boys Basketball Tryout Registration",
 };
 
 import TopNav from "./components/TopNav";
@@ -50,17 +50,14 @@ export default function RootLayout({
           name="theme-color"
           content="#e80707"
         />
-        {/* Social Sharing Meta Tags */}
         <meta
           property="og:title"
-          content="Precision Heat Basketball - Tryout Registration Open"
+          content="Precision Heat - U14 Boys Basketball Tryout Registration Open"
         />
         <meta
           property="og:description"
-          content="Precision Heat Tryouts Registration"
+          content="Precision Heat U14 Boys Basketball Tryout Registration"
         />
-        {/* Social Sharing Meta Tags using dynamic absolute URLs */}
-        {/* Import getAbsoluteUrl at the top of the file: import { getAbsoluteUrl } from "./lib/getAbsoluteUrl"; */}
         <meta
           property="og:image"
           content={getAbsoluteUrl("/social-image.jpg")}
@@ -79,11 +76,11 @@ export default function RootLayout({
         />
         <meta
           name="twitter:title"
-          content="Precision Heat Basketball - Tryout Registration Open"
+          content="Precision Heat - U14 Boys Basketball Tryout Registration Open"
         />
         <meta
           name="twitter:description"
-          content="Precision Heat Tryouts Registration"
+          content="Precision Heat U14 Boys Basketball Tryout Registration"
         />
         <meta
           name="twitter:image"
