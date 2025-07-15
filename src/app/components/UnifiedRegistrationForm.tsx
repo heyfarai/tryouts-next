@@ -58,7 +58,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     parsed.guardianPhone || (isDevOrPreviewEnv() ? "800 000 0000" : "")
   );
   const [guardianEmail, setGuardianEmail] = useState<string>(
-    parsed.guardianEmail || (isDevOrPreviewEnv() ? "gm@precisionheat.team" : "")
+    parsed.guardianEmail || (isDevOrPreviewEnv() ? "farai@icloud.com" : "")
   );
   const [waiverLiability, setWaiverLiability] = useState<boolean>(
     typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
