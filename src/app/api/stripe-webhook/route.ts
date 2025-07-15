@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { NextRequest, NextResponse } from "next/server";
+import Stripe from "stripe";
+import { prisma } from "../../lib/prisma";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-  apiVersion: '2025-06-30.basil',
+  apiVersion: "2025-06-30.basil",
 });
 
 export async function POST(req: NextRequest) {
-  const sig = req.headers.get('stripe-signature');
+  const sig = req.headers.get("stripe-signature");
   let event;
   try {
     const body = await req.text();
@@ -15,17 +16,108 @@ export async function POST(req: NextRequest) {
       sig as string,
       process.env.STRIPE_WEBHOOK_SECRET as string
     );
-  } catch (err: any) {
-    return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
+  } catch (err: unknown) {
+    return NextResponse.json(
+      {
+        error: `Webhook Error: ${
+          err instanceof Error ? err.message : String(err)
+        }`,
+      },
+      { status: 400 }
+    );
   }
   // Handle event types as needed
   switch (event.type) {
-    case 'payment_intent.succeeded':
-      // Handle successful payment intent
+    case "payment_intent.succeeded": {
+      // Expand charges for the payment intent
+      const paymentIntent = event.data.object as Stripe.PaymentIntent & {
+        charges?: { data: { receipt_url?: string }[] };
+      };
+      const registrationId = paymentIntent.metadata?.registrationId;
+      if (registrationId) {
+        try {
+          console.log(
+            "Attempting to upsert payment for registrationId:",
+            registrationId
+          );
+          await prisma.payment.upsert({
+            where: { registrationId },
+            update: {
+              stripeId: paymentIntent.id,
+              amount: paymentIntent.amount,
+              currency: paymentIntent.currency,
+              status: paymentIntent.status,
+              receiptUrl: (() => {
+                const charges = paymentIntent.charges;
+                if (
+                  charges &&
+                  Array.isArray(charges.data) &&
+                  charges.data[0]?.receipt_url
+                ) {
+                  return charges.data[0].receipt_url;
+                }
+                return null;
+              })(),
+            },
+            create: {
+              registrationId,
+              stripeId: paymentIntent.id,
+              amount: paymentIntent.amount,
+              currency: paymentIntent.currency,
+              status: paymentIntent.status,
+              receiptUrl: (() => {
+                const charges = paymentIntent.charges;
+                if (
+                  charges &&
+                  Array.isArray(charges.data) &&
+                  charges.data[0]?.receipt_url
+                ) {
+                  return charges.data[0].receipt_url;
+                }
+                return null;
+              })(),
+            },
+          });
+          // After upsert, send confirmation email from webhook
+          try {
+            const receiptUrl = (() => {
+              const charges = paymentIntent.charges;
+              if (
+                charges &&
+                Array.isArray(charges.data) &&
+                charges.data[0]?.receipt_url
+              ) {
+                return charges.data[0].receipt_url;
+              }
+              return null;
+            })();
+            const { sendConfirmationFromWebhook } = await import(
+              "./sendConfirmationFromWebhook"
+            );
+            await sendConfirmationFromWebhook({
+              registrationId,
+              receiptUrl,
+              guardianEmail: paymentIntent.metadata?.guardianEmail,
+            });
+            console.log(
+              "Confirmation email sent from webhook for registrationId:",
+              registrationId
+            );
+          } catch (err) {
+            console.error(
+              "Failed to send confirmation email from webhook:",
+              err
+            );
+          }
+        } catch (err) {
+          console.error("Failed to upsert payment:", err);
+        }
+      }
       break;
+    }
     // Add other event types as needed
     default:
       break;
   }
-  return NextResponse.json({ received: true });
+  return NextResponse.json({ received: true } satisfies { received: boolean });
 }

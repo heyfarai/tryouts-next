@@ -50,7 +50,7 @@ export async function GET(req: NextRequest) {
         : session.payment_intent?.id;
     const confirmation = registration
       ? {
-          guardianEmail: registration.guardian?.email || guardianEmail,
+          guardianEmail: (registration.guardian as any)?.email || guardianEmail,
           guardianPhone: registration.guardian?.phone || "",
           players: registration.players?.map((p: any) => p.player) || [],
           paymentStatus,
@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
         };
 
     return NextResponse.json({ confirmation });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err instanceof Error ? err.message : String(err) : String(err) }, { status: 500 });
   }
 }
