@@ -8,6 +8,7 @@ import { Player, PlayerErrors } from "./PlayerForm";
 import { DEFAULT_PLAYER } from "./constants";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { isDevOrPreviewEnv } from "../lib/envUtils";
 
 interface UnifiedRegistrationFormProps {
   registrationLoading?: boolean;
@@ -43,7 +44,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   const [players, setPlayers] = useState<Player[]>(
     parsed.players ||
-      (process.env.NODE_ENV === "development"
+      (isDevOrPreviewEnv()
         ? [DEFAULT_PLAYER]
         : [{ firstName: "", lastName: "", birthdate: "", gender: "other" }])
   );
@@ -51,16 +52,13 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     { firstName: "", lastName: "", birthdate: "", gender: "other" },
   ]);
   const [guardianName, setGuardianName] = useState<string>(
-    parsed.guardianName ||
-      (process.env.NODE_ENV === "development" ? "Mumzo" : "")
+    parsed.guardianName || (isDevOrPreviewEnv() ? "Mumzo" : "")
   );
   const [guardianPhone, setGuardianPhone] = useState<string>(
-    parsed.guardianPhone ||
-      (process.env.NODE_ENV === "development" ? "800 000 0000" : "")
+    parsed.guardianPhone || (isDevOrPreviewEnv() ? "800 000 0000" : "")
   );
   const [guardianEmail, setGuardianEmail] = useState<string>(
-    parsed.guardianEmail ||
-      (process.env.NODE_ENV === "development" ? "farai@icloud.com" : "")
+    parsed.guardianEmail || (isDevOrPreviewEnv() ? "farai@icloud.com" : "")
   );
   const [waiverLiability, setWaiverLiability] = useState<boolean>(
     typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true

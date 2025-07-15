@@ -1,5 +1,5 @@
 import { getConfirmationEmailHtml } from "../../emails/ConfirmationEmail";
-import nodemailer from "nodemailer";
+import { sendPostmarkEmail } from "../../lib/sendPostmarkEmail";
 import { prisma } from "../../lib/prisma";
 
 export async function sendConfirmationFromWebhook({
@@ -36,29 +36,16 @@ export async function sendConfirmationFromWebhook({
       paymentReceiptUrl: receiptUrl ?? undefined,
     });
 
-    // 3. SMTP config
-    const { SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS, EMAIL_FROM } =
-      process.env;
-    if (!SMTP_HOST || !SMTP_PORT || !SMTP_USER || !SMTP_PASS || !EMAIL_FROM) {
-      throw new Error("Missing SMTP environment variables");
-    }
-    const transporter = nodemailer.createTransport({
-      host: SMTP_HOST,
-      port: Number(SMTP_PORT),
-      secure: Number(SMTP_PORT) === 465,
-      auth: { user: SMTP_USER, pass: SMTP_PASS },
-    });
+    // 3. Postmark config
 
-    // 4. Send email
-    const info = await transporter.sendMail({
-      from: `"Precision Heat Basketball" <${EMAIL_FROM}>`,
+    // 4. Send email via reusable utility
+    const result = await sendPostmarkEmail({
       to: email,
-      subject: "Precision Heat Tryouts Registration Confirmation",
+      subject: "🔥🏀 Tryouts confirmation",
       html,
-      replyTo: EMAIL_FROM, // Change this to a different address if needed
+      messageStream: "outbound",
     });
-
-    return info;
+    return result;
   } catch (err) {
     console.error("[WebhookEmail] ERROR in sendConfirmationFromWebhook:", err);
     throw err;

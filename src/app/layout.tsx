@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import Script from "next/script";
+import { isDevOrPreviewEnv } from "./lib/envUtils";
+
+function getTitle() {
+  const base = "Precision Heat Basketball - Tryout Registration Open";
+  return isDevOrPreviewEnv() ? `[DEV] ${base}` : base;
+}
 
 export const metadata: Metadata = {
   title: "Precision Heat - U14 Boys Basketball Tryout Registration Open",
