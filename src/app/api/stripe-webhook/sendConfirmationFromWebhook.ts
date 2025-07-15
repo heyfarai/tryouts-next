@@ -41,7 +41,7 @@ export async function sendConfirmationFromWebhook({
     // 4. Send email via reusable utility
     const result = await sendPostmarkEmail({
       to: email,
-      subject: "🏀 Tryouts confirmation",
+      subject: "🔥🏀 Tryouts confirmation",
       html,
       messageStream: "outbound",
     });
