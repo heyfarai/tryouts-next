@@ -24,9 +24,9 @@ const ConfirmationStep: React.FC<ConfirmationStepProps> = ({
 }) => {
   return (
     <div>
-      <p className="text-xl mb-8"></p>
       <p className="text-xl mb-8">
-        Check your email for confirmation: {guardianEmail}
+        Check your email (including spam/junk folder) for confirmation:{" "}
+        {guardianEmail}
       </p>
       {/* Optionally display receipt info here if available */}
     </div>

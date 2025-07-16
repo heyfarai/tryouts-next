@@ -40,7 +40,7 @@ export default function RegistrationCompletePage() {
             Registered.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
-            Prepare.
+            Get ready.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
             Show up.
