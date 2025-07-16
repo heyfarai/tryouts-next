@@ -1,4 +1,4 @@
-import postmark from "postmark";
+import { ServerClient } from "postmark";
 
 const POSTMARK_API_TOKEN = process.env.POSTMARK_API_TOKEN;
 const FROM_EMAIL = "hi@precisionheat.team";
@@ -8,7 +8,7 @@ if (!POSTMARK_API_TOKEN) {
   throw new Error("Missing Postmark API token");
 }
 
-const client = new postmark.ServerClient(POSTMARK_API_TOKEN);
+const client = new ServerClient(POSTMARK_API_TOKEN);
 
 export interface SendPostmarkEmailOptions {
   to: string;
