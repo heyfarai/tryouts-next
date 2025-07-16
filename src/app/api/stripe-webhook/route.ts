@@ -79,8 +79,9 @@ export async function POST(req: NextRequest) {
             },
           });
           // After upsert, send confirmation email from webhook
+          let receiptUrl;
           try {
-            const receiptUrl = (() => {
+            receiptUrl = (() => {
               const charges = paymentIntent.charges;
               if (
                 charges &&
@@ -106,7 +107,15 @@ export async function POST(req: NextRequest) {
           } catch (err) {
             console.error(
               "Failed to send confirmation email from webhook:",
-              err
+              {
+                errorMessage: err instanceof Error ? err.message : String(err),
+                errorStack: err instanceof Error ? err.stack : undefined,
+                errorType: err?.constructor?.name || typeof err,
+                registrationId,
+                guardianEmail: paymentIntent.metadata?.guardianEmail,
+                receiptUrl,
+                rawError: err
+              }
             );
           }
         } catch (err) {
