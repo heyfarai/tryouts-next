@@ -47,6 +47,15 @@ export default function RootLayout({
           rel="manifest"
           href="/site.webmanifest?v=1"
         />
+        <link
+          rel="canonical"
+          href="https://precisionheat.team/"
+        />
+
+        <meta
+          name="description"
+          content={String(metadata.description)}
+        />
         <meta
           name="theme-color"
           content="#000"
