@@ -3,6 +3,7 @@ import { getPaymentAmount } from "../lib/paymentAmount";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
+import { useCreateRegistration } from "./useCreateRegistration";
 
 import { Player, PlayerErrors } from "./PlayerForm";
 import { DEFAULT_PLAYER } from "./constants";
@@ -72,6 +73,14 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const [hydrated, setHydrated] = useState<boolean>(false);
   // General error state for validation
   const [showGeneralError, setShowGeneralError] = useState(false);
+
+  // Registration API state
+  const { createRegistration, registrationId: regIdFromHook } = useCreateRegistration();
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (regIdFromHook && !registrationId) setRegistrationId(regIdFromHook);
+  }, [regIdFromHook, registrationId]);
 
   useEffect(() => {
     setHydrated(true);
@@ -644,10 +653,20 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 type="button"
                 className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-gray-400 transition"
                 disabled={registrationLoading}
-                onClick={() => {
+                onClick={async () => {
                   const valid = validateAll();
                   if (valid) {
                     setShowGeneralError(false);
+                    // Save cart/registration on step 1 submit
+                    if (!registrationId) {
+                      const regId = await createRegistration({
+                        players,
+                        guardianEmail,
+                      });
+                      if (regId) {
+                        setRegistrationId(regId);
+                      }
+                    }
                     setAccordionStep(2);
                   } else {
                     setShowGeneralError(true);
@@ -752,22 +771,13 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     }
                     setPayLoading(true);
                     const amount = players.length * Number(getPaymentAmount());
-                    // 1. Create registration in DB
-                    const regRes = await fetch("/api/create-registration", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({
-                        players,
-                        guardianEmail,
-                      }),
-                    });
-                    const regData = await regRes.json();
-                    if (!regRes.ok)
-                      throw new Error(
-                        regData.error || "Failed to create registration"
-                      );
-                    const registrationId = regData.registrationId;
-                    // 2. Create Stripe Checkout Session with real registrationId
+                    // Use existing registrationId from step 1
+                    if (!registrationId) {
+                      alert("Registration not found. Please complete step 1 first.");
+                      setPayLoading(false);
+                      return;
+                    }
+                    // Create Stripe Checkout Session with existing registrationId
                     const res = await fetch("/api/create-checkout-session", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },

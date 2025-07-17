@@ -65,6 +65,7 @@ export async function POST(req: NextRequest) {
       data: {
         guardianId: guardian.id,
         tryoutName: "2025 Tryout",
+        status: "PENDING_PAYMENT",
         players: {
           create: players.map((p: any) => ({
             player: {

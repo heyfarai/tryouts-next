@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "../../lib/prisma";
 
+
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-06-30.basil",
 });
@@ -78,6 +79,30 @@ export async function POST(req: NextRequest) {
               })(),
             },
           });
+
+          // Update registration status to COMPLETED
+          try {
+            console.log(
+              "[StripeWebhook] Attempting to update registration status to 'COMPLETED':",
+              registrationId
+            );
+            const regUpdate = await prisma.registration.update({
+              where: { id: registrationId },
+              data: { status: "COMPLETED" },
+            });
+            console.log(
+              "[StripeWebhook] Registration status updated:",
+              regUpdate.id,
+              regUpdate.status,
+              JSON.stringify(regUpdate)
+            );
+          } catch (err) {
+            console.error(
+              "[StripeWebhook] Failed to update registration status:",
+              err,
+              registrationId
+            );
+          }
           // After upsert, send confirmation email from webhook
           let receiptUrl;
           try {
