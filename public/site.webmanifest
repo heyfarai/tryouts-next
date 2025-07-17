@@ -1,7 +1,12 @@
 {
-  "name": "Precision Heat",
+  "name": "Precision Heat Basketball",
   "short_name": "Precision Heat",
   "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
@@ -13,7 +18,7 @@
       "type": "image/png"
     }
   ],
-  "theme_color": "#e80707",
+  "theme_color": "#000",
   "background_color": "#000",
   "display": "standalone"
 }

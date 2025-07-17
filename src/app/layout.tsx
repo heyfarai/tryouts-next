@@ -11,7 +11,8 @@ function getTitle() {
 
 export const metadata: Metadata = {
   title: "Precision Heat - U14 Boys Basketball Tryout Registration Open",
-  description: "Precision Heat U14 Boys Basketball Tryout Registration",
+  description:
+    "Register for tryouts. Ottawa-based AAA+ basketball team for elite players.",
 };
 
 import TopNav from "./components/TopNav";
@@ -46,17 +47,26 @@ export default function RootLayout({
           rel="manifest"
           href="/site.webmanifest?v=1"
         />
+        <link
+          rel="canonical"
+          href="https://precisionheat.team/"
+        />
+
+        <meta
+          name="description"
+          content={String(metadata.description)}
+        />
         <meta
           name="theme-color"
-          content="#e80707"
+          content="#000"
         />
         <meta
           property="og:title"
-          content="Precision Heat - U14 Boys Basketball Tryout Registration Open"
+          content={String(metadata.title)}
         />
         <meta
           property="og:description"
-          content="Precision Heat U14 Boys Basketball Tryout Registration"
+          content={String(metadata.description)}
         />
         <meta
           property="og:image"
@@ -76,12 +86,13 @@ export default function RootLayout({
         />
         <meta
           name="twitter:title"
-          content="Precision Heat - U14 Boys Basketball Tryout Registration Open"
+          content={String(metadata.title)}
         />
         <meta
           name="twitter:description"
-          content="Precision Heat U14 Boys Basketball Tryout Registration"
+          content={String(metadata.description)}
         />
+
         <meta
           name="twitter:image"
           content="https://precisionheat.team/social-image.jpg"
@@ -91,6 +102,36 @@ export default function RootLayout({
           type="text/javascript"
         >
           {`window.$crisp=[];window.CRISP_WEBSITE_ID="6358389e-34f1-4b83-b7af-c06223dd1738";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();`}
+        </Script>
+        <Script
+          id="org-structured-data"
+          type="application/ld+json"
+        >
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SportsTeam",
+            name: String(metadata.title),
+            url: "https://precisionheat.team/",
+            logo: "https://precisionheat.team/android-chrome-512x512.png",
+            sport: "Basketball",
+            memberOf: "Ontario Basketball Association",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Ottawa",
+              addressRegion: "ON",
+              addressCountry: "CA",
+            },
+            email: "GM@precisionheat.team",
+            contactPoint: {
+              "@type": "ContactPoint",
+              contactType: "General Manager",
+              email: "GM@precisionheat.team",
+            },
+            sameAs: [
+              "https://www.facebook.com/precisionheat.team",
+              "https://instagram.com/precisionbasketball.team",
+            ],
+          })}
         </Script>
       </head>
       <body className="bg-black text-[#cccccc]">
