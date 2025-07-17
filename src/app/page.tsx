@@ -198,7 +198,7 @@ export default function Home() {
         className="sectionCoaching bg-size-[50%_50%] md:bg-cover bg-position-[-34rem_-2rem] md:bg-position-[center_0]  flex flex-col items-center  lg:pt-32 pt-32"
       >
         <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-60 md:pt-0 bg-auto ">
-          <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400">
+          <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400 md:text-black">
             Our coaches.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-0">
@@ -222,8 +222,8 @@ export default function Home() {
             <p className="text-lg mb-8 ">
               Now, they channel that experience into developing young athletes
               who play smart, stay composed, and thrive in high-stakes moments.
-              Their coaching goes beyond W's. <br />
-              It's about mindset, accountability, and real growth. <br />
+              Their coaching goes beyond W&apos;s. <br />
+              It&apos;s about mindset, accountability, and real growth. <br />
               Meet the coaches behind the culture.
             </p>
             <p className="text-lg mb-8 ">
@@ -240,7 +240,8 @@ export default function Home() {
             </p>
 
             <p className="text-lg mb-8 ">
-              W's still matter. Here's a summary of their recents successes:
+              W&apos;s still matter. Here&apos;s a summary of their recents
+              successes:
             </p>
             <ul>
               <li>🏆 2024 Ontario Cup U17 & U15 Champions</li>
