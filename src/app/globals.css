@@ -37,7 +37,6 @@ ul {
 }
 .sectionCoaching {
   background-image: url("/bg-coach.jpg");
-  background-size: cover;
   background-repeat: no-repeat;
   background-color: black;
 }

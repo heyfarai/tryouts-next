@@ -3,9 +3,9 @@ import React from "react";
 const CoachingSection = () => (
   <div
     id="coaching"
-    className="sectionCoaching bg-size-[50%_50%] md:bg-cover bg-position-[-34rem_-2rem] md:bg-position-[center_0]  flex flex-col items-center  lg:pt-32 pt-32"
+    className="sectionCoaching bg-size-[auto_40%] md:bg-size-[auto_60%] lg:bg-size-[auto_80%] bg-position-[70%_0] md:bg-position-[20%_0]  flex flex-col items-center  lg:pt-32 pt-32"
   >
-    <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-60 md:pt-0 bg-auto ">
+    <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-48 md:pt-12 bg-auto ">
       <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400 md:text-black">
         Our coaches.
       </h1>
