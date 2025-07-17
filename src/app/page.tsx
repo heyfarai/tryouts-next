@@ -209,8 +209,9 @@ export default function Home() {
           </h1>
           <div className="coachContent mt-16">
             <p className="text-lg mb-8 ">
-              Two military vets. Decades of experience. One mission: develop
-              disciplined, confident players who love the game.
+              We don&apos;t do parent coaches. We have two military vets with
+              decades of experience. One mission: develop disciplined, confident
+              players who love the game.
             </p>
             <p className="text-lg mb-8 ">
               Coach Nicholas and Coach Ron bring a combined 50+ years of
