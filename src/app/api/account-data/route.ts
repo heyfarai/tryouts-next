@@ -30,15 +30,28 @@ export async function GET(req: NextRequest) {
         },
       });
       if (!user || !user.guardian) return NextResponse.json({ error: 'Guardian not found' }, { status: 404 });
-      const registrations = user.guardian.registrations.map(r => ({
-        ...r,
-        payment: r.payment ? {
-          amount: r.payment.amount,
-          currency: r.payment.currency,
-          status: r.payment.status,
-          receiptUrl: r.payment.receiptUrl
-        } : null
-      }));
+      type RegistrationType = {
+  id: string;
+  tryoutName: string;
+  createdAt: string;
+  payment?: {
+    amount: number;
+    currency: string;
+    status: string;
+    receiptUrl?: string;
+  } | null;
+  players: unknown[];
+};
+const registrations = user.guardian.registrations.map((r: any) => ({
+  ...r,
+  createdAt: r.createdAt instanceof Date ? r.createdAt.toISOString() : r.createdAt,
+  payment: r.payment ? {
+    amount: r.payment.amount,
+    currency: r.payment.currency,
+    status: r.payment.status,
+    receiptUrl: r.payment.receiptUrl
+  } : null
+}));
       return NextResponse.json({
         role: 'GUARDIAN',
         guardian: user.guardian,
@@ -73,7 +86,7 @@ export async function GET(req: NextRequest) {
     } else {
       return NextResponse.json({ error: 'Invalid role' }, { status: 400 });
     }
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }
