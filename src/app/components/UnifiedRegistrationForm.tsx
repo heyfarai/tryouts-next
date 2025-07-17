@@ -577,6 +577,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 name="guardianPhone"
                 type="tel"
                 required
+                autoComplete="tel"
                 value={guardianPhone}
                 onChange={(e) => setGuardianPhone(e.target.value)}
                 placeholder="555-555-5555"
