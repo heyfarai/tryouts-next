@@ -195,13 +195,10 @@ export default function Home() {
       </div>
       <div
         id="coaching"
-        className="sectionCoaching flex flex-col items-center  lg:pt-32 pt-32"
+        className="sectionCoaching bg-size-[50%_50%] md:bg-cover bg-position-[-34rem_-2rem] md:bg-position-[center_0]  flex flex-col items-center  lg:pt-32 pt-32"
       >
-        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48">
-          <h1
-            style={{ color: "black" }}
-            className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400"
-          >
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-60 md:pt-0 bg-auto ">
+          <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400">
             Our coaches.
           </h1>
           <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-0">
@@ -244,19 +241,19 @@ export default function Home() {
 
             <p className="text-lg mb-8 ">
               W's still matter. Here's a summary of their recents successes:
-              <ul>
-                <li>🏆 2024 Ontario Cup U17 & U15 Champions</li>
-                <li>🏆 2025 Ontario Cup U15 Champions</li>
-                <li>
-                  🏆 3× First-Place Winners – Mike Suys Memorial Tournament
-                  (U15/U17)
-                </li>
-                <li>
-                  🏆 Podium finishes in over 10 elite-level tournaments
-                  (2021–2025)
-                </li>
-              </ul>
             </p>
+            <ul>
+              <li>🏆 2024 Ontario Cup U17 & U15 Champions</li>
+              <li>🏆 2025 Ontario Cup U15 Champions</li>
+              <li>
+                🏆 3× 1st Place Winners – Mike Suys Memorial Tournament
+                (U15/U17)
+              </li>
+              <li>
+                🏆 Podium finishes in over 10 elite-level tournaments
+                (2021–2025)
+              </li>
+            </ul>
           </div>
         </div>
       </div>
