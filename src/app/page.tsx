@@ -224,7 +224,8 @@ export default function Home() {
               Now, they channel that experience into developing young athletes
               who play smart, stay composed, and thrive in high-stakes moments.
               Their coaching goes beyond W&apos;s. <br />
-              It&apos;s about mindset, accountability, and real growth. <br />
+              It&apos;s about self-respect, mindset, accountability, and real
+              growth. <br />
               Meet the coaches behind the culture.
             </p>
             <p className="text-lg mb-8 ">
@@ -245,15 +246,14 @@ export default function Home() {
               successes:
             </p>
             <ul>
-              <li>🏆 2024 Ontario Cup U17 & U15 Champions</li>
+              <li>🏆 2024 Ontario Cup U17 Champions</li>
               <li>🏆 2025 Ontario Cup U15 Champions</li>
               <li>
-                🏆 3× 1st Place Winners – Mike Suys Memorial Tournament
+                🏆 2× 1st Place Winners – Mike Suys Memorial Tournament
                 (U15/U17)
               </li>
               <li>
-                🏆 Podium finishes in over 10 elite-level tournaments
-                (2021–2025)
+                🏆 Podium finishes in over 10 AAA-level tournaments (2021–2025)
               </li>
             </ul>
           </div>
