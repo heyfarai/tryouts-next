@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 import { prisma } from "../../lib/prisma";
 
-
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-06-30.basil",
 });
@@ -41,44 +40,30 @@ export async function POST(req: NextRequest) {
             "Attempting to upsert payment for registrationId:",
             registrationId
           );
-          await prisma.payment.upsert({
-            where: { registrationId },
-            update: {
-              stripeId: paymentIntent.id,
-              amount: paymentIntent.amount,
-              currency: paymentIntent.currency,
-              status: paymentIntent.status,
-              receiptUrl: (() => {
-                const charges = paymentIntent.charges;
-                if (
-                  charges &&
-                  Array.isArray(charges.data) &&
-                  charges.data[0]?.receipt_url
-                ) {
-                  return charges.data[0].receipt_url;
-                }
-                return null;
-              })(),
-            },
-            create: {
-              registrationId,
-              stripeId: paymentIntent.id,
-              amount: paymentIntent.amount,
-              currency: paymentIntent.currency,
-              status: paymentIntent.status,
-              receiptUrl: (() => {
-                const charges = paymentIntent.charges;
-                if (
-                  charges &&
-                  Array.isArray(charges.data) &&
-                  charges.data[0]?.receipt_url
-                ) {
-                  return charges.data[0].receipt_url;
-                }
-                return null;
-              })(),
-            },
-          });
+          // Fetch the Charge to get the receipt_url for DB and email
+let receiptUrl: string | null = null;
+if (paymentIntent.latest_charge) {
+  const charge = await stripe.charges.retrieve(paymentIntent.latest_charge as string);
+  receiptUrl = charge.receipt_url;
+}
+await prisma.payment.upsert({
+  where: { registrationId },
+  update: {
+    stripeId: paymentIntent.id,
+    amount: paymentIntent.amount,
+    currency: paymentIntent.currency,
+    status: paymentIntent.status,
+    receiptUrl: receiptUrl,
+  },
+  create: {
+    registrationId,
+    stripeId: paymentIntent.id,
+    amount: paymentIntent.amount,
+    currency: paymentIntent.currency,
+    status: paymentIntent.status,
+    receiptUrl: receiptUrl,
+  },
+});
 
           // Update registration status to COMPLETED
           try {
@@ -104,19 +89,7 @@ export async function POST(req: NextRequest) {
             );
           }
           // After upsert, send confirmation email from webhook
-          let receiptUrl;
           try {
-            receiptUrl = (() => {
-              const charges = paymentIntent.charges;
-              if (
-                charges &&
-                Array.isArray(charges.data) &&
-                charges.data[0]?.receipt_url
-              ) {
-                return charges.data[0].receipt_url;
-              }
-              return null;
-            })();
             const { sendConfirmationFromWebhook } = await import(
               "./sendConfirmationFromWebhook"
             );
@@ -130,18 +103,15 @@ export async function POST(req: NextRequest) {
               registrationId
             );
           } catch (err) {
-            console.error(
-              "Failed to send confirmation email from webhook:",
-              {
-                errorMessage: err instanceof Error ? err.message : String(err),
-                errorStack: err instanceof Error ? err.stack : undefined,
-                errorType: err?.constructor?.name || typeof err,
-                registrationId,
-                guardianEmail: paymentIntent.metadata?.guardianEmail,
-                receiptUrl,
-                rawError: err
-              }
-            );
+            console.error("Failed to send confirmation email from webhook:", {
+              errorMessage: err instanceof Error ? err.message : String(err),
+              errorStack: err instanceof Error ? err.stack : undefined,
+              errorType: err?.constructor?.name || typeof err,
+              registrationId,
+              guardianEmail: paymentIntent.metadata?.guardianEmail,
+              receiptUrl,
+              rawError: err,
+            });
           }
         } catch (err) {
           console.error("Failed to upsert payment:", err);
