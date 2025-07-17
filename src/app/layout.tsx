@@ -48,7 +48,7 @@ export default function RootLayout({
         />
         <meta
           name="theme-color"
-          content="#e80707"
+          content="#000"
         />
         <meta
           property="og:title"
