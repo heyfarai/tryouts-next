@@ -194,6 +194,73 @@ export default function Home() {
         </div>
       </div>
       <div
+        id="coaching"
+        className="sectionCoaching flex flex-col items-center  lg:pt-32 pt-32"
+      >
+        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48">
+          <h1
+            style={{ color: "black" }}
+            className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400"
+          >
+            Our coaches.
+          </h1>
+          <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-0">
+            Coach Nicholas.
+          </h1>
+          <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-0">
+            Coach Ron.
+          </h1>
+          <div className="coachContent mt-16">
+            <p className="text-lg mb-8 ">
+              Two military vets. Decades of experience. One mission: develop
+              disciplined, confident players who love the game.
+            </p>
+            <p className="text-lg mb-8 ">
+              Coach Nicholas and Coach Ron bring a combined 50+ years of
+              high-level basketball experience, on the court, on the bench, and
+              in uniform. Both competed at national and international levels as
+              members of Canadian military teams, earning a reputation for
+              toughness, precision, and performance under pressure.
+            </p>
+            <p className="text-lg mb-8 ">
+              Now, they channel that experience into developing young athletes
+              who play smart, stay composed, and thrive in high-stakes moments.
+              Their coaching goes beyond W's. <br />
+              It's about mindset, accountability, and real growth. <br />
+              Meet the coaches behind the culture.
+            </p>
+            <p className="text-lg mb-8 ">
+              Head Coach: Nicholas Thomas (
+              <a
+                className="text-[var(--precision-red)]"
+                href="/bios/bio-coach-nicholas-thomas.pdf"
+              >
+                Download full profile
+              </a>
+              )
+              {/* <br />
+              Assistant Coach: Ron&apos; */}
+            </p>
+
+            <p className="text-lg mb-8 ">
+              W's still matter. Here's a summary of their recents successes:
+              <ul>
+                <li>🏆 2024 Ontario Cup U17 & U15 Champions</li>
+                <li>🏆 2025 Ontario Cup U15 Champions</li>
+                <li>
+                  🏆 3× First-Place Winners – Mike Suys Memorial Tournament
+                  (U15/U17)
+                </li>
+                <li>
+                  🏆 Podium finishes in over 10 elite-level tournaments
+                  (2021–2025)
+                </li>
+              </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div
         id="FAQ"
         className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
       >
