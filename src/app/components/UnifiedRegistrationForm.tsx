@@ -23,6 +23,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   // Persisted registration form state keys
   const FORM_STORAGE_KEY = "registrationFormData";
+  const REG_ID_KEY = "registrationId";
 
   // Hydrate all form fields from localStorage using useState initializers
   const saved =
@@ -67,20 +68,43 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const [waiverPhoto, setWaiverPhoto] = useState<boolean>(
     typeof parsed.waiverPhoto === "boolean" ? parsed.waiverPhoto : true
   );
-  const [accordionStep, setAccordionStep] = useState<number>(
-    typeof parsed.accordionStep === "number" ? parsed.accordionStep : 1
-  );
+  const [accordionStep, setAccordionStep] = useState<number>(() => {
+    // If legacy: form data exists but no regId, force step 1
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem(FORM_STORAGE_KEY);
+      const regId = localStorage.getItem(REG_ID_KEY);
+      if (saved && !regId) return 1;
+    }
+    return typeof parsed.accordionStep === "number" ? parsed.accordionStep : 1;
+  });
   const [hydrated, setHydrated] = useState<boolean>(false);
   // General error state for validation
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   // Registration API state
   const { createRegistration, registrationId: regIdFromHook } = useCreateRegistration();
-  const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [registrationId, setRegistrationId] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem(REG_ID_KEY) : null
+  );
 
   useEffect(() => {
-    if (regIdFromHook && !registrationId) setRegistrationId(regIdFromHook);
+    if (regIdFromHook && regIdFromHook !== registrationId) {
+      setRegistrationId(regIdFromHook);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(REG_ID_KEY, regIdFromHook);
+      }
+    }
   }, [regIdFromHook, registrationId]);
+
+  // On mount, rehydrate registrationId from localStorage (for reloads)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedRegId = localStorage.getItem(REG_ID_KEY);
+      if (storedRegId && !registrationId) {
+        setRegistrationId(storedRegId);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     setHydrated(true);
@@ -666,6 +690,9 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       });
                       if (regId) {
                         setRegistrationId(regId);
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem(REG_ID_KEY, regId);
+                        }
                       }
                     }
                     setAccordionStep(2);
@@ -776,6 +803,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     if (!registrationId) {
                       alert("Registration not found. Please complete step 1 first.");
                       setPayLoading(false);
+                      // Also clear any stale regId in storage
+                      if (typeof window !== "undefined") {
+                        localStorage.removeItem(REG_ID_KEY);
+                      }
+                      setAccordionStep(1);
                       return;
                     }
                     // Create Stripe Checkout Session with existing registrationId
