@@ -98,8 +98,8 @@ export default function WaiverCodeOfConductPage() {
             <li>Recap videos, announcements, or sponsor content</li>
           </ul>
           <p>
-            If you prefer your child not appear in media, contact us at [Insert
-            Contact Info].
+            If you prefer your child not appear in media, contact us at
+            <a href="mailto:gm@precisionheat.team">gm@precisionheat.team</a>
           </p>
 
           <h2 className="dela font-extrabold text-xl mt-8 mb-4">
