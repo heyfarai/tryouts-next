@@ -104,7 +104,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
         setRegistrationId(storedRegId);
       }
     }
-  }, []);
+  }, [registrationId]);
 
   useEffect(() => {
     setHydrated(true);
