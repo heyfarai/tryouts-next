@@ -41,7 +41,7 @@ const SectionSponsors: React.FC = () => {
             key={sponsor.href}
             href={sponsor.href}
             title={sponsor.alt}
-            className="hover:opacity-80 transition mx-4"
+            className="hover:opacity-80 transition mx-4 cursor-pointer"
             target="_blank"
             rel="noopener noreferrer"
           >
