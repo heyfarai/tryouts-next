@@ -55,8 +55,15 @@ model Registration {
   guardianId   String
   tryoutName   String
   createdAt    DateTime @default(now())
+  status       RegistrationStatus @default(PENDING_PAYMENT)
   payment      Payment?
   players      PlayerRegistration[]
+}
+
+enum RegistrationStatus {
+  PENDING_PAYMENT
+  COMPLETED
+  ABANDONED
 }
 model PlayerRegistration {
   id              String   @id @default(uuid())
