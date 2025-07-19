@@ -18,6 +18,9 @@ ul {
 .alexandria {
   font-family: "Alexandria", "ui-sans-serif", "system-ui", "sans-serif" !important;
 }
+h1.alexandria {
+  letter-spacing: -1px;
+}
 
 .sectionHero {
   background-image: url("/bg-shot.jpg");

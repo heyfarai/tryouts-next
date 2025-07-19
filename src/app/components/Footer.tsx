@@ -4,7 +4,7 @@ import Image from "next/image";
 const Footer: React.FC = () => {
   return (
     <footer className="mt-auto w-full max-w-[85rem] py-10 px-4 sm:px-6 lg:px-8 mx-auto mb-12">
-      <div className="flex flex-col lg:flex-row justify-between">
+      <div className="flex flex-col md:flex-row justify-between">
         <div className="mt-3">
           <p className="text-gray-500">
             &copy; {new Date().getFullYear()} Precision Basketball Academy
