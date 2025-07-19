@@ -7,6 +7,8 @@
 
 body {
   font-family: "Manrope", "ui-sans-serif", "system-ui", "sans-serif";
+  font-weight: 500;
+  font-optical-sizing: auto;
 }
 p,
 ul {
