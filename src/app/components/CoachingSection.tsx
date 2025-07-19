@@ -3,7 +3,7 @@ import React from "react";
 const CoachingSection = () => (
   <div
     id="coaching"
-    className="sectionCoaching bg-size-[auto_40%] md:bg-size-[auto_60%] lg:bg-size-[auto_80%] bg-position-[70%_0] md:bg-position-[20%_0]  flex flex-col items-center  lg:pt-32 pt-32"
+    className="sectionCoaching bg-size-[auto_40%] md:bg-size-[auto_60%] lg:bg-size-[auto_auto] bg-position-[70%_0] md:bg-position-[20%_0]  flex flex-col items-center  lg:pt-32 pt-32"
   >
     <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-48 md:pt-16 bg-auto ">
       <h1 className="hidden dela font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400 md:text-[var(--precision-red)]">
@@ -44,7 +44,7 @@ const CoachingSection = () => (
           Download full PDF bio
         </a>
         )
-        {/* <br />
+        {/* <br />  
       Assistant Coach: Ron&apos; */}
       </p>
       <p className="text-lg mb-8 ">
