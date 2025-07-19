@@ -10,15 +10,25 @@ interface ConfirmationInfoProps {
   } | null;
 }
 
-const ConfirmationInfo: React.FC<ConfirmationInfoProps> = ({ confirmation }) => {
+const ConfirmationInfo: React.FC<ConfirmationInfoProps> = ({
+  confirmation,
+}) => {
   if (!confirmation) return null;
   return (
     <>
-      <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">Done.</h1>
-      <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">Prepare.</h1>
-      <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">Show up.</h1>
+      <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+        Done.
+      </h1>
+      <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
+        Prepare.
+      </h1>
+      <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
+        Show up.
+      </h1>
       <ConfirmationStep {...confirmation} />
-      <h2 className="dela font-extrabold text-xl lg:text-2xl md:text-xl mt-0 mb-4">Remember.</h2>
+      <h2 className="alexandria font-extrabold text-xl lg:text-2xl md:text-xl mt-0 mb-4">
+        Remember.
+      </h2>
       <ul className="mb-8 text-lg">
         <li>
           <strong> Tryouts Day 1 (All welcome)</strong> <br />

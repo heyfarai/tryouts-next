@@ -5,6 +5,8 @@ import { useUser } from "@clerk/nextjs";
 import CoachingSection from "./components/CoachingSection";
 import TryoutRegistrationList from "./components/TryoutRegistrationList";
 import UnifiedRegistrationForm from "./components/UnifiedRegistrationForm";
+import SectionSponsors from "./components/SectionSponsors";
+import SectionFAQ from "./components/SectionFAQ";
 
 export default function Home() {
   const { user, isLoaded } = useUser();
@@ -36,11 +38,11 @@ export default function Home() {
           <div className="mb-40">
             <h1
               style={{ color: "var(--precision-red)" }}
-              className="dela font-extrabold text-4xl lg:text-5xl md:text-4xl mb-0"
+              className="alexandria font-extrabold text-4xl lg:text-5xl md:text-4xl mb-0"
             >
               Precision Heat.
             </h1>
-            <h1 className="dela font-extrabold text-4xl lg:text-5xl md:text-4xl mt-0 mb-12 md:leading-[3.2rem]">
+            <h1 className="alexandria font-extrabold text-4xl lg:text-5xl md:text-4xl mt-0 mb-12 md:leading-[3.2rem]">
               U14 Boys Basketball.
             </h1>
             <p className="text-xl mb-8">
@@ -96,14 +98,14 @@ export default function Home() {
           <div className="formLede">
             <h1
               style={{ color: "var(--precision-red)" }}
-              className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-1"
+              className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mb-1"
             >
               Tryouts.
             </h1>
-            <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-1">
+            <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-1">
               Take the shot.
             </h1>
-            <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
+            <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
               With Precision.
             </h1>
             <p className="text-lg mb-4">
@@ -170,7 +172,7 @@ export default function Home() {
                   <div>
                     {registrationComplete ? (
                       <div className="p-8 text-center">
-                        <h2 className="dela text-2xl font-bold mb-4 text-green-400">
+                        <h2 className="alexandria text-2xl font-bold mb-4 text-green-400">
                           Registration Complete!
                         </h2>
                         <p className="mb-4">
@@ -195,76 +197,8 @@ export default function Home() {
         </div>
       </div>
       <CoachingSection />
-      <div
-        id="FAQ"
-        className="sectionFAQ flex flex-col items-center  lg:pt-32 pt-32"
-      >
-        <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48">
-          <h1
-            style={{ color: "var(--precision-red)" }}
-            className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
-          >
-            FAQs.
-          </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
-            Answers.
-          </h1>
-          <div className="faqContent mt-16">
-            <div className="faqItem mb-12">
-              <h2 className="text-xl font-bold mb-4">
-                What is the Tryout and Evaluation Process?
-              </h2>
-              <p className="text-lg mb-4">
-                <strong>Coaching Staff</strong> Tryouts will be conducted by
-                Precision Heat coaches, alongside current competitive basketball
-                professionals.
-              </p>
-              <div className="text-lg mb-4">
-                <strong>Evaluation Criteria</strong>
-                <ul className="list-disc ml-4">
-                  <li>Standardized tryout forms</li>
-                  <li>
-                    Assessment of athletic abilities and basketball skills
-                  </li>
-                  <li>Scrimmages to evaluate game-like decision-making</li>
-                  <li>
-                    Evaluation of coachability athletic abilities and basketball
-                    skills
-                  </li>
-                </ul>
-              </div>
-            </div>
-            <div className="faqItem">
-              <h2 className="text-xl font-bold mb-4">
-                Is Financial Assistance Available?
-              </h2>
-              <p className="text-lg mb-4">
-                Financial assistance is available on a case by case basis.
-                Contact us at{" "}
-                <a
-                  href="mailto:gm@precisionheat.team"
-                  className=" text-[var(--precision-red)] hover:underline hover:text-gray-400 transition"
-                >
-                  gm@precisionheat.team
-                </a>{" "}
-                to inquire about financial assistance options.
-              </p>
-            </div>
-            <div className="faqItem">
-              <h2 className="text-xl font-bold mb-4">More questions?</h2>
-              <p className="text-lg mb-4">
-                Reach out to{" "}
-                <a
-                  href="mailto:gm@precisionheat.team"
-                  className="text-[var(--precision-red)] hover:underline hover:text-gray-400 transition"
-                >
-                  gm@precisionheat.team
-                </a>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
+      <SectionFAQ />
+      <SectionSponsors />
     </div>
   );
 }

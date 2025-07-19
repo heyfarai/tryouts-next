@@ -1,20 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap");
 @import "tailwindcss";
 :root {
   --precision-red: #e80707;
 }
 
 body {
-  @apply font-sans;
+  font-family: "Manrope", "ui-sans-serif", "system-ui", "sans-serif";
 }
 p,
 ul {
   color: #cccccc;
 }
 
-.dela {
-  font-family: "Dela Gothic One", Arial, Helvetica, sans-serif !important;
+.alexandria {
+  font-family: "Alexandria", "ui-sans-serif", "system-ui", "sans-serif" !important;
 }
 
 .sectionHero {

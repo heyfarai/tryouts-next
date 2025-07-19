@@ -16,6 +16,7 @@ export const metadata: Metadata = {
 };
 
 import TopNav from "./components/TopNav";
+import Footer from "./components/Footer";
 import { getAbsoluteUrl } from "./lib/getAbsoluteUrl";
 
 export default function RootLayout({
@@ -140,6 +141,7 @@ export default function RootLayout({
             <TopNav />
             {children}
           </main>
+          <Footer />
         </ClerkProvider>
       </body>
     </html>

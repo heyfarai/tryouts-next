@@ -6,16 +6,16 @@ export default function WaiverCodeOfConductPage() {
     <div>
       <div className=" flex flex-col justify-start lg:pl-64 pt-36">
         <div className="content max-w-3xl mx-7">
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Waivers.
           </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
             Code of Conduct.
           </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
             Read them.
           </h1>
-          <h2 className="dela font-extrabold text-xl mt-0 mb-12">
+          <h2 className="alexandria font-extrabold text-xl mt-0 mb-12">
             Precision Heat – Waiver & Consent Agreement
           </h2>
           <p>
@@ -26,7 +26,7 @@ export default function WaiverCodeOfConductPage() {
             Last updated: 1 July 2025
           </p>
 
-          <h2 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h2 className="alexandria font-extrabold text-xl mt-8 mb-4">
             🧠 Concussion Awareness (Rowan’s Law)
           </h2>
           <p>
@@ -57,7 +57,7 @@ export default function WaiverCodeOfConductPage() {
             are present.
           </p>
 
-          <h2 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h2 className="alexandria font-extrabold text-xl mt-8 mb-4">
             🏀 Injury Liability
           </h2>
           <p>
@@ -73,7 +73,7 @@ export default function WaiverCodeOfConductPage() {
             </li>
           </ul>
 
-          <h2 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h2 className="alexandria font-extrabold text-xl mt-8 mb-4">
             🩺 Medical Consent
           </h2>
           <p>In a medical emergency during a Precision Heat activity:</p>
@@ -87,7 +87,7 @@ export default function WaiverCodeOfConductPage() {
             </li>
           </ul>
 
-          <h2 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h2 className="alexandria font-extrabold text-xl mt-8 mb-4">
             📸 Media Consent
           </h2>
           <p>
@@ -102,7 +102,7 @@ export default function WaiverCodeOfConductPage() {
             <a href="mailto:gm@precisionheat.team">gm@precisionheat.team</a>
           </p>
 
-          <h2 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h2 className="alexandria font-extrabold text-xl mt-8 mb-4">
             📑 Code of Conduct
           </h2>
           <p>
@@ -110,7 +110,7 @@ export default function WaiverCodeOfConductPage() {
             agree to uphold the following standards:
           </p>
 
-          <h3 className="dela font-extrabold text-xl mt-8 mb-4">
+          <h3 className="alexandria font-extrabold text-xl mt-8 mb-4">
             🔥 For Players
           </h3>
           <ul className="ml-8">
@@ -127,7 +127,7 @@ export default function WaiverCodeOfConductPage() {
             </li>
           </ul>
 
-          <h3 className="dela font-extraboh3 text-xl mt-8 mb-4">
+          <h3 className="alexandria font-extraboh3 text-xl mt-8 mb-4">
             🧠 For Parents & Guardians
           </h3>
           <ul className="ml-8 ">

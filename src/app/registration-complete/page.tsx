@@ -36,13 +36,13 @@ export default function RegistrationCompletePage() {
     <div>
       <div className="sectionHero flex flex-col items-center  sm:min-h-[calc(100vh)]">
         <div className="sectionContent w-full lg:w-[68%] lg:ml-48 max-w-[640px] px-6 lg:pt-52 pt-36 pb-32 mb-12">
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl text-red-600 mb-0">
             Registered.
           </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
             Get ready.
           </h1>
-          <h1 className="dela font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
+          <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
             Show up.
           </h1>
           {loading ? (
