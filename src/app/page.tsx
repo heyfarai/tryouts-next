@@ -98,11 +98,11 @@ export default function Home() {
           <div className="formLede">
             <h1
               style={{ color: "var(--precision-red)" }}
-              className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mb-1"
+              className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mb-0"
             >
               Tryouts.
             </h1>
-            <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-1">
+            <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-0">
               Take the shot.
             </h1>
             <h1 className="alexandria font-extrabold text-4xl lg:text-6xl md:text-5xl mt-0 mb-12">
