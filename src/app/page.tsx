@@ -46,9 +46,9 @@ export default function Home() {
               U14 Boys Basketball.
             </h1>
             <p className="text-xl mb-8">
-              An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br /> We
-              coach and train competitive basketball players to elite levels of
-              individual and team skills.
+              An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br />{" "}
+              Play for a team that coaches and trains competitive basketball
+              players to elite levels of individual and team skills.
             </p>
             <p className="text-lg mb-20 mt-0">
               <a
