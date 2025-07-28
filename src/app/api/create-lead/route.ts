@@ -59,7 +59,7 @@ export async function POST(request: NextRequest) {
     try {
       const emailResult = await sendPostmarkEmail({
         to: email,
-        subject: `${firstName}, Your Free Tryout Mindset Guide is Here!`,
+        subject: `🔥🏀 ${firstName}, here's your free Tryout Mindset Guide!`,
         html: `
       <!DOCTYPE html>
       <html>
