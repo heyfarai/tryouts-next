@@ -27,19 +27,19 @@ const TopNav: React.FC = () => {
         {/* Button Group: Auth only */}
         <div className="flex items-center gap-x-4 lg:gap-x-6 ms-auto h-full">
           <Link
-            href="#coaching"
+            href="/#coaching"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
           >
             Coaches
           </Link>
           <Link
-            href="#tryouts"
+            href="/#tryouts"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
           >
             Tryouts
           </Link>
           <Link
-            href="#FAQ"
+            href="/#FAQ"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
           >
             FAQ
