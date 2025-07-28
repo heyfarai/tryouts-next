@@ -19,7 +19,7 @@ export default function OptionalRegistrationStep({
   const [showSuccess, setShowSuccess] = useState(false);
 
   return (
-    <div className="container mx-auto px-6 lg:pt-48 pt-48 max-w-5xl">
+    <div className="container mx-auto px-6 lg:pt-32 pt-48 max-w-5xl">
       {!showSuccess ? (
         <div className="text-center text-white">
           {/* Success message for PDF download */}
@@ -39,7 +39,7 @@ export default function OptionalRegistrationStep({
                 />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold mb-4">
+            <h2 className="hidden text-3xl font-bold mb-4">
               Check Your Email, {leadData.firstName}!
             </h2>
             <p className="text-lg text-gray-300 mb-8">
@@ -52,7 +52,7 @@ export default function OptionalRegistrationStep({
           <div className="flex justify-center mb-12">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-gray-900 rounded-full flex items-center justify-center text-green-400 font-bold text-sm">
+                <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-gray-500 font-bold text-sm">
                   ✓
                 </div>
                 <span className="ml-2 text-sm text-gray-400 font-medium">

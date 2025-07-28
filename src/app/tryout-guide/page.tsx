@@ -1,16 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import LeadCaptureForm from "../components/LeadCaptureForm";
 import OptionalRegistrationStep from "../components/OptionalRegistrationStep";
 
 export default function TryoutGuidePage() {
-  const [currentStep, setCurrentStep] = useState<1 | 2>(1);
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const [leadData, setLeadData] = useState<{
     email: string;
     firstName: string;
     userId?: string;
   } | null>(null);
+
+  // Get current step from URL params, default to 1
+  const currentStep = parseInt(searchParams?.get("step") || "1") as 1 | 2;
+
+  // Load lead data from sessionStorage on mount
+  useEffect(() => {
+    const savedLeadData = sessionStorage.getItem("leadData");
+    if (savedLeadData) {
+      try {
+        setLeadData(JSON.parse(savedLeadData));
+      } catch (error) {
+        console.error("Failed to parse saved lead data:", error);
+        sessionStorage.removeItem("leadData");
+      }
+    }
+  }, []);
+
+  // Redirect to step 1 if trying to access step 2 without lead data
+  useEffect(() => {
+    if (currentStep === 2 && !leadData) {
+      router.replace("/tryout-guide?step=1");
+    }
+  }, [currentStep, leadData, router]);
 
   const handleLeadCaptured = (data: {
     email: string;
@@ -18,7 +43,14 @@ export default function TryoutGuidePage() {
     userId: string;
   }) => {
     setLeadData(data);
-    setCurrentStep(2);
+    // Save to sessionStorage for persistence across page refreshes
+    sessionStorage.setItem("leadData", JSON.stringify(data));
+    // Navigate to step 2 using URL params
+    router.push("/tryout-guide?step=2");
+  };
+
+  const handleBack = () => {
+    router.push("/tryout-guide?step=1");
   };
 
   return (
@@ -40,7 +72,7 @@ export default function TryoutGuidePage() {
         {currentStep === 2 && leadData && (
           <OptionalRegistrationStep
             leadData={leadData}
-            onBack={() => setCurrentStep(1)}
+            onBack={handleBack}
           />
         )}
       </div>
