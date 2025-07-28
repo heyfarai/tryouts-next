@@ -8,4 +8,6 @@ export const DEFAULT_PLAYER: Player = {
   gender: "male",
 };
 
-export const PAYMENT_AMOUNT_PER_PLAYER = Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) || 3000;
+import { getPaymentAmount } from "../lib/paymentAmount";
+
+export const PAYMENT_AMOUNT_PER_PLAYER = getPaymentAmount();
