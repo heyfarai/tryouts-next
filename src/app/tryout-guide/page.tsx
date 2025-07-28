@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import LeadCaptureForm from "../components/LeadCaptureForm";
 import OptionalRegistrationStep from "../components/OptionalRegistrationStep";
 
-export default function TryoutGuidePage() {
+function TryoutGuideContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [leadData, setLeadData] = useState<{
@@ -77,5 +77,13 @@ export default function TryoutGuidePage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function TryoutGuidePage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-gray-800 via-gray-700 to-gray-900 flex items-center justify-center text-white">Loading...</div>}>
+      <TryoutGuideContent />
+    </Suspense>
   );
 }

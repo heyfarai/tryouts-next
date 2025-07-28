@@ -81,7 +81,7 @@ export default function OptionalRegistrationStep({
               Secure a spot at our upcoming tryouts today.
             </p>
 
-            <div className="bg-black backdrop-blur-sm rounded-lg p-6 mb-8 border border-white/20">
+            <div className="bg-gray-900 backdrop-blur-sm rounded-lg p-6 mb-8 border border-white/20">
               <h4 className="text-xl text-left font-bold text-[var(--precision-red)] mb-4">
                 What you get at Precision Heat
               </h4>
