@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 import TopNav from "./components/TopNav";
 import Footer from "./components/Footer";
 import { getAbsoluteUrl } from "./lib/getAbsoluteUrl";
+import { ConditionalTopNav } from "./components/ConditionalTopNav";
 
 export default function RootLayout({
   children,
@@ -138,7 +139,7 @@ export default function RootLayout({
       <body className="bg-black text-[#cccccc]">
         <ClerkProvider>
           <main className="min-h-screen text-[#cccccc]">
-            <TopNav />
+            <ConditionalTopNav />
             {children}
           </main>
           <Footer />
