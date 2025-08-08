@@ -1,18 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function GET(request: NextRequest) {
   try {
-    const authHeader = request.headers.get('authorization');
-    
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    const authHeader = request.headers.get("authorization");
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return NextResponse.json({ valid: false }, { status: 401 });
     }
 
     const token = authHeader.substring(7);
-    
+
     try {
       jwt.verify(token, JWT_SECRET);
       return NextResponse.json({ valid: true });
@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ valid: false }, { status: 401 });
     }
   } catch (error) {
-    console.error('Token verification error:', error);
+    console.error("Token verification error:", error);
     return NextResponse.json({ valid: false }, { status: 500 });
   }
 }

@@ -7,6 +7,7 @@ export async function POST(req: NextRequest) {
   const baseUrl = `${protocol}://${host}`;
   try {
     const { players, guardianEmail } = await req.json();
+    
     if (!players || !guardianEmail) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({ email: guardianEmail }),
     });
     const upsertData = await upsertRes.json();
+    
     if (!upsertRes.ok) {
       return NextResponse.json(
         { error: upsertData.error || "Failed to upsert Clerk user" },
@@ -31,6 +33,7 @@ export async function POST(req: NextRequest) {
     let user = await prisma.user.findUnique({
       where: { email: guardianEmail },
     });
+    
     let guardian;
     if (!user) {
       // Create user and guardian in DB with real Clerk user ID
@@ -41,6 +44,7 @@ export async function POST(req: NextRequest) {
           role: "GUARDIAN",
         },
       });
+      
       guardian = await prisma.guardian.create({
         data: {
           userId: user.id,
@@ -84,8 +88,10 @@ export async function POST(req: NextRequest) {
         players: true,
       },
     });
+    
     return NextResponse.json({ registrationId: registration.id });
   } catch (err: unknown) {
-    return NextResponse.json({ error: err instanceof Error ? err instanceof Error ? err.message : String(err) : String(err) }, { status: 500 });
+    console.error("[ERROR] Registration creation failed:", err);
+    return NextResponse.json({ error: err instanceof Error ? err.message : String(err) }, { status: 500 });
   }
 }

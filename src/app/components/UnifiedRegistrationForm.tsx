@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
 import { useCreateRegistration } from "./useCreateRegistration";
+import { useUpdateRegistration } from "./useUpdateRegistration";
 
 import { Player, PlayerErrors } from "./PlayerForm";
 import { DEFAULT_PLAYER } from "./constants";
@@ -83,6 +84,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   // Registration API state
   const { createRegistration, registrationId: regIdFromHook } = useCreateRegistration();
+  const { updateRegistration } = useUpdateRegistration();
   const [registrationId, setRegistrationId] = useState<string | null>(
     typeof window !== "undefined" ? localStorage.getItem(REG_ID_KEY) : null
   );
@@ -684,6 +686,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     setShowGeneralError(false);
                     // Save cart/registration on step 1 submit
                     if (!registrationId) {
+                      // Create new registration
                       const regId = await createRegistration({
                         players,
                         guardianEmail,
@@ -694,6 +697,13 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                           localStorage.setItem(REG_ID_KEY, regId);
                         }
                       }
+                    } else {
+                      // Update existing registration with current form data
+                      await updateRegistration({
+                        registrationId,
+                        players,
+                        guardianEmail,
+                      });
                     }
                     setAccordionStep(2);
                   } else {

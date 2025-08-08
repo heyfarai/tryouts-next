@@ -1,24 +1,22 @@
-import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import { prisma } from "../../../lib/prisma";
+const JWT_SECRET = process.env.JWT_SECRET;
 
 function verifyAdminToken(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    throw new Error('Unauthorized');
+  const authHeader = request.headers.get("authorization");
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new Error("Unauthorized");
   }
 
   const token = authHeader.substring(7);
-  
+
   try {
     jwt.verify(token, JWT_SECRET);
     return true;
   } catch (error) {
-    throw new Error('Unauthorized');
+    throw new Error("Unauthorized");
   }
 }
 
@@ -30,17 +28,17 @@ export async function GET(request: NextRequest) {
       include: {
         user: {
           select: {
-            email: true
-          }
+            email: true,
+          },
         },
         guardian: {
           include: {
             user: {
               select: {
-                email: true
-              }
-            }
-          }
+                email: true,
+              },
+            },
+          },
         },
         registrations: {
           include: {
@@ -48,23 +46,23 @@ export async function GET(request: NextRequest) {
               select: {
                 tryoutName: true,
                 status: true,
-                createdAt: true
-              }
-            }
-          }
-        }
+                createdAt: true,
+              },
+            },
+          },
+        },
       },
       orderBy: {
-        firstName: 'asc'
-      }
+        firstName: "asc",
+      },
     });
 
     return NextResponse.json(players);
   } catch (error) {
-    console.error('Error fetching players:', error);
+    console.error("Error fetching players:", error);
     return NextResponse.json(
-      { error: 'Unauthorized or server error' },
-      { status: error.message === 'Unauthorized' ? 401 : 500 }
+      { error: "Unauthorized or server error" },
+      { status: error.message === "Unauthorized" ? 401 : 500 }
     );
   }
 }
