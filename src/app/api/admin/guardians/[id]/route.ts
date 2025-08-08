@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 function verifyAdminToken(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -24,18 +24,18 @@ function verifyAdminToken(request: NextRequest) {
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     verifyAdminToken(request);
 
-    const { id } = params;
+    const { id: guardianId } = await params;
 
     // Use a transaction to delete related records in the correct order
     await prisma.$transaction(async (tx) => {
       // First, find the guardian and their related records
       const guardian = await tx.guardian.findUnique({
-        where: { id },
+        where: { id: guardianId },
         include: {
           players: {
             include: {
@@ -77,17 +77,17 @@ export async function DELETE(
 
       // Delete all registrations by this guardian
       await tx.registration.deleteMany({
-        where: { guardianId: id },
+        where: { guardianId: guardianId },
       });
 
       // Delete all players under this guardian
       await tx.player.deleteMany({
-        where: { guardianId: id },
+        where: { guardianId: guardianId },
       });
 
       // Finally, delete the guardian
       await tx.guardian.delete({
-        where: { id },
+        where: { id: guardianId },
       });
     });
 
@@ -102,7 +102,7 @@ export async function DELETE(
       },
       {
         status:
-          error instanceof Error && error.message === "Unauthorized"
+          error instanceof Error && error instanceof Error && error.message === "Unauthorized"
             ? 401
             : 500,
       }

@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 function verifyAdminToken(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -24,18 +24,18 @@ function verifyAdminToken(request: NextRequest) {
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     verifyAdminToken(request);
 
-    const { id } = params;
+    const { id: userId } = await params;
 
     // Use a transaction to delete related records in the correct order
     await prisma.$transaction(async (tx) => {
       // First, find the user and their related records
       const user = await tx.user.findUnique({
-        where: { id },
+        where: { id: userId },
         include: {
           guardian: {
             include: {
@@ -115,7 +115,7 @@ export async function DELETE(
 
       // Finally, delete the user
       await tx.user.delete({
-        where: { id },
+        where: { id: userId },
       });
     });
 
@@ -130,7 +130,7 @@ export async function DELETE(
       },
       {
         status:
-          error instanceof Error && error.message === "Unauthorized"
+          error instanceof Error && error instanceof Error && error.message === "Unauthorized"
             ? 401
             : 500,
       }

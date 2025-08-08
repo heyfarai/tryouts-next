@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { prisma } from "../../../lib/prisma";
-const JWT_SECRET = process.env.JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 function verifyAdminToken(request: NextRequest) {
   const authHeader = request.headers.get("authorization");
@@ -62,7 +62,7 @@ export async function GET(request: NextRequest) {
     console.error("Error fetching registrations:", error);
     return NextResponse.json(
       { error: "Unauthorized or server error" },
-      { status: error.message === "Unauthorized" ? 401 : 500 }
+      { status: error instanceof Error && error.message === "Unauthorized" ? 401 : 500 }
     );
   }
 }
