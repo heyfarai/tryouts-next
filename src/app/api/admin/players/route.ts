@@ -1,0 +1,68 @@
+import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken";
+import { prisma } from "../../../lib/prisma";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+function verifyAdminToken(request: NextRequest) {
+  const authHeader = request.headers.get("authorization");
+
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    throw new Error("Unauthorized");
+  }
+
+  const token = authHeader.substring(7);
+
+  try {
+    jwt.verify(token, JWT_SECRET);
+    return true;
+  } catch (error) {
+    throw new Error("Unauthorized");
+  }
+}
+
+export async function GET(request: NextRequest) {
+  try {
+    verifyAdminToken(request);
+
+    const players = await prisma.player.findMany({
+      include: {
+        user: {
+          select: {
+            email: true,
+          },
+        },
+        guardian: {
+          include: {
+            user: {
+              select: {
+                email: true,
+              },
+            },
+          },
+        },
+        registrations: {
+          include: {
+            registration: {
+              select: {
+                tryoutName: true,
+                status: true,
+                createdAt: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        firstName: "asc",
+      },
+    });
+
+    return NextResponse.json(players);
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return NextResponse.json(
+      { error: "Unauthorized or server error" },
+      { status: error.message === "Unauthorized" ? 401 : 500 }
+    );
+  }
+}

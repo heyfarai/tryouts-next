@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
+import { getPaymentAmount } from "../lib/paymentAmount";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { validatePlayerInfo } from "./validation";
-import { DEFAULT_PLAYER } from "./constants";
+import { useCreateRegistration } from "./useCreateRegistration";
+import { useUpdateRegistration } from "./useUpdateRegistration";
+
 import { Player, PlayerErrors } from "./PlayerForm";
+import { DEFAULT_PLAYER } from "./constants";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { isDevOrPreviewEnv } from "../lib/envUtils";
 
 interface UnifiedRegistrationFormProps {
-  onSuccess: () => void;
-  registrationLoading: boolean;
+  registrationLoading?: boolean;
 }
 
 const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
-  onSuccess,
   registrationLoading,
 }) => {
   // Local loading state for Pay button
@@ -19,55 +24,196 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
 
   // Persisted registration form state keys
   const FORM_STORAGE_KEY = "registrationFormData";
+  const REG_ID_KEY = "registrationId";
 
-  // Initialize state from localStorage if present
-  useEffect(() => {
+  // Hydrate all form fields from localStorage using useState initializers
+  const saved =
+    typeof window !== "undefined"
+      ? localStorage.getItem(FORM_STORAGE_KEY)
+      : null;
+  type RegistrationFormData = {
+    players: Player[];
+    guardianName: string;
+    guardianPhone: string;
+    guardianEmail: string;
+    waiverLiability: boolean;
+    waiverPhoto: boolean;
+    accordionStep: number;
+  };
+  let parsed: Partial<RegistrationFormData> = {};
+  try {
+    parsed = saved ? JSON.parse(saved) : {};
+  } catch {}
+
+  const [players, setPlayers] = useState<Player[]>(
+    parsed.players ||
+      (isDevOrPreviewEnv()
+        ? [DEFAULT_PLAYER]
+        : [{ firstName: "", lastName: "", birthdate: "", gender: "other" }])
+  );
+  const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
+    { firstName: "", lastName: "", birthdate: "", gender: "other" },
+  ]);
+  const [guardianName, setGuardianName] = useState<string>(
+    parsed.guardianName || (isDevOrPreviewEnv() ? "Mumzo" : "")
+  );
+  const [guardianPhone, setGuardianPhone] = useState<string>(
+    parsed.guardianPhone || (isDevOrPreviewEnv() ? "800 000 0000" : "")
+  );
+  const [guardianEmail, setGuardianEmail] = useState<string>(
+    parsed.guardianEmail || (isDevOrPreviewEnv() ? "farai@icloud.com" : "")
+  );
+  const [waiverLiability, setWaiverLiability] = useState<boolean>(
+    typeof parsed.waiverLiability === "boolean" ? parsed.waiverLiability : true
+  );
+  const [waiverPhoto, setWaiverPhoto] = useState<boolean>(
+    typeof parsed.waiverPhoto === "boolean" ? parsed.waiverPhoto : true
+  );
+  const [accordionStep, setAccordionStep] = useState<number>(() => {
+    // If legacy: form data exists but no regId, force step 1
     if (typeof window !== "undefined") {
-      localStorage.removeItem("confirmationEmailSent");
-      localStorage.removeItem("registrationConfirmation");
       const saved = localStorage.getItem(FORM_STORAGE_KEY);
-      if (saved) {
-        try {
-          const data = JSON.parse(saved);
-          if (data.players) setPlayers(data.players);
-          if (data.guardianName) setGuardianName(data.guardianName);
-          if (data.guardianPhone) setGuardianPhone(data.guardianPhone);
-          if (data.guardianEmail) setGuardianEmail(data.guardianEmail);
-          if (typeof data.waiverLiability === "boolean") setWaiverLiability(data.waiverLiability);
-          if (typeof data.waiverPhoto === "boolean") setWaiverPhoto(data.waiverPhoto);
-          if (typeof data.accordionStep === "number") setAccordionStep(data.accordionStep);
-        } catch {}
+      const regId = localStorage.getItem(REG_ID_KEY);
+      if (saved && !regId) return 1;
+    }
+    return typeof parsed.accordionStep === "number" ? parsed.accordionStep : 1;
+  });
+  const [hydrated, setHydrated] = useState<boolean>(false);
+  // General error state for validation
+  const [showGeneralError, setShowGeneralError] = useState(false);
+
+  // Registration API state
+  const { createRegistration, registrationId: regIdFromHook } = useCreateRegistration();
+  const { updateRegistration } = useUpdateRegistration();
+  const [registrationId, setRegistrationId] = useState<string | null>(
+    typeof window !== "undefined" ? localStorage.getItem(REG_ID_KEY) : null
+  );
+
+  useEffect(() => {
+    if (regIdFromHook && regIdFromHook !== registrationId) {
+      setRegistrationId(regIdFromHook);
+      if (typeof window !== "undefined") {
+        localStorage.setItem(REG_ID_KEY, regIdFromHook);
       }
     }
-  }, []);
+  }, [regIdFromHook, registrationId]);
 
-  // Players
-  const [players, setPlayers] = useState<Player[]>([DEFAULT_PLAYER]);
-  const [playerErrors, setPlayerErrors] = useState<PlayerErrors[]>([
-    { firstName: "", lastName: "", birthdate: "", gender: "" },
+  // On mount, rehydrate registrationId from localStorage (for reloads)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const storedRegId = localStorage.getItem(REG_ID_KEY);
+      if (storedRegId && !registrationId) {
+        setRegistrationId(storedRegId);
+      }
+    }
+  }, [registrationId]);
+
+  useEffect(() => {
+    setHydrated(true);
+
+    // Autofill polling: for first 3 seconds after mount, poll key fields for changes
+    let active = true;
+    let pollCount = 0;
+    const maxPolls = 10; // poll for ~3 seconds (10 x 300ms)
+    const pollInterval = 300;
+    const poll = () => {
+      if (!active || pollCount > maxPolls) return;
+      pollCount++;
+      // Guardian Email
+      const emailInput = document.getElementById(
+        "guardianEmail"
+      ) as HTMLInputElement | null;
+      if (emailInput && emailInput.value !== guardianEmail) {
+        setGuardianEmail(emailInput.value);
+      }
+      // Guardian Phone
+      const phoneInput = document.getElementById(
+        "guardianPhone"
+      ) as HTMLInputElement | null;
+      if (phoneInput && phoneInput.value !== guardianPhone) {
+        setGuardianPhone(phoneInput.value);
+      }
+      // Guardian Name
+      const nameInput = document.getElementById(
+        "guardianName"
+      ) as HTMLInputElement | null;
+      if (nameInput && nameInput.value !== guardianName) {
+        setGuardianName(nameInput.value);
+      }
+      // Player fields
+      let playersChanged = false;
+      const updatedPlayers = players.map((player, idx) => {
+        let changed = false;
+        const firstNameInput = document.getElementById(
+          `player-firstName-${idx}`
+        ) as HTMLInputElement | null;
+        const lastNameInput = document.getElementById(
+          `player-lastName-${idx}`
+        ) as HTMLInputElement | null;
+        const birthdateInput = document.getElementById(
+          `player-birthdate-${idx}`
+        ) as HTMLInputElement | null;
+        const updated = { ...player };
+        if (firstNameInput && firstNameInput.value !== player.firstName) {
+          updated.firstName = firstNameInput.value;
+          changed = true;
+        }
+        if (lastNameInput && lastNameInput.value !== player.lastName) {
+          updated.lastName = lastNameInput.value;
+          changed = true;
+        }
+        if (birthdateInput && birthdateInput.value !== player.birthdate) {
+          updated.birthdate = birthdateInput.value;
+          changed = true;
+        }
+        if (changed) playersChanged = true;
+        return updated;
+      });
+      if (playersChanged) setPlayers(updatedPlayers);
+      setTimeout(poll, pollInterval);
+    };
+    setTimeout(poll, pollInterval);
+    return () => {
+      active = false;
+    };
+  }, [guardianEmail, guardianPhone, guardianName, players]);
+
+  // Ensure at least one blank player on mount (only if no data was restored)
+  useEffect(() => {
+    if (players.length === 0 && hydrated) {
+      setPlayers([
+        { firstName: "", lastName: "", birthdate: "", gender: "other" },
+      ]);
+      setPlayerErrors([
+        { firstName: "", lastName: "", birthdate: "", gender: "other" },
+      ]);
+    }
+  }, [players.length, hydrated]);
+
+  // Hide general error when user edits any field
+  useEffect(() => {
+    if (showGeneralError) setShowGeneralError(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    players,
+    guardianName,
+    guardianPhone,
+    guardianEmail,
+    waiverLiability,
+    waiverPhoto,
   ]);
 
-  // Guardian fields
-  const [guardianName, setGuardianName] = useState("");
-  const [guardianPhone, setGuardianPhone] = useState("");
-  const [guardianEmail, setGuardianEmail] = useState("");
   // Guardian errors
   const [guardianNameError, setGuardianNameError] = useState("");
   const [guardianPhoneError, setGuardianPhoneError] = useState("");
   const [guardianEmailError, setGuardianEmailError] = useState("");
 
   // Waivers
-  const [waiverLiability, setWaiverLiability] = useState(true);
-  const [waiverPhoto, setWaiverPhoto] = useState(true);
   const [waiverLiabilityError, setWaiverLiabilityError] = useState("");
-  const [waiverPhotoError, setWaiverPhotoError] = useState("");
-
-  // Accordion step state: 1 = player, 2 = guardian, 3 = payment
-  const [accordionStep, setAccordionStep] = useState(1);
 
   // Save form data to localStorage whenever relevant state changes
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== "undefined" && hydrated) {
       const data = {
         players,
         guardianName,
@@ -79,8 +225,16 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
       };
       localStorage.setItem(FORM_STORAGE_KEY, JSON.stringify(data));
     }
-  }, [players, guardianName, guardianPhone, guardianEmail, waiverLiability, waiverPhoto, accordionStep]);
-
+  }, [
+    players,
+    guardianName,
+    guardianPhone,
+    guardianEmail,
+    waiverLiability,
+    waiverPhoto,
+    accordionStep,
+    hydrated,
+  ]);
 
   const formRef = useRef<HTMLFormElement | null>(null);
   const router = useRouter();
@@ -134,13 +288,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     }
     // Waivers
     setWaiverLiabilityError("");
-    setWaiverPhotoError("");
     if (!waiverLiability) {
       setWaiverLiabilityError("You must agree to the liability waiver.");
       valid = false;
     }
     if (!waiverPhoto) {
-      setWaiverPhotoError("You must consent to photo/video release.");
       valid = false;
     }
     return valid;
@@ -149,11 +301,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const handleAddPlayer = () => {
     setPlayers([
       ...players,
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
+      { firstName: "", lastName: "", birthdate: "", gender: "other" },
     ]);
     setPlayerErrors([
       ...playerErrors,
-      { firstName: "", lastName: "", birthdate: "", gender: "" },
+      { firstName: "", lastName: "", birthdate: "", gender: "other" },
     ]);
   };
   const handleRemovePlayer = (idx: number) => {
@@ -187,27 +339,32 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
     >
       {/* Accordion Step 1: Player & Guardian */}
       <div
-        className={`border-b border-gray-700 ${
-          accordionStep === 1 ? "" : "opacity-60 pointer-events-none"
+        className={`bg-neutral-800 rounded-tr-lg rounded-tl-lg ${
+          accordionStep === 1 ? "" : "opacity-60"
         }`}
       >
-        <div className="w-full flex items-center justify-between py-4 px-6 bg-neutral-900 text-white border-0">
+        <div className="stepHeader w-full flex items-center justify-between py-6 px-6  text-white rounded-tr-sm rounded-tl-sm ">
           <button
             type="button"
-            className="text-left flex-1 bg-transparent border-none text-white focus:outline-none flex items-center"
+            className="w-full text-left  border-none text-white focus:outline-none flex items-center justify-between "
             onClick={() => setAccordionStep(1)}
             aria-expanded={accordionStep === 1}
           >
-            <span className="text-2xl dela font-bold">
-              1. The Player & Guardian
+            <span className="text-xl font-bold">1. The Player & Guardian</span>
+            <span className="ml-2 hidden">
+              {accordionStep === 1 ? "▼" : "▶"}
             </span>
-            <span className="ml-2">{accordionStep === 1 ? "▼" : "▶"}</span>
           </button>
           {accordionStep !== 1 && (
             <button
               type="button"
-              className="hidden ml-4 text-blue-400 underline text-sm bg-transparent border-none cursor-pointer"
-              onClick={() => setAccordionStep(1)}
+              className="ml-4 underline text-sm bg-transparent border-none cursor-pointer"
+              onClick={() => {
+                setAccordionStep(1);
+                if (formRef.current) {
+                  formRef.current.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
               tabIndex={0}
             >
               Edit
@@ -215,12 +372,11 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
           )}
         </div>
         {accordionStep === 1 && (
-          <div className="pb-12 px-6">
-            <h2 className="dela text-xl font-bold mb-12 pt-8">The Player </h2>
+          <div className="stepWrapper pb-12 px-6 rounded-tl-sm rounded-tr-sm">
             {players.map((player, idx) => (
               <div
                 key={idx}
-                className="mb-8"
+                className="mb-8 pt-4"
               >
                 <div className="flex gap-3 flex-col md:flex-row">
                   <div className="flex-1">
@@ -228,17 +384,18 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       className="uppercase text-xs font-bold text-gray-300"
                       htmlFor={`firstName-${idx}`}
                     >
-                      First Name
+                      Player First Name
                     </label>
                     <input
-                      id={`firstName-${idx}`}
+                      id={`player-firstName-${idx}`}
                       type="text"
+                      autoComplete="given-name"
                       value={player.firstName}
                       onChange={(e) =>
                         handleInputChange(idx, "firstName", e.target.value)
                       }
                       required
-                      className="w-full px-2 py-2 mt-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
+                      className="w-full px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none"
                     />
                     {playerErrors[idx]?.firstName && (
                       <span className="text-red-500 text-xs block mt-1">
@@ -251,17 +408,18 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                       htmlFor={`lastName-${idx}`}
                       className="uppercase text-xs font-bold text-gray-300"
                     >
-                      Last Name
+                      Player Last Name
                     </label>
                     <input
-                      id={`lastName-${idx}`}
+                      id={`player-lastName-${idx}`}
                       type="text"
+                      autoComplete="family-name"
                       value={player.lastName}
                       onChange={(e) =>
                         handleInputChange(idx, "lastName", e.target.value)
                       }
                       required
-                      className="w-full px-2 py-2 mt-2 border-gray-900 bg-neutral-900   text-white focus:outline-none"
+                      className="w-full px-2 py-2 mt-2 border-gray-900    text-white focus:outline-none"
                     />
                     {playerErrors[idx]?.lastName && (
                       <span className="text-red-500 text-xs block mt-1">
@@ -271,31 +429,43 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   </div>
                 </div>
                 <div className="flex gap-3 flex-col md:flex-row mt-6">
-                  <div className="flex-1">
+                  <div className="flex-1 flex flex-col">
                     <label
                       htmlFor={`birthdate-${idx}`}
                       className="uppercase text-xs font-bold text-gray-300"
                     >
-                      Birthdate
+                      Player Birthdate
                     </label>
-                    <input
+
+                    <DatePicker
                       id={`birthdate-${idx}`}
-                      type="date"
-                      value={player.birthdate}
-                      onChange={(e) =>
-                        handleInputChange(idx, "birthdate", e.target.value)
+                      selected={
+                        player.birthdate ? new Date(player.birthdate) : null
                       }
+                      onChange={(date: Date | null) =>
+                        handleInputChange(
+                          idx,
+                          "birthdate",
+                          date ? date.toISOString().slice(0, 10) : ""
+                        )
+                      }
+                      dateFormat="yyyy-MM-dd"
+                      maxDate={new Date("2012-12-31")}
+                      showMonthDropdown
+                      showYearDropdown
+                      dropdownMode="select"
+                      placeholderText="Select birthdate"
+                      className="w-1/2 px-2 py-2 mt-2 border-gray-900 text-white focus:outline-none bg-neutral-800 focus:bg-neutral-900"
                       required
-                      className="w-full px-2 py-2 mt-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
-                      max="2012-12-31"
                     />
+
                     {playerErrors[idx]?.birthdate && (
                       <span className="text-red-500 text-xs block mt-1">
                         {playerErrors[idx].birthdate}
                       </span>
                     )}
                   </div>
-                  <div className="flex-1">
+                  <div className="flex-1 hidden">
                     <label
                       htmlFor={`gender-${idx}`}
                       className="uppercase text-xs font-bold text-gray-300"
@@ -309,7 +479,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                         handleInputChange(idx, "gender", e.target.value)
                       }
                       required
-                      className="w-full px-2 py-2 mt-2 border-gray-900 bg-neutral-900 text-white focus:outline-none"
+                      className="w-full px-2 py-2 mt-2 border-gray-900  text-white focus:outline-none"
                     >
                       <option value="">Select</option>
                       <option value="male">Male</option>
@@ -327,7 +497,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   {players.length > 1 && (
                     <button
                       type="button"
-                      className="text-blue-600 hover:text-blue-800 hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
+                      className="hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
                       onClick={() => handleRemovePlayer(idx)}
                       aria-label="Remove player"
                     >
@@ -358,7 +528,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   {idx === players.length - 1 && (
                     <button
                       type="button"
-                      className="text-blue-600 hover:text-blue-800 hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
+                      className="text-neutral-400 hover:text-neutral-200 hover:underline mt-2 text-sm font-semibold cursor-pointer bg-transparent border-none p-0 flex items-center gap-1"
                       onClick={handleAddPlayer}
                       tabIndex={0}
                       aria-label="Add player"
@@ -397,70 +567,75 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 </div>
               </div>
             ))}
-            <h2 className="dela text-xl font-bold mb-4 pt-6">The Guardian</h2>
-            <label
-              htmlFor="guardianName"
-              className="uppercase text-xs mt-2 font-bold text-gray-300"
-            >
-              Guardian/Emergency Contact Name
-            </label>
-            <input
-              id="guardianName"
-              name="guardianName"
-              type="text"
-              required
-              value={guardianName}
-              onChange={(e) => setGuardianName(e.target.value)}
-              placeholder="Parent Name"
-              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
-            />
-            {guardianNameError && (
-              <span className="text-red-500 text-xs block mb-4">
-                {guardianNameError}
-              </span>
-            )}
-            <label
-              htmlFor="guardianPhone"
-              className="uppercase text-xs mt-2 font-bold text-gray-300"
-            >
-              Guardian Phone
-            </label>
-            <input
-              id="guardianPhone"
-              name="guardianPhone"
-              type="tel"
-              required
-              value={guardianPhone}
-              onChange={(e) => setGuardianPhone(e.target.value)}
-              placeholder="555-555-5555"
-              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
-            />
-            {guardianPhoneError && (
-              <span className="text-red-500 text-xs block mb-4">
-                {guardianPhoneError}
-              </span>
-            )}
-            <label
-              htmlFor="guardianEmail"
-              className="uppercase text-xs font-bold text-gray-300"
-            >
-              Guardian Email
-            </label>
-            <input
-              id="guardianEmail"
-              name="guardianEmail"
-              type="email"
-              required
-              value={guardianEmail}
-              onChange={(e) => setGuardianEmail(e.target.value)}
-              placeholder="parent@email.com"
-              className="w-full px-2 py-2 mt-2 mb-4 border-gray-900 bg-neutral-900 text-white focus:outline-none"
-            />
-            {guardianEmailError && (
-              <span className="text-red-500 text-xs block mb-4">
-                {guardianEmailError}
-              </span>
-            )}
+            <div className="mb-8 pt-8">
+              <h2 className=" text-xl font-bold mb-4 pt-6 hidden">
+                The Guardian
+              </h2>
+              <label
+                htmlFor="guardianName"
+                className="uppercase text-xs mt-2 font-bold text-gray-300"
+              >
+                Guardian/Emergency Contact Name
+              </label>
+              <input
+                id="guardianName"
+                name="guardianName"
+                type="text"
+                required
+                value={guardianName}
+                onChange={(e) => setGuardianName(e.target.value)}
+                placeholder="Parent Name"
+                className="w-full px-2 py-2 mt-2 mb-4 border-gray-900  text-white focus:outline-none"
+              />
+              {guardianNameError && (
+                <span className="text-red-500 text-xs block mb-4">
+                  {guardianNameError}
+                </span>
+              )}
+              <label
+                htmlFor="guardianPhone"
+                className="uppercase text-xs mt-2 font-bold text-gray-300"
+              >
+                Guardian Phone
+              </label>
+              <input
+                id="guardianPhone"
+                name="guardianPhone"
+                type="tel"
+                required
+                autoComplete="tel"
+                value={guardianPhone}
+                onChange={(e) => setGuardianPhone(e.target.value)}
+                placeholder="555-555-5555"
+                className="w-full px-2 py-2 mt-2 mb-4 border-gray-900  text-white focus:outline-none"
+              />
+              {guardianPhoneError && (
+                <span className="text-red-500 text-xs block mb-4">
+                  {guardianPhoneError}
+                </span>
+              )}
+              <label
+                htmlFor="guardianEmail"
+                className="uppercase text-xs font-bold text-gray-300"
+              >
+                Guardian Email
+              </label>
+              <input
+                id="guardianEmail"
+                name="guardianEmail"
+                type="email"
+                required
+                value={guardianEmail}
+                onChange={(e) => setGuardianEmail(e.target.value)}
+                placeholder="parent@email.com"
+                className="w-full px-2 py-2 mt-2 mb-4 border-gray-900  text-white focus:outline-none"
+              />
+              {guardianEmailError && (
+                <span className="text-red-500 text-xs block mb-4">
+                  {guardianEmailError}
+                </span>
+              )}
+            </div>
             <div className="mb-4 mt-6">
               <label className="flex items-center">
                 <input
@@ -484,18 +659,56 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                 </span>
               </label>
               {waiverLiabilityError && (
-                <span className="text-red-500 text-xs block mt-4">
+                <span className="text-[var(--precision-red)] text-xs block mt-4">
                   {waiverLiabilityError}
                 </span>
               )}
             </div>
-            <div className="mt-12 pb-24">
+            {/* General error message for validation errors */}
+            {showGeneralError && (
+              <div
+                className="bg-red-100 text-red-700 px-4 py-3 mt-12 rounded mb-4"
+                role="alert"
+              >
+                <span className="block">
+                  Check for missing or invalid fields highlighted in red.
+                </span>
+              </div>
+            )}
+            <div className="mt-12 pb-6">
               <button
                 type="button"
-                className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-red-600 border-b-4 cursor-pointer hover:bg-gray-200"
+                className="py-3 px-8 border-gray-400 bg-gray-100 text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:bg-gray-400 transition"
                 disabled={registrationLoading}
-                onClick={() => {
-                  if (validateAll()) setAccordionStep(2);
+                onClick={async () => {
+                  const valid = validateAll();
+                  if (valid) {
+                    setShowGeneralError(false);
+                    // Save cart/registration on step 1 submit
+                    if (!registrationId) {
+                      // Create new registration
+                      const regId = await createRegistration({
+                        players,
+                        guardianEmail,
+                      });
+                      if (regId) {
+                        setRegistrationId(regId);
+                        if (typeof window !== "undefined") {
+                          localStorage.setItem(REG_ID_KEY, regId);
+                        }
+                      }
+                    } else {
+                      // Update existing registration with current form data
+                      await updateRegistration({
+                        registrationId,
+                        players,
+                        guardianEmail,
+                      });
+                    }
+                    setAccordionStep(2);
+                  } else {
+                    setShowGeneralError(true);
+                  }
                 }}
               >
                 {registrationLoading ? "Submitting..." : "Continue to Payment"}
@@ -503,125 +716,150 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
             </div>
           </div>
         )}
+        {accordionStep === 2 && (
+          <>
+            {/* Step 1 Summary */}
+            <div className="bg-neutral-800 text-white px-6 pt-0 pb-6 rounded mb-0">
+              <div className="mb-4">
+                <div className="font-semibold mb-1">Registering:</div>
+                <p className="ml-0 flex">
+                  {players.map((player, idx) => (
+                    <span
+                      key={idx}
+                      className="mb-1 list-none ml-0 pl-0"
+                    >
+                      {player.firstName} {player.lastName} — {player.birthdate}{" "}
+                    </span>
+                  ))}
+                </p>
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian:</span>{" "}
+                {guardianName || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian Phone:</span>{" "}
+                {guardianPhone || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+              <div className="mb-1">
+                <span className="font-semibold">Guardian Email:</span>{" "}
+                {guardianEmail || (
+                  <span className="italic text-gray-400">(none)</span>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Accordion Step 2: Payment */}
       <div
-        className={`mt-0 pb-24 ${
+        className={`mt-0 pb-0 mb-12 bg-neutral-800 rounded-lg border-t-2 border-black ${
           accordionStep === 2 ? "" : "opacity-60 pointer-events-none"
         }`}
       >
         <button
           type="button"
-          className="w-full text-left py-4 px-6 bg-neutral-900 text-white focus:outline-none flex items-center justify-between"
+          className="w-full text-left py-6 px-6 text-white focus:outline-none flex items-center justify-between"
           onClick={() => setAccordionStep(2)}
           aria-expanded={accordionStep === 2}
         >
-          <span className="text-2xl dela font-bold">2. The Money</span>
-          <span className="ml-2">{accordionStep === 2 ? "▼" : "▶"}</span>
+          <span className="text-xl font-bold">2. The Money</span>
+          <span className="ml-2 hidden">{accordionStep === 2 ? "▼" : "▶"}</span>
         </button>
         {accordionStep === 2 && (
           <>
             {/* Invoice summary */}
             <div className="bg-neutral-800 text-white p-6 rounded mb-6">
               <div className="flex justify-between mb-2">
-                <span>Players:</span>
+                <span>Players to register</span>
                 <span>{players.length}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span>Price per player:</span>
-                <span>
-                  $
-                  {Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) /
-                    100}
-                </span>
+                <span>Price per player</span>
+                <span>${Number(getPaymentAmount()) / 100}</span>
               </div>
-              <div className="flex justify-between font-bold text-lg mt-4 border-t border-neutral-700 pt-2">
-                <span>Total:</span>
+              <div className="flex justify-between font-bold mt-4 border-t border-neutral-700 pt-4">
+                <span>Total to pay</span>
                 <span>
                   $
                   {(
-                    (players.length *
-                      Number(
-                        process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
-                      )) /
+                    (players.length * Number(getPaymentAmount())) /
                     100
                   ).toFixed(2)}
                 </span>
               </div>
             </div>
             {/* Pay button */}
-            <button
-              type="button"
-              className="py-3 px-8 border-gray-400 bg-red-600 text-white rounded-sm font-bold border-b-red-900 border-b-4 cursor-pointer hover:bg-red-700 w-full text-xl"
-              style={{ opacity: registrationLoading || payLoading ? 0.5 : 1 }}
-              disabled={registrationLoading || payLoading}
-              onClick={async () => {
-                try {
-                  setPayLoading(true);
-                  const amount =
-                    players.length *
-                    Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER);
-                  // 1. Create registration in DB
-                  const regRes = await fetch("/api/create-registration", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      players,
-                      guardianEmail,
-                    }),
-                  });
-                  const regData = await regRes.json();
-                  if (!regRes.ok)
-                    throw new Error(
-                      regData.error || "Failed to create registration"
+            <div className="px-6 pb-12">
+              <button
+                type="button"
+                className="py-3 px-8 bg-white text-black rounded-sm font-bold border-b-[var(--precision-red)] border-b-4 cursor-pointer hover:text-white text-xl hover:bg-gray-400 transition"
+                style={{ opacity: registrationLoading || payLoading ? 0.5 : 1 }}
+                disabled={registrationLoading || payLoading}
+                onClick={async () => {
+                  try {
+                    // Remove confirmationEmailSent flag when starting a new registration
+                    if (typeof window !== "undefined") {
+                      localStorage.removeItem("confirmationEmailSent");
+                    }
+                    setPayLoading(true);
+                    const amount = players.length * Number(getPaymentAmount());
+                    // Use existing registrationId from step 1
+                    if (!registrationId) {
+                      alert("Registration not found. Please complete step 1 first.");
+                      setPayLoading(false);
+                      // Also clear any stale regId in storage
+                      if (typeof window !== "undefined") {
+                        localStorage.removeItem(REG_ID_KEY);
+                      }
+                      setAccordionStep(1);
+                      return;
+                    }
+                    // Create Stripe Checkout Session with existing registrationId
+                    const res = await fetch("/api/create-checkout-session", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        amount,
+                        registrationId,
+                        players,
+                        guardianEmail,
+                        successUrl: `${window.location.origin}/registration-complete?session_id={CHECKOUT_SESSION_ID}`,
+                        cancelUrl: `${window.location.origin}/register?canceled=1`,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (!res.ok)
+                      throw new Error(
+                        data.error || "Failed to create checkout session"
+                      );
+                    const { getStripe } = await import("./stripeCheckout");
+                    const stripe = await getStripe();
+                    if (!stripe) throw new Error("Stripe.js failed to load");
+                    await stripe.redirectToCheckout({ sessionId: data.id });
+                  } catch (err: any) {
+                    alert(
+                      err.message || "An error occurred while starting payment."
                     );
-                  const registrationId = regData.registrationId;
-                  // 2. Create Stripe Checkout Session with real registrationId
-                  const res = await fetch("/api/create-checkout-session", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                      amount,
-                      registrationId,
-                      players,
-                      guardianEmail,
-                      successUrl: `${window.location.origin}/registration-complete?session_id={CHECKOUT_SESSION_ID}`,
-                      cancelUrl: `${window.location.origin}/register?canceled=1`,
-                    }),
-                  });
-                  const data = await res.json();
-                  if (!res.ok)
-                    throw new Error(
-                      data.error || "Failed to create checkout session"
-                    );
-                  const { getStripe } = await import("./stripeCheckout");
-                  const stripe = await getStripe();
-                  if (!stripe) throw new Error("Stripe.js failed to load");
-                  await stripe.redirectToCheckout({ sessionId: data.id });
-                } catch (err: any) {
-                  alert(
-                    err.message || "An error occurred while starting payment."
-                  );
-                } finally {
-                  setPayLoading(false);
-                  // Only clear persisted form data after payment attempt (success or cancel handled by redirect)
-                  if (typeof window !== "undefined") {
-                    localStorage.removeItem(FORM_STORAGE_KEY);
+                  } finally {
+                    setPayLoading(false);
+                    // (Do not clear registrationFormData here; it will be cleared in the confirmation step after email is sent)
                   }
-                }
-              }}
-            >
-              {registrationLoading || payLoading
-                ? "Processing..."
-                : `Pay $${(
-                    (players.length *
-                      Number(
-                        process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER
-                      )) /
-                    100
-                  ).toFixed(2)}`}
-            </button>
+                }}
+              >
+                {registrationLoading || payLoading
+                  ? "Processing..."
+                  : `Pay $${(
+                      (players.length * getPaymentAmount()) /
+                      100
+                    ).toFixed(2)}`}
+              </button>
+            </div>
           </>
         )}
       </div>
