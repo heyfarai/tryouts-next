@@ -78,7 +78,7 @@ export default function Home() {
           <p className="text-lg mb-12">
             <span className="font-bold">Games:</span> All 2025-26 league games
             are in Ottawa. <br />
-            <span className="font-bold">Tournaments:</span> We'll travel to
+            <span className="font-bold">Tournaments:</span> We&apos;ll travel to
             select competitive tournaments across Ontario and Quebec. We plan to
             minimize travel in our first season.
           </p>
