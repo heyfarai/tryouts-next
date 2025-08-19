@@ -43,12 +43,12 @@ export default function Home() {
               Precision Heat.
             </h1>
             <h1 className="alexandria font-extrabold text-4xl lg:text-5xl md:text-4xl mt-0 mb-12 md:leading-[3.2rem]">
-              U14 Boys Basketball.
+              Grade 8/9 Boys Basketball.
             </h1>
             <p className="text-xl mb-8 font-semibold">
-              An Ottawa-based U14 AAA+ (Major Bantam) basketball team. <br />{" "}
-              For the 2025-26 season we are playing in the highly competitive
-              Ascent League of the{" "}
+              An Ottawa-based Grade 8/9 AAA+ (Major Bantam) basketball team.{" "}
+              <br /> For the 2025-26 season we are playing in the highly
+              competitive Ascent League of the{" "}
               <a
                 className="text-[var(--precision-red)] hover:underline transition"
                 href="https://natcaphoops.com/"
