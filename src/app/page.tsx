@@ -145,7 +145,7 @@ export default function Home() {
               With Precision.
             </h1>
             <p className="text-lg mb-4">
-              For competitive players born in 2012 or later. $30 per player.
+              For competitive players born in 2011 or later. $30 per player.
             </p>
             <div className="flex lg:flex-row flex-col mb-2 text-lg gap-x-16">
               <div className="mb-6">

@@ -83,7 +83,8 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
   const [showGeneralError, setShowGeneralError] = useState(false);
 
   // Registration API state
-  const { createRegistration, registrationId: regIdFromHook } = useCreateRegistration();
+  const { createRegistration, registrationId: regIdFromHook } =
+    useCreateRegistration();
   const { updateRegistration } = useUpdateRegistration();
   const [registrationId, setRegistrationId] = useState<string | null>(
     typeof window !== "undefined" ? localStorage.getItem(REG_ID_KEY) : null
@@ -450,7 +451,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                         )
                       }
                       dateFormat="yyyy-MM-dd"
-                      maxDate={new Date("2012-12-31")}
+                      maxDate={new Date("2011-12-31")}
                       showMonthDropdown
                       showYearDropdown
                       dropdownMode="select"
@@ -811,7 +812,9 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                     const amount = players.length * Number(getPaymentAmount());
                     // Use existing registrationId from step 1
                     if (!registrationId) {
-                      alert("Registration not found. Please complete step 1 first.");
+                      alert(
+                        "Registration not found. Please complete step 1 first."
+                      );
                       setPayLoading(false);
                       // Also clear any stale regId in storage
                       if (typeof window !== "undefined") {
