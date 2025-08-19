@@ -81,13 +81,15 @@ export async function getConfirmationEmailHtml({
                 Tryout Day 1 (All welcome):<br/>
                 Sunday, August 24, 2025<br/>
                 3:00pm - 5:00pm <br/>
-                BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/><br/><br/>
+                BGC Tomlinson (<a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">1463 Prince of
+              Wales Dr.</a>) <br/><br/><br/>
                 </li>
                 <li>
                 Tryout Day 2 (Invitation only):<br/>
                 Thursday, August 28, 2025<br/>
                 5:30pm - 7:30pm <br/>
-                BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/>
+                BGC Tomlinson (<a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">1463 Prince of
+              Wales Dr.</a>) <br/>
                 </li>
             </ul>
             ${

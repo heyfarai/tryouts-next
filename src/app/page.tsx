@@ -156,12 +156,12 @@ export default function Home() {
                 (All welcome) <br />
                 Sunday, 24 August <br />
                 3:00pm - 5:00pm <br />
-                BGC Taggart Parkes (
+                BGC Tomlinson (
                 <a
-                  href="https://maps.app.goo.gl/fcace5GkineLFBK69"
+                  href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7"
                   className="text-[var(--precision-red)]"
                 >
-                  map
+                  1463 Prince of Wales Dr.
                 </a>
                 )
               </div>
@@ -173,12 +173,13 @@ export default function Home() {
                 (Invitation only) <br />
                 Thursday, 28 August <br />
                 5:30pm - 7:30pm <br />
-                BGC Taggart Parkes (
+                BGC Tomlinson (
                 <a
-                  href="https://maps.app.goo.gl/fcace5GkineLFBK69"
+                  href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7"
                   className="text-[var(--precision-red)]"
                 >
-                  map <i className="fa-solid fa-location-dot"></i>
+                  1463 Prince of Wales Dr.
+                  <i className="fa-solid fa-location-dot"></i>
                 </a>
                 )
               </div>

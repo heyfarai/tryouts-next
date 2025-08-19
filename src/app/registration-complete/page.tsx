@@ -66,9 +66,11 @@ export default function RegistrationCompletePage() {
               Sunday, August 24, 2025
               <br />
               3:00pm - 5:00pm <br />
-              BGC Taggart Parkes (
-              <a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>){" "}
-              <br />
+              BGC Tomlinson (
+              <a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">
+                1463 Prince of Wales Dr.
+              </a>
+              ) <br />
               <br />
               <br />
             </li>
@@ -78,9 +80,11 @@ export default function RegistrationCompletePage() {
               Thursday, August 28, 2025
               <br />
               5:30pm - 7:30pm <br />
-              BGC Taggart Parkes (
-              <a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>){" "}
-              <br />
+              BGC Tomlinson (
+              <a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">
+                1463 Prince of Wales Dr.
+              </a>
+              ) <br />
             </li>
           </ul>
         </div>
