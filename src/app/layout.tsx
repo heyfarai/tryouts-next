@@ -10,7 +10,7 @@ function getTitle() {
 }
 
 export const metadata: Metadata = {
-  title: "Precision Heat - U14 Boys Basketball Tryout Registration Open",
+  title: "Precision Heat - Grade 8/9 Boys Basketball Tryout Registration Open",
   description:
     "Register for tryouts. Ottawa-based AAA+ basketball team for elite players.",
 };

@@ -74,7 +74,7 @@ export default function OptionalRegistrationStep({
           {/* Registration Upsell */}
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-8 border border-white/20 max-w-2xl mx-auto">
             <h3 className="text-2xl font-bold mb-4">
-              Looking for a U14 boys competitive tryout?
+              Looking for a Grade 8/9 boys competitive tryout?
             </h3>
 
             <p className="text-lg text-gray-300 mb-8 leading-relaxed">
