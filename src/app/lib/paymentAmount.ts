@@ -8,8 +8,9 @@ export function getPaymentAmount(): number {
   if (typeof window !== 'undefined') {
     try {
       const url = new URL(window.location.href);
-      // Root path and any search param triggers discount
-      if ((url.pathname === '/' || url.pathname === '') && url.search.length > 1) {
+      // Only specific discount codes trigger reduced price
+      const discountCode = url.searchParams.get('discount');
+      if (discountCode === 'EARLY_BIRD_2024') {
         return 100;
       }
     } catch (e) {
@@ -24,7 +25,9 @@ export function getPaymentAmountFromUrl(urlString: string): number {
   const defaultAmount = Number(process.env.NEXT_PUBLIC_PAYMENT_AMOUNT_PER_PLAYER) || 3000;
   try {
     const url = new URL(urlString, 'http://dummy');
-    if ((url.pathname === '/' || url.pathname === '') && url.search.length > 1) {
+    // Only specific discount codes trigger reduced price
+    const discountCode = url.searchParams.get('discount');
+    if (discountCode === 'EARLY_BIRD_2024') {
       return 100;
     }
   } catch (e) {}

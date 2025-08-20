@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+import { getPaymentAmountFromUrl } from "../../lib/paymentAmount";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
   apiVersion: "2025-06-30.basil",
@@ -21,6 +22,20 @@ export async function POST(req: NextRequest) {
     if (!amount || !registrationId || !players || !guardianEmail) {
       return NextResponse.json(
         { error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // Server-side price validation - calculate expected amount
+    const refererUrl = req.headers.get("referer") || `${baseUrl}/`;
+    const expectedAmountPerPlayer = getPaymentAmountFromUrl(refererUrl);
+    const expectedTotalAmount = players.length * expectedAmountPerPlayer;
+    
+    // Validate client-provided amount matches server calculation
+    if (amount !== expectedTotalAmount) {
+      console.error(`Price mismatch: client=${amount}, server=${expectedTotalAmount}, players=${players.length}, referer=${refererUrl}`);
+      return NextResponse.json(
+        { error: "Invalid payment amount" },
         { status: 400 }
       );
     }
