@@ -451,7 +451,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                         )
                       }
                       dateFormat="yyyy-MM-dd"
-                      maxDate={new Date("2011-12-31")}
+                      maxDate={new Date("2012-12-31")}
                       showMonthDropdown
                       showYearDropdown
                       dropdownMode="select"
