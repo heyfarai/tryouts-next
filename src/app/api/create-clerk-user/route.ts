@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: respText }, { status: resp.status });
     }
     return NextResponse.json({ success: true, message: 'User created in Clerk', data: respText });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err instanceof Error ? err.message : String(err) : String(err) }, { status: 500 });
   }
 }

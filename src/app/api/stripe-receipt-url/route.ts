@@ -18,12 +18,12 @@ export async function GET(req: NextRequest) {
     const paymentIntent = await stripe.paymentIntents.retrieve(
       payment_intent_id,
       { expand: ["charges"] }
-    );
+    ) as Stripe.PaymentIntent;
     // Debug log the full PaymentIntent object and charges
     if (
       !paymentIntent ||
-      typeof paymentIntent.charges !== "object" ||
-      !("data" in paymentIntent.charges)
+      typeof (paymentIntent as any).charges !== "object" ||
+      !("data" in (paymentIntent as any).charges)
     ) {
       // Fallback: Try to fetch the latest_charge directly
       if (paymentIntent.latest_charge) {
@@ -39,11 +39,11 @@ export async function GET(req: NextRequest) {
               { status: 404 }
             );
           }
-        } catch (err: any) {
+        } catch (err: unknown) {
           return NextResponse.json(
             {
               error: "Failed to fetch latest_charge directly",
-              detail: err.message,
+              detail: err instanceof Error ? err.message : String(err),
             },
             { status: 500 }
           );
@@ -54,43 +54,45 @@ export async function GET(req: NextRequest) {
         { status: 404 }
       );
     }
-    const charge = paymentIntent.charges.data[0];
-    if (!charge) {
-      // Fallback: Try to fetch the latest_charge directly
-      if (paymentIntent.latest_charge) {
-        try {
-          const charge = await stripe.charges.retrieve(
-            paymentIntent.latest_charge as string
-          );
-          if (charge && charge.receipt_url) {
-            return NextResponse.json({ receipt_url: charge.receipt_url });
-          } else {
-            return NextResponse.json(
-              { error: "No receipt_url on latest charge", charge },
-              { status: 404 }
-            );
-          }
-        } catch (err: any) {
+    if ((paymentIntent as any).charges && (paymentIntent as any).charges.data.length > 0) {
+      const charge = (paymentIntent as any).charges.data[0];
+      const receipt_url = charge?.receipt_url ?? "";
+      if (receipt_url) {
+        return NextResponse.json({ receipt_url } satisfies { receipt_url: string });
+      }
+    }
+    // Fallback: Try to fetch the latest_charge directly
+    if ((paymentIntent as any).latest_charge) {
+      try {
+        const charge = await stripe.charges.retrieve(
+          (paymentIntent as any).latest_charge as string
+        );
+        if (charge && charge.receipt_url) {
+          return NextResponse.json({ receipt_url: charge.receipt_url });
+        } else {
           return NextResponse.json(
-            {
-              error: "Failed to fetch latest_charge directly",
-              detail: err.message,
-            },
-            { status: 500 }
+            { error: "No receipt_url on latest charge", charge },
+            { status: 404 }
           );
         }
+      } catch (err: unknown) {
+        return NextResponse.json(
+          {
+            error: "Failed to fetch latest_charge directly",
+            detail: err instanceof Error ? err.message : String(err),
+          },
+          { status: 500 }
+        );
       }
-      return NextResponse.json(
-        {
-          error: "No charge found for payment intent",
-          charges: paymentIntent.charges,
-        },
-        { status: 404 }
-      );
     }
-    const receipt_url = charge.receipt_url;
-    return NextResponse.json({ receipt_url });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "No charge found for payment intent",
+        charges: (paymentIntent as any).charges,
+      },
+      { status: 404 }
+    );
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err instanceof Error ? err.message : String(err) : String(err) }, { status: 500 });
   }
 }

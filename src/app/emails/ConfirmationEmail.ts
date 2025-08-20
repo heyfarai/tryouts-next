@@ -1,15 +1,9 @@
-import QRCode from "qrcode";
-
 export async function getConfirmationEmailHtml({
-  email,
   players,
   paymentReceiptUrl,
-  phone,
 }: {
-  email: string;
   players: any[];
   paymentReceiptUrl?: string;
-  phone?: string;
 }): Promise<string> {
   // DEBUG: Log input to diagnose email rendering issues
   console.log("[ConfirmationEmail] players:", JSON.stringify(players));
@@ -87,16 +81,26 @@ export async function getConfirmationEmailHtml({
                 Tryout Day 1 (All welcome):<br/>
                 Sunday, August 24, 2025<br/>
                 3:00pm - 5:00pm <br/>
-                BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/><br/><br/>
+                BGC Tomlinson (<a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">1463 Prince of
+              Wales Dr.</a>) <br/><br/><br/>
                 </li>
                 <li>
                 Tryout Day 2 (Invitation only):<br/>
                 Thursday, August 28, 2025<br/>
                 5:30pm - 7:30pm <br/>
-                BGC Taggart Parkes (<a href="https://maps.app.goo.gl/fcace5GkineLFBK69">map</a>) <br/>
+                BGC Tomlinson (<a href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7">1463 Prince of
+              Wales Dr.</a>) <br/>
                 </li>
             </ul>
-            
+            ${
+              paymentReceiptUrl
+                ? `<div style="margin: 0;">
+            <p><strong>Receipt</strong></p>
+                  <a href="${paymentReceiptUrl}" target="_blank" rel="noopener" style="">View Payment Receipt</a>
+                </div>`
+                : ""
+            }
+            <p>We'll remind you closer to the day.</p>
             <p>See you at the tryouts!</p>
         </div>
     </div>

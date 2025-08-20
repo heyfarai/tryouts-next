@@ -15,6 +15,8 @@ model User {
   clerkUserId  String   @unique
   email        String   @unique
   role         Role     @default(GUARDIAN)
+  isLead       Boolean  @default(false)
+  leadSource   String?
   guardian     Guardian?
   player       Player?
   createdAt    DateTime @default(now())
@@ -55,9 +57,17 @@ model Registration {
   guardianId   String
   tryoutName   String
   createdAt    DateTime @default(now())
+  status       RegistrationStatus @default(PENDING_PAYMENT)
   payment      Payment?
   players      PlayerRegistration[]
 }
+
+enum RegistrationStatus {
+  PENDING_PAYMENT
+  COMPLETED
+  ABANDONED
+}
+
 model PlayerRegistration {
   id              String   @id @default(uuid())
   registration    Registration @relation(fields: [registrationId], references: [id])
