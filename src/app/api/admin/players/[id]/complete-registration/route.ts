@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 export async function POST(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Verify admin token (basic check)
@@ -12,7 +12,7 @@ export async function POST(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const playerId = params.id;
+    const { id: playerId } = await params;
 
     // Find the most recent pending registration for this player
     const pendingRegistration = await prisma.registration.findFirst({
