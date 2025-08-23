@@ -32,7 +32,7 @@ async function getPlayers(): Promise<Player[]> {
       LEFT JOIN "PlayerRegistration" pr ON p.id = pr."playerId"
       LEFT JOIN "Registration" r ON pr."registrationId" = r.id AND r.status = 'COMPLETED'
       GROUP BY p.id, p."firstName", p."lastName", p."checkInId"
-      ORDER BY p."lastName" ASC, p."firstName" ASC
+      ORDER BY LOWER(p."firstName") ASC, LOWER(p."lastName") ASC
     ` as any[]).map(player => ({
       ...player,
       registrations: player.registrations || []
