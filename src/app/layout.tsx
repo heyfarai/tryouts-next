@@ -136,7 +136,7 @@ export default function RootLayout({
           })}
         </Script>
       </head>
-      <body>
+      <body className="landing">
         <ClerkProvider>
           <main className="min-h-screen">
             <ConditionalTopNav />
