@@ -147,9 +147,18 @@ export default function Home() {
             <p className="text-lg mb-4">
               For competitive players born in 2011 or later. $30 per player.
             </p>
-            <div className="flex lg:flex-row flex-col mb-2 text-lg gap-x-16">
-              <div className="mb-6">
-                <span className="font-bold uppercase mt-0 mb-2">
+            <div
+              style={{ color: "#cccccc" }}
+              className="flex lg:flex-row flex-col mb-2 text-lg gap-x-16"
+            >
+              <div
+                style={{ color: "#cccccc" }}
+                className="mb-6"
+              >
+                <span
+                  style={{ color: "#cccccc" }}
+                  className="font-bold uppercase mt-0 mb-2"
+                >
                   Tryouts Day 1
                 </span>
                 <br />
@@ -165,8 +174,14 @@ export default function Home() {
                 </a>
                 )
               </div>
-              <div className="mb-6">
-                <span className="font-bold uppercase mt-0 mb-2">
+              <div
+                style={{ color: "#cccccc" }}
+                className="mb-6"
+              >
+                <span
+                  style={{ color: "#cccccc" }}
+                  className="font-bold uppercase mt-0 mb-2"
+                >
                   Tryouts Day 2
                 </span>
                 <br />
