@@ -1,6 +1,3 @@
-// Tryouts Registration App Prisma Schema
-// Supports: Clerk user linkage, guardians, players, registrations, Stripe payments, and future roles
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,15 +8,72 @@ datasource db {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  clerkUserId  String   @unique
-  email        String   @unique
-  role         Role     @default(GUARDIAN)
-  isLead       Boolean  @default(false)
-  leadSource   String?
-  guardian     Guardian?
-  player       Player?
-  createdAt    DateTime @default(now())
+  id          String    @id @default(uuid())
+  clerkUserId String    @unique
+  email       String    @unique
+  role        Role      @default(GUARDIAN)
+  createdAt   DateTime  @default(now())
+  isLead      Boolean   @default(false)
+  leadSource  String?
+  guardian    Guardian?
+  player      Player?
+}
+
+model Guardian {
+  id            String         @id @default(uuid())
+  userId        String         @unique
+  phone         String?
+  user          User           @relation(fields: [userId], references: [id])
+  players       Player[]
+  registrations Registration[]
+}
+
+model Player {
+  id            String               @id @default(uuid())
+  userId        String?              @unique
+  firstName     String
+  lastName      String
+  birthdate     DateTime
+  gender        String
+  guardianId    String
+  checkInId     Int?                 @unique
+  guardian      Guardian             @relation(fields: [guardianId], references: [id])
+  user          User?                @relation(fields: [userId], references: [id])
+  registrations PlayerRegistration[]
+}
+
+model Registration {
+  id         String               @id @default(uuid())
+  guardianId String
+  tryoutName String
+  createdAt  DateTime             @default(now())
+  status     RegistrationStatus   @default(PENDING_PAYMENT)
+  isWalkIn   Boolean              @default(false)
+  payment    Payment?
+  players    PlayerRegistration[]
+  guardian   Guardian             @relation(fields: [guardianId], references: [id])
+}
+
+model PlayerRegistration {
+  id             String       @id @default(uuid())
+  registrationId String
+  playerId       String
+  checkedInAt    DateTime?
+  checkedOutAt   DateTime?
+  player         Player       @relation(fields: [playerId], references: [id])
+  registration   Registration @relation(fields: [registrationId], references: [id])
+}
+
+model Payment {
+  id             String       @id @default(uuid())
+  stripeId       String       @unique
+  amount         Int
+  currency       String
+  status         String
+  receiptUrl     String?
+  createdAt      DateTime     @default(now())
+  registrationId String       @unique
+  registration   Registration @relation(fields: [registrationId], references: [id])
 }
 
 enum Role {
@@ -29,64 +83,8 @@ enum Role {
   COACH
 }
 
-model Guardian {
-  id         String   @id @default(uuid())
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String   @unique
-  phone      String?
-  players    Player[]
-  registrations Registration[]
-}
-
-model Player {
-  id         String   @id @default(uuid())
-  user       User?    @relation(fields: [userId], references: [id])
-  userId     String?  @unique
-  firstName  String
-  lastName   String
-  birthdate  DateTime
-  gender     String
-  checkInId  Int?     @unique
-  guardian   Guardian @relation(fields: [guardianId], references: [id])
-  guardianId String
-  registrations PlayerRegistration[]
-}
-
-model Registration {
-  id           String   @id @default(uuid())
-  guardian     Guardian @relation(fields: [guardianId], references: [id])
-  guardianId   String
-  tryoutName   String
-  createdAt    DateTime @default(now())
-  status       RegistrationStatus @default(PENDING_PAYMENT)
-  payment      Payment?
-  players      PlayerRegistration[]
-}
-
 enum RegistrationStatus {
   PENDING_PAYMENT
   COMPLETED
   ABANDONED
-}
-
-model PlayerRegistration {
-  id              String   @id @default(uuid())
-  registration    Registration @relation(fields: [registrationId], references: [id])
-  registrationId  String
-  player          Player @relation(fields: [playerId], references: [id])
-  playerId        String
-  checkedInAt     DateTime?
-  checkedOutAt    DateTime?
-}
-
-model Payment {
-  id             String   @id @default(uuid())
-  stripeId       String   @unique
-  amount         Int
-  currency       String
-  status         String
-  receiptUrl     String?
-  createdAt      DateTime @default(now())
-  registration   Registration @relation(fields: [registrationId], references: [id])
-  registrationId String   @unique
 }

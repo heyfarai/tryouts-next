@@ -88,6 +88,7 @@ export async function POST(request: Request) {
           guardianId: guardian.id,
           tryoutName: 'Walk-in Registration',
           status: 'PENDING_PAYMENT', // Mark as unpaid
+          isWalkIn: true, // Flag as walk-in to distinguish from abandoned carts
         },
       });
 
