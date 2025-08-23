@@ -162,7 +162,6 @@ export default function Home() {
                   Tryouts Day 1
                 </span>
                 <br />
-                (All welcome) <br />
                 Sunday, 24 August <br />
                 3:00pm - 5:00pm <br />
                 BGC Tomlinson (
@@ -185,7 +184,6 @@ export default function Home() {
                   Tryouts Day 2
                 </span>
                 <br />
-                (Invitation only) <br />
                 Thursday, 28 August <br />
                 5:30pm - 7:30pm <br />
                 BGC Tomlinson (
