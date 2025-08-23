@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Player } from "./page";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -270,13 +271,22 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
     <div className="min-h-screen p-4">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Player Check-In</h1>
+          <div className="flex items-center gap-4">
+            <Image
+              src="/precision-logo.svg"
+              alt="Precision Heat Logo"
+              width={48}
+              height={48}
+              className="h-12 w-auto mr-2"
+            />
+            <h1 className="text-2xl font-bold">Tryouts Check-In</h1>
+          </div>
           <div className="flex gap-2">
             <button
               onClick={() => setShowAddPlayerModal(true)}
               className="px-4 py-2 bg-black text-white rounded-lg hover:bg-orange-700 transition-colors"
             >
-              Add Walk-in Player
+              Add Player
             </button>
             <button
               onClick={refreshPlayers}
