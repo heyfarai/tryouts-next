@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import CheckInClient from './CheckInClient';
+import CheckInAuth from './CheckInAuth';
 
 export interface Player {
   id: string;
@@ -61,5 +61,5 @@ export const revalidate = 0;
 export default async function CheckInPage() {
   const players = await getPlayers();
   
-  return <CheckInClient initialPlayers={players} />;
+  return <CheckInAuth initialPlayers={players} />;
 }

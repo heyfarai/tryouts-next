@@ -8,9 +8,10 @@ import "react-datepicker/dist/react-datepicker.css";
 
 interface CheckInClientProps {
   initialPlayers: Player[];
+  onLogout?: () => void;
 }
 
-export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
+export default function CheckInClient({ initialPlayers, onLogout }: CheckInClientProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -177,6 +178,22 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/checkin/logout', { method: 'POST' });
+      if (onLogout) {
+        onLogout();
+      } else {
+        // Fallback: reload the page to trigger auth check
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Fallback: reload the page
+      window.location.reload();
+    }
+  };
+
   const cancelRemoval = () => {
     setShowConfirmModal(false);
     setPlayerToRemove(null);
@@ -287,6 +304,12 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
               className="px-4 py-2 bg-black text-white rounded-lg hover:bg-orange-700 transition-colors"
             >
               Add Player
+            </button>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+            >
+              Logout
             </button>
             <button
               onClick={refreshPlayers}
