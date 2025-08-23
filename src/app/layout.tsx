@@ -99,12 +99,12 @@ export default function RootLayout({
           name="twitter:image"
           content="https://precisionheat.team/social-image.jpg"
         />
-        <Script
+        {/* <Script
           id="crisp-script"
           type="text/javascript"
         >
           {`window.$crisp=[];window.CRISP_WEBSITE_ID="6358389e-34f1-4b83-b7af-c06223dd1738";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();`}
-        </Script>
+        </Script> */}
         <Script
           id="org-structured-data"
           type="application/ld+json"
