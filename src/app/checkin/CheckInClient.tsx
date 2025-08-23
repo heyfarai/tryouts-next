@@ -11,7 +11,10 @@ interface CheckInClientProps {
   onLogout?: () => void;
 }
 
-export default function CheckInClient({ initialPlayers, onLogout }: CheckInClientProps) {
+export default function CheckInClient({
+  initialPlayers,
+  onLogout,
+}: CheckInClientProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [searchTerm, setSearchTerm] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -180,7 +183,7 @@ export default function CheckInClient({ initialPlayers, onLogout }: CheckInClien
 
   const handleLogout = async () => {
     try {
-      await fetch('/api/checkin/logout', { method: 'POST' });
+      await fetch("/api/checkin/logout", { method: "POST" });
       if (onLogout) {
         onLogout();
       } else {
@@ -188,7 +191,7 @@ export default function CheckInClient({ initialPlayers, onLogout }: CheckInClien
         window.location.reload();
       }
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
       // Fallback: reload the page
       window.location.reload();
     }
@@ -285,7 +288,7 @@ export default function CheckInClient({ initialPlayers, onLogout }: CheckInClien
   const allCount = players.length;
 
   return (
-    <div className="min-h-screen p-4">
+    <div className="min-h-screen p-1">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-4">
@@ -296,24 +299,24 @@ export default function CheckInClient({ initialPlayers, onLogout }: CheckInClien
               height={48}
               className="h-12 w-auto mr-2"
             />
-            <h1 className="text-2xl font-bold">Tryouts Check-In</h1>
+            <h1 className="text-2xl font-bold">Check-In</h1>
           </div>
           <div className="flex gap-2">
             <button
               onClick={() => setShowAddPlayerModal(true)}
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-orange-700 transition-colors"
+              className="px-2 py-2 bg-black text-sm text-white rounded-lg hover:bg-orange-700 transition-colors"
             >
               Add Player
             </button>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
+              className="px-2 py-2 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
               Logout
             </button>
             <button
               onClick={refreshPlayers}
-              className="hidden px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              className="hidden px-2 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               Refresh
             </button>
