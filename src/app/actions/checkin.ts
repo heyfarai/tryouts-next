@@ -1,6 +1,6 @@
 'use server';
 
-import { Player } from '../checkin/CheckInClient';
+import { Player } from '../checkin/page';
 
 export async function fetchPlayers(): Promise<Player[]> {
   try {
