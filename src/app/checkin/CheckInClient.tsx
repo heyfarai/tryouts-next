@@ -310,7 +310,7 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
             </div>
             <input
               type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:text-white focus:bg-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               placeholder="Search by name or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -434,8 +434,8 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
             <h3 className="text-lg font-semibold text-gray-500 mb-4">
-              Remove {playerToRemove.firstName} {playerToRemove.lastName} from
-              today&apos;s tryouts?
+              Check out {playerToRemove.firstName} {playerToRemove.lastName}{" "}
+              from today&apos;s tryouts?
             </h3>
             <p className="text-gray-600 mb-6">
               This will uncheck {playerToRemove.firstName}{" "}
@@ -452,7 +452,7 @@ export default function CheckInClient({ initialPlayers }: CheckInClientProps) {
                 onClick={confirmRemoval}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"
               >
-                Remove {playerToRemove.firstName}
+                Checkout {playerToRemove.firstName}
               </button>
             </div>
           </div>
