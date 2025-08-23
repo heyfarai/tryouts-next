@@ -178,6 +178,30 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
     setDeleteModal({ show: false, type: 'users', id: '', name: '' });
   };
 
+  const markRegistrationComplete = async (playerId: string) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const response = await fetch(`/api/admin/players/${playerId}/complete-registration`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        await fetchData(activeTab);
+        showSuccess('Registration marked complete!', 'Player registration has been updated to completed status.');
+      } else {
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        showError('Failed to mark registration complete', errorData.error || 'Unknown error occurred.');
+      }
+    } catch (error) {
+      console.error('Mark complete error:', error);
+      showError('Operation failed', error instanceof Error ? error.message : 'An unexpected error occurred.');
+    }
+  };
+
   useEffect(() => {
     fetchData(activeTab);
   }, [activeTab]);
@@ -459,18 +483,44 @@ export function AdminDashboard({ onLogout }: AdminDashboardProps) {
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {player.user?.email || <span className="text-gray-400">-</span>}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                            {player.registrations.length} registration{player.registrations.length !== 1 ? 's' : ''}
-                          </span>
+                        <td className="px-6 py-4 text-sm text-gray-500">
+                          <div className="space-y-1">
+                            {player.registrations.map((reg) => (
+                              <div key={reg.registration.tryoutName + reg.registration.createdAt} className="flex items-center space-x-2">
+                                <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-medium ${
+                                  reg.registration.status === 'COMPLETED' ? 'bg-green-100 text-green-800' :
+                                  reg.registration.status === 'PENDING_PAYMENT' ? 'bg-yellow-100 text-yellow-800' :
+                                  'bg-red-100 text-red-800'
+                                }`}>
+                                  {reg.registration.status.replace('_', ' ')}
+                                </span>
+                                <span className="text-xs text-gray-400 font-mono">
+                                  ID: {reg.registration.tryoutName.includes('Walk-in') ? 'WALK-IN' : 'REG'}-{reg.registration.createdAt.slice(-8, -4)}
+                                </span>
+                              </div>
+                            ))}
+                            {player.registrations.length === 0 && (
+                              <span className="text-gray-400 text-xs">No registrations</span>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                          <button
-                            onClick={() => showDeleteModal('players', player.id, `${player.firstName} ${player.lastName}`)}
-                            className="text-red-600 hover:text-red-900"
-                          >
-                            Delete
-                          </button>
+                          <div className="flex space-x-4">
+                            {player.registrations.some(reg => reg.registration.status === 'PENDING_PAYMENT') && (
+                              <button
+                                onClick={() => markRegistrationComplete(player.id)}
+                                className="text-green-600 hover:text-green-900 hover:underline"
+                              >
+                                Mark Complete
+                              </button>
+                            )}
+                            <button
+                              onClick={() => showDeleteModal('players', player.id, `${player.firstName} ${player.lastName}`)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
