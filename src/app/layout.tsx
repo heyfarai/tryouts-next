@@ -136,9 +136,9 @@ export default function RootLayout({
           })}
         </Script>
       </head>
-      <body className="bg-black text-[#cccccc]">
+      <body>
         <ClerkProvider>
-          <main className="min-h-screen text-[#cccccc]">
+          <main className="min-h-screen">
             <ConditionalTopNav />
             {children}
           </main>

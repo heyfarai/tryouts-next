@@ -4,10 +4,10 @@ import { usePathname } from 'next/navigation';
 import TopNav from './TopNav';
 
 export function ConditionalTopNav() {
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   
-  // Hide TopNav on admin pages
-  if (pathname && pathname.startsWith('/admin')) {
+  // Hide TopNav on admin and check-in pages
+  if (pathname.startsWith('/admin') || pathname.startsWith('/checkin')) {
     return null;
   }
   

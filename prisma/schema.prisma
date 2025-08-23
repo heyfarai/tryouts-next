@@ -46,6 +46,7 @@ model Player {
   lastName   String
   birthdate  DateTime
   gender     String
+  checkInId  Int?     @unique
   guardian   Guardian @relation(fields: [guardianId], references: [id])
   guardianId String
   registrations PlayerRegistration[]
@@ -74,6 +75,8 @@ model PlayerRegistration {
   registrationId  String
   player          Player @relation(fields: [playerId], references: [id])
   playerId        String
+  checkedInAt     DateTime?
+  checkedOutAt    DateTime?
 }
 
 model Payment {
