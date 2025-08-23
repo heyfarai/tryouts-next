@@ -9,6 +9,7 @@ body {
   font-family: "Manrope", "ui-sans-serif", "system-ui", "sans-serif";
   font-weight: 500;
   font-optical-sizing: auto;
+  background-color: black;
 }
 p,
 ul {
@@ -20,8 +21,11 @@ ul {
 }
 h1.alexandria {
   letter-spacing: -1px;
+  color: #cccccc;
 }
-
+.faqItem > h2 {
+  color: #cccccc;
+}
 .sectionHero {
   background-image: url("/bg-shot.jpg");
   background-size: cover;

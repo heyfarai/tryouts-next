@@ -46,9 +46,9 @@ export default function Home() {
               Grade 8/9 Boys Basketball.
             </h1>
             <p className="text-xl mb-8 font-semibold">
-              An Ottawa-based Grade 8/9 AAA+ (Major Bantam) basketball team.{" "}
-              <br /> For the 2025-26 season we are playing in the highly
-              competitive Ascent League of the{" "}
+              An Ottawa-based Grade 8/9 AAA+ basketball team. <br /> For the
+              2025-26 season we are playing in the highly competitive Ascent
+              League of the{" "}
               <a
                 className="text-[var(--precision-red)] hover:underline transition"
                 href="https://natcaphoops.com/"
