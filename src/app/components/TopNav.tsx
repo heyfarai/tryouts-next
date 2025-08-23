@@ -44,12 +44,6 @@ const TopNav: React.FC = () => {
           >
             FAQ
           </Link>
-          <Link
-            href="/checkin"
-            className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
-          >
-            Check-In
-          </Link>
           <a
             href="https://instagram.com/precisionbasketball.team"
             target="_blank"
