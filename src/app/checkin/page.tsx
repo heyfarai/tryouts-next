@@ -55,6 +55,9 @@ async function getPlayers(): Promise<Player[]> {
   }
 }
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function CheckInPage() {
   const players = await getPlayers();
   
