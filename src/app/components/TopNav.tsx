@@ -12,14 +12,14 @@ const TopNav: React.FC = () => {
         {/* Logo */}
         <Link
           href="/"
-          className="md:fixed md:top-5 flex-none text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
+          className="md:fixed  flex-none text-xl inline-block font-semibold focus:outline-hidden focus:opacity-80"
           aria-label="Precision Heat"
         >
           <Image
             src="/precision-logo.svg"
             alt="Precision Heat Logo"
-            width={60}
-            height={60}
+            width={48}
+            height={48}
           />
         </Link>
         {/* End Logo */}
