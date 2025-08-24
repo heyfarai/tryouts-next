@@ -38,7 +38,7 @@ export default function TryoutsBanner() {
 
   return (
     <div
-      className="w-full py-3 px-4 text-center"
+      className="w-full py-3 px-2 text-center"
       style={{ backgroundColor: "var(--precision-red)", color: "#131211" }}
     >
       <div className="max-w-6xl mx-auto">
