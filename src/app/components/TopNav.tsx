@@ -7,7 +7,7 @@ import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
 const TopNav: React.FC = () => {
   return (
-    <header className="absolute top-0 z-50 w-full py-7">
+    <header className="absolute top-0 z-50 w-full py-12">
       <nav className="relative w-full flex flex-wrap justify-between px-6 md:px-6 lg:px-8 mx-auto h-[72px]">
         {/* Logo */}
         <Link
@@ -18,8 +18,8 @@ const TopNav: React.FC = () => {
           <Image
             src="/precision-logo.svg"
             alt="Precision Heat Logo"
-            width={72}
-            height={72}
+            width={60}
+            height={60}
           />
         </Link>
         {/* End Logo */}
