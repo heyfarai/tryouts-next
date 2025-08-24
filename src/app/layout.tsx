@@ -19,6 +19,7 @@ import TopNav from "./components/TopNav";
 import Footer from "./components/Footer";
 import { getAbsoluteUrl } from "./lib/getAbsoluteUrl";
 import { ConditionalTopNav } from "./components/ConditionalTopNav";
+import TryoutsBanner from "./components/TryoutsBanner";
 
 export default function RootLayout({
   children,
@@ -138,6 +139,7 @@ export default function RootLayout({
       </head>
       <body className="landing">
         <ClerkProvider>
+          <TryoutsBanner />
           <main className="min-h-screen">
             <ConditionalTopNav />
             {children}
