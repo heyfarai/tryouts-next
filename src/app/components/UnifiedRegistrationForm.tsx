@@ -712,7 +712,7 @@ const UnifiedRegistrationForm: React.FC<UnifiedRegistrationFormProps> = ({
                   }
                 }}
               >
-                {registrationLoading ? "Submitting..." : "Continue to Payment"}
+                {registrationLoading ? "Submitting..." : "Continue"}
               </button>
             </div>
           </div>
