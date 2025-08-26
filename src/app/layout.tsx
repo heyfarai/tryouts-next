@@ -146,6 +146,10 @@ export default function RootLayout({
           </main>
           <Footer />
         </ClerkProvider>
+        <script
+          async
+          src="https://scripts.simpleanalyticscdn.com/latest.js"
+        ></script>
       </body>
     </html>
   );
