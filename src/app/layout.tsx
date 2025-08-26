@@ -137,7 +137,7 @@ export default function RootLayout({
           })}
         </Script>
       </head>
-      <body className="landing">
+      <body className="bg-black landing">
         <ClerkProvider>
           <TryoutsBanner />
           <main className="min-h-screen">
