@@ -44,8 +44,15 @@ const CoachingSection = () => (
           Download full PDF bio
         </a>
         )
-        {/* <br />  
-      Assistant Coach: Ron&apos; */}
+        <br />
+        Assistant Coach: Ron Jacobs (
+        <a
+          className="text-[var(--precision-red)]"
+          href="/bios/bio-coach-ron-jacobs.pdf"
+        >
+          Download full PDF bio
+        </a>
+        )
       </p>
       <p className="text-lg mb-8 ">
         W&apos;s still matter. Here&apos;s just a few of their recent successes:
