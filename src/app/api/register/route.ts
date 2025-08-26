@@ -60,8 +60,8 @@ export async function POST(req: NextRequest) {
         players: { include: { player: true } },
       },
     });
-    return NextResponse.json({ registration });
-  } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ registration } satisfies { registration: unknown });
+  } catch (err: unknown) {
+    return NextResponse.json({ error: err instanceof Error ? err instanceof Error ? err instanceof Error ? err.message : String(err) : String(err) : String(err) }, { status: 500 });
   }
 }

@@ -1,13 +1,32 @@
-@import url("https://fonts.googleapis.com/css2?family=Dela+Gothic+One&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Alexandria:wght@100..900&display=swap");
 @import "tailwindcss";
-
-.dela {
-  font-family: "Dela Gothic One", Arial, Helvetica, sans-serif !important;
+:root {
+  --precision-red: #e80707;
 }
 
+body {
+  font-family: "Manrope", "ui-sans-serif", "system-ui", "sans-serif";
+  font-weight: 500;
+  font-optical-sizing: auto;
+}
+
+p,
+ul {
+  color: #cccccc;
+}
+
+.alexandria {
+  font-family: "Alexandria", "ui-sans-serif", "system-ui", "sans-serif" !important;
+}
+h1.alexandria {
+  letter-spacing: -1px;
+  color: #cccccc;
+}
+.faqItem > h2 {
+  color: #cccccc;
+}
 .sectionHero {
-  min-height: 100vh;
-  height: 100vh;
   background-image: url("/bg-shot.jpg");
   background-size: cover;
   background-position: top;
@@ -25,6 +44,18 @@
   min-height: 100vh;
   /* Ensures black background is visible where image doesn't cover */
 }
+.sectionCoaching {
+  background-image: url("/bg-coach.jpg");
+  background-repeat: no-repeat;
+  background-color: black;
+}
+.sectionFAQ {
+  background-image: url("/bg-rim.jpg");
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  background-color: black;
+}
 input[type="text"],
 input[type="email"],
 input[type="tel"],
@@ -33,8 +64,20 @@ input[type="time"],
 select,
 input[type="number"] {
   border-bottom: 2px solid rgb(122, 122, 122);
-  background-color: black;
-  padding-left: 0;
+  @apply rounded-sm;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="tel"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+input[type="number"]:focus {
+  @apply outline-none bg-neutral-900;
+  border-bottom: 2px solid var(--precision-red);
 }
 label.forText {
+}
+.stepWrapper {
+  @apply bg-neutral-800;
 }

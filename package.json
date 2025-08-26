@@ -4,18 +4,24 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cleanup:abandoned": "ts-node scripts/cleanup-abandoned-registrations.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.23.3",
     "@prisma/client": "^6.11.1",
     "@stripe/react-stripe-js": "^3.7.0",
+    "@types/jsonwebtoken": "^9.0.10",
+    "date-fns": "^4.1.0",
+    "jsonwebtoken": "^9.0.2",
     "next": "15.3.5",
     "nodemailer": "^7.0.5",
+    "postmark": "^4.0.5",
     "qrcode": "^1.5.4",
     "react": "^19.0.0",
+    "react-datepicker": "^8.4.0",
     "react-dom": "^19.0.0",
     "stripe": "^18.3.0"
   },
@@ -23,11 +29,13 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.3.5",
     "prisma": "^6.11.1",
+    "stylelint-config-tailwindcss": "^1.0.0",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
