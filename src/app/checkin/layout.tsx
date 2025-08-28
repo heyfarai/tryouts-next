@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import TryoutsBanner from "../components/TryoutsBanner";
 
 export const metadata: Metadata = {
   title: "Player Check-In",
@@ -13,7 +12,6 @@ export default function CheckInLayout({
 }) {
   return (
     <div className="min-h-screen">
-      <TryoutsBanner />
       <main className="container mx-auto px-4 py-6">{children}</main>
     </div>
   );

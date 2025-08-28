@@ -329,7 +329,7 @@ export default function CheckInClient({
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow mb-6 p-4">
+        <div className="bg-white rounded-lg shadow mb-6">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
@@ -346,7 +346,7 @@ export default function CheckInClient({
             </div>
             <input
               type="text"
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:text-white focus:bg-gray-100 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:text-white focus:bg-gray-100 focus:outline-none focus:ring-0 focus:border-1 sm:text-sm"
               placeholder="Search by name or ID..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -377,12 +377,12 @@ export default function CheckInClient({
           </div>
         )}
 
-        <div className="flex border-b border-gray-200 mb-6">
+        <div className=" mb-6">
           <button
             onClick={() => setActiveTab("unchecked")}
-            className={`py-2 px-4 font-medium text-sm ${
+            className={`py-2 px-4 font-semibold text-sm uppercase ${
               activeTab === "unchecked"
-                ? "border-b-2 border-blue-500 text-blue-600"
+                ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -390,9 +390,9 @@ export default function CheckInClient({
           </button>
           <button
             onClick={() => setActiveTab("checked")}
-            className={`py-2 px-4 font-medium text-sm ${
+            className={`py-2 px-4 font-semibold text-sm uppercase   ${
               activeTab === "checked"
-                ? "border-b-2 border-blue-500 text-blue-600"
+                ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -400,9 +400,9 @@ export default function CheckInClient({
           </button>
           <button
             onClick={() => setActiveTab("all")}
-            className={`py-2 px-4 font-medium text-sm ${
+            className={`py-2 px-4 font-semibold text-sm uppercase ${
               activeTab === "all"
-                ? "border-b-2 border-blue-500 text-blue-600"
+                ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
@@ -410,23 +410,23 @@ export default function CheckInClient({
           </button>
         </div>
 
-        <div className="bg-white shadow overflow-hidden rounded-lg">
-          <ul className="divide-y divide-gray-200">
+        <div className="bg-[#252422] shadow overflow-hidden rounded-lg">
+          <ul className="divide-y divide-gray-900">
             {filteredPlayers.length > 0 ? (
               filteredPlayers.map((player) => {
                 const checkedIn = isCheckedIn(player);
                 return (
                   <li
                     key={player.id}
-                    className="px-6 py-4"
+                    className="px-0 py-0"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center">
-                        <div className="flex-shrink-0 h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center font-medium text-gray-600">
+                        <div className="flex-shrink-0 h-20  w-20 p-2  bg-[#252422] flex items-center justify-center font-bold alexandria text-[#ecebec] text-3xl">
                           {player.checkInId}
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">
+                          <div className="text-xl font-semibold text-[#ecebec]">
                             {player.firstName} {player.lastName}
                             {!player.registrations?.[0] && (
                               <span className="ml-2 px-2 py-1 text-xs bg-red-100 text-red-800 rounded-full">
@@ -436,22 +436,24 @@ export default function CheckInClient({
                           </div>
                         </div>
                       </div>
-                      <button
-                        onClick={() => handleButtonClick(player, checkedIn)}
-                        onMouseEnter={() => setHoveredButton(player.id)}
-                        onMouseLeave={() => setHoveredButton(null)}
-                        className={`px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                          checkedIn
-                            ? "bg-green-100 text-green-800 hover:bg-red-100 hover:text-red-800"
-                            : "bg-blue-100 text-blue-800 hover:bg-blue-200"
-                        }`}
-                      >
-                        {checkedIn && hoveredButton === player.id
-                          ? "Uncheck"
-                          : checkedIn
-                          ? "Checked In"
-                          : "Check In"}
-                      </button>
+                      <div className=" mr-6">
+                        <button
+                          onClick={() => handleButtonClick(player, checkedIn)}
+                          onMouseEnter={() => setHoveredButton(player.id)}
+                          onMouseLeave={() => setHoveredButton(null)}
+                          className={`px-4 py-2 rounded-sm font-semibold transition-all duration-200 ${
+                            checkedIn
+                              ? "bg-[#4f4b48] text-[#ecebec] hover:bg-red-100 hover:text-red-800"
+                              : "bg-[var(--precision-red)] text-[#ecebec] hover:bg-[var(--precision-red)] hover:text-[#ecebec] hover:opacity-80"
+                          }`}
+                        >
+                          {checkedIn && hoveredButton === player.id
+                            ? "Uncheck"
+                            : checkedIn
+                            ? "Checked In"
+                            : "Check In"}
+                        </button>
+                      </div>
                     </div>
                   </li>
                 );

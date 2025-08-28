@@ -1,9 +1,12 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 export default function TryoutsBanner() {
   const [isVisible, setIsVisible] = useState(false);
+  const pathname = usePathname();
 
   const checkIfTryoutsDay = () => {
     // Get current date in Eastern timezone
@@ -15,7 +18,7 @@ export default function TryoutsBanner() {
     // Check if it's August 24th, 2025
     const isAugust24 =
       easternTime.getMonth() === 7 && // August is month 7 (0-indexed)
-      easternTime.getDate() === 24 &&
+      easternTime.getDate() === 28 &&
       easternTime.getFullYear() === 2025;
 
     setIsVisible(isAugust24);
@@ -32,31 +35,38 @@ export default function TryoutsBanner() {
     return () => clearInterval(interval);
   }, []);
 
-  if (!isVisible) {
+  if (!isVisible || pathname !== "/") {
     return null;
   }
 
   return (
     <div
-      className="w-full py-3 px-2 text-center"
-      style={{ backgroundColor: "var(--precision-red)", color: "#131211" }}
+      className="w-full py-3 px-2 text-center fixed top-0 z-50 bg-[var(--precision-red)]"
+      style={{ backgroundColor: "red", color: "#131211" }}
     >
       <div className="max-w-6xl mx-auto">
         <p className="text-sm md:text-base font-semibold text-[#131211]">
           <span className="text-[#131211]">
-            Tryouts Day 1, Sun. 24th Aug. at BGC Tomlinson
+            Tryouts Day 2{" "}
+            <span className="text-[#131211] px-1 font-bold">·</span> Thu 28th
+            Aug <span className="text-[#131211] px-1 font-bold">·</span>{" "}
+            <Link
+              href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline hover:no-underline"
+              style={{ color: "#131211" }}
+            >
+              BGC Tomlinson
+            </Link>
+            <span className="text-[#131211] px-1 font-bold">·</span>{" "}
+            <Link
+              className="underline hover:no-underline"
+              href="/#tryouts"
+            >
+              Sign up
+            </Link>
           </span>{" "}
-          (
-          <a
-            href="https://maps.app.goo.gl/4YFkKQamYPUCXG4m7"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:no-underline"
-            style={{ color: "#131211" }}
-          >
-            map
-          </a>
-          )
         </p>
       </div>
     </div>
