@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Player } from "./page";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Toast, ToastMessage } from "../components/Toast";
 
 interface CheckInClientProps {
   initialPlayers: Player[];
@@ -17,7 +18,7 @@ export default function CheckInClient({
 }: CheckInClientProps) {
   const [players, setPlayers] = useState<Player[]>(initialPlayers);
   const [searchTerm, setSearchTerm] = useState("");
-  const [error, setError] = useState<string | null>(null);
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [activeTab, setActiveTab] = useState<"unchecked" | "checked" | "all">(
     "unchecked"
   );
@@ -32,39 +33,90 @@ export default function CheckInClient({
     birthdate: "",
   });
 
+  const addToast = (toast: Omit<ToastMessage, "id">) => {
+    const newToast: ToastMessage = {
+      ...toast,
+      id: Math.random().toString(36).substr(2, 9),
+    };
+    setToasts((prev) => [...prev, newToast]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
+
   useEffect(() => {
-    const eventSource = new EventSource("/api/checkin/events");
+    let eventSource: EventSource | null = null;
+    let reconnectTimeout: NodeJS.Timeout | null = null;
+    let reconnectAttempts = 0;
+    const maxReconnectAttempts = 5;
 
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
+    const connectSSE = () => {
+      eventSource = new EventSource("/api/checkin/events");
 
-      if (data.type === "checkin_updated") {
-        setPlayers((prevPlayers) =>
-          prevPlayers.map((player) => {
-            if (player.id === data.playerId) {
-              const updatedRegistrations = [...player.registrations];
-              if (updatedRegistrations[0]) {
-                updatedRegistrations[0] = {
-                  ...updatedRegistrations[0],
-                  checkedInAt: data.isCheckedIn ? data.timestamp : null,
-                  checkedOutAt: !data.isCheckedIn ? data.timestamp : null,
-                };
+      eventSource.onopen = () => {
+        console.log("SSE connection established");
+        reconnectAttempts = 0;
+        // Connection established successfully
+      };
+
+      eventSource.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+
+        if (data.type === "checkin_updated") {
+          setPlayers((prevPlayers) =>
+            prevPlayers.map((player) => {
+              if (player.id === data.playerId) {
+                const updatedRegistrations = [...player.registrations];
+                if (updatedRegistrations[0]) {
+                  updatedRegistrations[0] = {
+                    ...updatedRegistrations[0],
+                    checkedInAt: data.isCheckedIn ? data.timestamp : null,
+                    checkedOutAt: !data.isCheckedIn ? data.timestamp : null,
+                  };
+                }
+                return { ...player, registrations: updatedRegistrations };
               }
-              return { ...player, registrations: updatedRegistrations };
-            }
-            return player;
-          })
-        );
-      }
+              return player;
+            })
+          );
+        }
+      };
+
+      eventSource.onerror = (error) => {
+        console.error("SSE connection error:", error);
+        eventSource?.close();
+
+        if (reconnectAttempts < maxReconnectAttempts) {
+          reconnectAttempts++;
+          const delay = Math.min(1000 * Math.pow(2, reconnectAttempts), 30000); // Exponential backoff, max 30s
+          console.log(
+            `Attempting to reconnect in ${delay}ms (attempt ${reconnectAttempts}/${maxReconnectAttempts})`
+          );
+
+          reconnectTimeout = setTimeout(() => {
+            connectSSE();
+          }, delay);
+        } else {
+          addToast({
+            type: "error",
+            title: "Connection Lost",
+            message: "Lost connection to server. Please refresh the page.",
+            duration: 10000,
+          });
+        }
+      };
     };
 
-    eventSource.onerror = (error) => {
-      console.error("SSE connection error:", error);
-      setError("Lost connection to server. Please refresh.");
-    };
+    connectSSE();
 
     return () => {
-      eventSource.close();
+      if (reconnectTimeout) {
+        clearTimeout(reconnectTimeout);
+      }
+      if (eventSource) {
+        eventSource.close();
+      }
     };
   }, []);
 
@@ -78,9 +130,13 @@ export default function CheckInClient({
         registrations: player.registrations || [],
       }));
       setPlayers(normalizedData);
-      setError(null);
+      // Players refreshed successfully
     } catch (err) {
-      setError("Failed to load players. Please try again.");
+      addToast({
+        type: "error",
+        title: "Refresh Failed",
+        message: "Failed to refresh player list",
+      });
       console.error("Error fetching players:", err);
     }
   };
@@ -131,8 +187,7 @@ export default function CheckInClient({
         })
       );
 
-      // Clear any previous errors
-      setError(null);
+      // Check-in status updated successfully
     } catch (err) {
       console.error(
         `Error updating check-in status (attempt ${retryCount + 1}):`,
@@ -156,9 +211,11 @@ export default function CheckInClient({
 
       // Show user-friendly error message
       const errorMessage = err instanceof Error ? err.message : "Unknown error";
-      setError(
-        `Failed to update check-in status: ${errorMessage}. Please try again.`
-      );
+      addToast({
+        type: "error",
+        title: "Check-in Failed",
+        message: "Failed to update check-in status",
+      });
     }
   };
 
@@ -209,7 +266,11 @@ export default function CheckInClient({
       !addPlayerForm.email ||
       !addPlayerForm.birthdate
     ) {
-      setError("Please fill in all required fields");
+      addToast({
+        type: "warning",
+        title: "Missing Information",
+        message: "Please fill in all required fields",
+      });
       return;
     }
 
@@ -240,7 +301,11 @@ export default function CheckInClient({
         birthdate: "",
       });
       setShowAddPlayerModal(false);
-      setError(null);
+      addToast({
+        type: "success",
+        title: "Player Added",
+        message: `${addPlayerForm.firstName} ${addPlayerForm.lastName} has been added successfully`,
+      });
 
       // Auto check-in the new player
       setTimeout(() => {
@@ -248,14 +313,18 @@ export default function CheckInClient({
       }, 100);
     } catch (err) {
       console.error("Error adding player:", err);
-      setError(err instanceof Error ? err.message : "Failed to add player");
+      addToast({
+        type: "error",
+        title: "Add Failed",
+        message: err instanceof Error ? err.message : "Failed to add player",
+      });
     }
   };
 
   const cancelAddPlayer = () => {
     setAddPlayerForm({ firstName: "", lastName: "", email: "", birthdate: "" });
     setShowAddPlayerModal(false);
-    setError(null);
+    // Modal cancelled
   };
 
   const isCheckedIn = (player: Player) => {
@@ -354,59 +423,45 @@ export default function CheckInClient({
           </div>
         </div>
 
-        {error && (
-          <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
-            <div className="flex">
-              <div className="flex-shrink-0">
-                <svg
-                  className="h-5 w-5 text-red-400"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </div>
-              <div className="ml-3">
-                <p className="text-sm text-red-700">{error}</p>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className=" mb-6">
+        <div className="flex flex-wrap gap-2 mb-6">
           <button
             onClick={() => setActiveTab("unchecked")}
-            className={`py-2 px-4 font-semibold text-sm uppercase ${
+            className={`py-2 px-4 font-medium tracking-wider text-sm uppercase ${
               activeTab === "unchecked"
                 ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            Unchecked ({uncheckedCount})
+            Unchecked
+            <span className="ml-2 p-0.5 text-xs text-[#131211] font-bold rounded-3xl bg-[#ecebec] px-2">
+              {uncheckedCount}
+            </span>
           </button>
           <button
             onClick={() => setActiveTab("checked")}
-            className={`py-2 px-4 font-semibold text-sm uppercase   ${
+            className={`py-2 px-4 font-medium tracking-wider text-sm uppercase   ${
               activeTab === "checked"
                 ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            Checked In ({checkedCount})
+            Checked In
+            <span className="ml-2 p-0.5 text-xs text-[#131211] font-bold rounded-3xl bg-[#ecebec] px-2">
+              {checkedCount}
+            </span>
           </button>
           <button
             onClick={() => setActiveTab("all")}
-            className={`py-2 px-4 font-semibold text-sm uppercase ${
+            className={`py-2 px-4 font-medium tracking-wider text-sm uppercase ${
               activeTab === "all"
                 ? "bg-[#4f4b48] text-white rounded-4xl"
                 : "text-gray-500 hover:text-gray-700"
             }`}
           >
-            All ({allCount})
+            All
+            <span className="ml-2 p-0.5 text-xs text-[#131211] font-bold rounded-3xl bg-[#ecebec] px-2">
+              {allCount}
+            </span>
           </button>
         </div>
 
@@ -611,6 +666,11 @@ export default function CheckInClient({
           </div>
         </div>
       )}
+
+      <Toast
+        toasts={toasts}
+        onRemove={removeToast}
+      />
     </div>
   );
 }
