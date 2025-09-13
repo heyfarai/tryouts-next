@@ -25,7 +25,7 @@ const sponsors = [
   },
   {
     href: "https://verdunwindows.com",
-    imgSrc: "/sponsors/sponsor-Verdun.png",
+    imgSrc: "/sponsors/sponsor-verdun.png",
     alt: "Verdun Windows -  Windows and Doors Made in Canada.",
     width: 65,
     height: 65,
