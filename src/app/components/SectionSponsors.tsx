@@ -23,19 +23,26 @@ const sponsors = [
     width: 50,
     height: 52,
   },
+  {
+    href: "https://verdunwindows.com",
+    imgSrc: "/sponsors/sponsor-Verdun.png",
+    alt: "Verdun Windows -  Windows and Doors Made in Canada.",
+    width: 65,
+    height: 65,
+  },
 ];
 
 const SectionSponsors: React.FC = () => {
   return (
     <div
       id="sponsors"
-      className="sectionSponsors flex flex-col items-center  lg:pt-6 pt-6"
+      className="sectionSponsors flex flex-col items-center lg:pt-6 pt-6"
     >
       <p className="text-center mb-12">
         Our sponsors support us.
         <br /> Please support them.
       </p>
-      <div className="flex flex-wrap justify-center gap-y-6 mb-12">
+      <div className="flex flex-wrap justify-center gap-y-6 items-center mb-12">
         {sponsors.map((sponsor) => (
           <a
             key={sponsor.href}
