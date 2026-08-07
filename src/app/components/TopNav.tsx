@@ -30,7 +30,7 @@ const TopNav: React.FC = () => {
             href="/#coaching"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
           >
-            Coaches
+            Coach
           </Link>
           <Link
             href="/#tryouts"

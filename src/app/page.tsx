@@ -43,10 +43,10 @@ export default function Home() {
               Precision Heat.
             </h1>
             <h1 className="alexandria font-extrabold text-4xl lg:text-5xl md:text-4xl mt-0 mb-12 md:leading-[3.2rem]">
-              Grade 8/9 Boys Basketball.
+              Grade 9/10 Boys Basketball.
             </h1>
             <p className="text-xl mb-8 font-semibold">
-              An Ottawa-based Grade 8/9 AAA+ basketball team. <br /> For the
+              An Ottawa-based Grade 9/10 AAA+ basketball team. <br /> For the
               2025-26 season we are playing in the highly competitive Ascent
               League of the{" "}
               <a

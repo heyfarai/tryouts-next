@@ -7,33 +7,29 @@ const CoachingSection = () => (
   >
     <div className="sectionContent w-full lg:w-[68%] lg:ml-24 max-w-[640px] px-6 pb-48 pt-48 md:pt-16 bg-auto ">
       <h1 className="hidden alexandria font-extrabold text-4xl lg:text-5xl md:text-5xl mb-0 text-shadow-stone-400 md:text-[var(--precision-red)]">
-        Our coaches.
-      </h1>
-      <h1 className="alexandria font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-0">
-        Coach Nicholas.
+        Our coach.
       </h1>
       <h1 className="alexandria font-extrabold text-4xl lg:text-5xl md:text-5xl mt-0 mb-12">
-        Coach Ron.
+        Coach Nicholas.
       </h1>
       <p className="text-lg mb-8 w-[60%]">
-        We don&apos;t do parent coaches. We have two military vets with decades
-        of experience. One mission: develop disciplined, confident players who
-        love the game.
+        We don&apos;t do parent coaches. We have a military vet with decades of
+        experience. One mission: develop disciplined, confident players who love
+        the game.
       </p>
       <p className="text-lg mb-8 ">
-        Coach Nicholas and Coach Ron bring a combined 50+ years of high-level
-        basketball experience, on the court, on the bench, and in uniform. Both
-        competed at national and international levels as members of Canadian
-        military teams, earning a reputation for toughness, precision, and
-        performance under pressure.
+        Coach Nicholas brings decades of high-level basketball experience, on
+        the court, on the bench, and in uniform. He competed at national and
+        international levels as a member of Canadian military teams, earning a
+        reputation for toughness, precision, and performance under pressure.
       </p>
       <p className="text-lg mb-8 ">
-        Now, they channel that experience into developing young athletes who
-        play smart, stay composed, and thrive in high-stakes moments. Their
-        coaching goes beyond W&apos;s. <br />
+        Now, he channels that experience into developing young athletes who play
+        smart, stay composed, and thrive in high-stakes moments. His coaching
+        goes beyond W&apos;s. <br />
         It&apos;s about self-respect, mindset, accountability, and real growth.{" "}
         <br />
-        Meet the coaches behind the culture.
+        Meet the coach behind the culture.
       </p>
       <p className="text-lg mb-8 ">
         Head Coach: Nicholas Thomas (
@@ -44,18 +40,9 @@ const CoachingSection = () => (
           Download full PDF bio
         </a>
         )
-        <br />
-        Assistant Coach: Ron Jacobs (
-        <a
-          className="text-[var(--precision-red)]"
-          href="/bios/bio-coach-ron-jacobs.pdf"
-        >
-          Download full PDF bio
-        </a>
-        )
       </p>
       <p className="text-lg mb-8 ">
-        W&apos;s still matter. Here&apos;s just a few of their recent successes:
+        W&apos;s still matter. Here&apos;s just a few of his recent successes:
       </p>
       <ul>
         <li>🏆 2024 Ontario Cup U17 Champions</li>
