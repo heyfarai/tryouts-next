@@ -32,12 +32,14 @@ const TopNav: React.FC = () => {
           >
             Coaches
           </Link>
-          <Link
-            href="/#tryouts"
+          <a
+            href="https://www.cognitoforms.com/DavidBrazeau/TryoutsRegistration"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
           >
             Tryouts
-          </Link>
+          </a>
           <Link
             href="/#FAQ"
             className="text-white text-shadow-sm font-bold hover:text-[var(--precision-red)] transition"
